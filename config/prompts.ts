@@ -1,0 +1,1 @@
+export const notesPrompt = process.env.NOTES_PROMPT
