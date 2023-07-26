@@ -1,5 +1,4 @@
 import NotesClient from "@/components/notes/NotesClient";
-import NotesEditor from "@/components/notes/NotesEditor";
 import { Metadata, ResolvingMetadata } from "next";
 
 type Props = {

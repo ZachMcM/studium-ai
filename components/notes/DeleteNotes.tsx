@@ -36,7 +36,7 @@ export default function DeleteNotes({ id }: { id: string }) {
   });
 
   return (
-    <AlertDialogContent>
+    <AlertDialogContent className="max-w-[425px] md:max-w-[525px]">
     <AlertDialogHeader>
       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
       <AlertDialogDescription>
