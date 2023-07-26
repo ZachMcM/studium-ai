@@ -3,33 +3,38 @@ import { getAuthSession } from "@/lib/auth";
 import { openai } from "@/lib/openai";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { NextRequest, NextResponse } from "next/server";
+import { ChatCompletionRequestMessage } from "openai-edge";
 
-export const runtime = "edge";
+function buildPrompt(prompt: string): ChatCompletionRequestMessage[] {
+  return prompt.split("\n").map((message) => ({
+    role: "user",
+    content: message,
+  }));
+}
 
 export async function POST(req: NextRequest) {
-  const { content } = (await req.json()) as {
-    content?: string;
-  };
+  const { prompt } = await req.json();
+
+  const structuredPrompt = `${notesPrompt} ${prompt}`;
 
   const session = await getAuthSession();
 
-  if (!content)
-    return NextResponse.json({
-      error: "Invalid request, no data source",
-      status: 400,
-    });
-  if (!session)
+  if (!session) {
     return NextResponse.json({ error: "Unauthorized request", status: 400 });
-
-  if (session && content) {
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
+  } else {
+    const response = await openai.createChatCompletion({
+      model: "gpt-4",
       stream: true,
-      prompt: `${notesPrompt} Source: ${content}`,
+      messages: buildPrompt(structuredPrompt),
+      max_tokens: 500,
+      temperature: 0.7,
+      top_p: 1,
+      frequency_penalty: 1,
+      presence_penalty: 1,
     });
 
-    const stream = OpenAIStream(response)
+    const stream = OpenAIStream(response);
 
-    return new StreamingTextResponse(stream)
+    return new StreamingTextResponse(stream);
   }
 }

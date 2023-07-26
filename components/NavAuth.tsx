@@ -11,10 +11,10 @@ export default function NavAuth() {
     <>
       {session ? (
         <Link href="/dashboard/notes">
-          <Button>Dashboard</Button>
+          <Button variant="secondary">Dashboard</Button>
         </Link>
       ) : (
-        <Button onClick={() => signIn()}>Sign In</Button>
+        <Button variant="secondary" onClick={() => signIn()}>Sign In</Button>
       )}
     </>
   );

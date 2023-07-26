@@ -1,19 +1,41 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { AlertCircle, ExternalLink, Link2, Loader2, MoreVertical, Trash2 } from "lucide-react";
+import {
+  AlertCircle,
+  Edit,
+  Forward,
+  Loader2,
+  MoreVertical,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { Notes } from "@prisma/client";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import Link from "next/link";
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogCancel, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogCancel,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { useToast } from "../ui/use-toast";
-import NotesCreator from "./NotesCreator";
 
 export default function NotesList() {
   const { data: session } = useSession({
@@ -33,24 +55,39 @@ export default function NotesList() {
   });
 
   const queryClient = useQueryClient();
-  const { toast } = useToast()
+  const { toast } = useToast();
+  const router = useRouter();
 
   const { mutate: deleteNotes } = useMutation({
     mutationFn: async (id: string): Promise<Notes> => {
       const res = await fetch(`/api/notes/${id}`, {
-        method: "DELETE"
-      })
-      const data = await res.json()
-      return data
+        method: "DELETE",
+      });
+      const data = await res.json();
+      return data;
     },
     onSuccess: (data) => {
-      console.log(data)
-      queryClient.invalidateQueries({ queryKey: ['notes'] })
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
       toast({
-        title: "Successfully deleted the notes."
-      })
-    }
-  })
+        title: "Successfully deleted the notes.",
+      });
+    },
+  });
+
+  const { mutate: createNotes, isLoading: creatingNotes } = useMutation({
+    mutationFn: async (): Promise<Notes> => {
+      const res = await fetch("/api/notes", {
+        method: "POST",
+      });
+      const data = await res.json();
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      router.push(`/notes/${data.id}`);
+    },
+  });
 
   const [search, setSearch] = useState("");
 
@@ -62,7 +99,14 @@ export default function NotesList() {
           value={search}
           placeholder="Search notes..."
         />
-        <NotesCreator/>
+        <Button className="shrink-0" onClick={() => createNotes()}>
+          Add New...{" "}
+          {creatingNotes ? (
+            <Loader2 className="h-4 w-4 ml-2 animate-spin" />
+          ) : (
+            <Plus className="h-4 w-4" />
+          )}
+        </Button>
       </div>
       <div className="mt-6">
         {notesLoading ? (
@@ -78,58 +122,86 @@ export default function NotesList() {
             </Alert>
           ) : (
             <div className="flex flex-col border rounded-lg">
-              {notesList.map((notes) => (
-                <div className="flex items-center justify-between border-b last:border-none px-6 py-4">
-                  <div className="space-y-1">
-                    <Link
-                      href={`/notes/${notes.id}`}
-                      className="text-lg hover:underline font-semibold"
-                    >
-                      {notes.title}
-                    </Link>
-                    <p className="text-muted-foreground font-medium text-sm">
-                      {new Date(notes.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <AlertDialog>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon"><MoreVertical className="h-4 w-4"/></Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <Link href={`/notes/${notes.id}`}>
-                          <DropdownMenuItem>
-                            <ExternalLink className="h-4 w-4 mr-2"/>Open
-                          </DropdownMenuItem>
+              {notesList.filter((notes) =>
+                notes.title.toLowerCase().includes(search.toLowerCase())
+              ).length !== 0 ? (
+                notesList
+                  .filter((notes) =>
+                    notes.title.toLowerCase().includes(search.toLowerCase())
+                  )
+                  .map((notes) => (
+                    <div className="flex items-center justify-between border-b last:border-none px-6 py-4">
+                      <div className="space-y-1">
+                        <Link
+                          href={`/notes/${notes.id}`}
+                          className="text-lg hover:underline font-semibold"
+                        >
+                          {notes.title}
                         </Link>
-                        {/* TODO */}
-                        <DropdownMenuItem>
-                          <Link2 className="h-4 w-4 mr-2"/>Share
-                        </DropdownMenuItem>
-                        <AlertDialogTrigger asChild>
-                          <DropdownMenuItem className="!text-destructive">
-                            <Trash2 className="h-4 w-4 mr-2"/>Delete
-                          </DropdownMenuItem>
-                        </AlertDialogTrigger>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete these notes.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => {
-                          deleteNotes(notes.id)
-                        }}>Continue</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              ))}
+                        <p className="text-muted-foreground font-medium text-sm">
+                          {new Date(notes.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <AlertDialog>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <Link href={`/notes/${notes.id}`}>
+                              <DropdownMenuItem>
+                                <Edit className="h-4 w-4 mr-2" />
+                                Edit
+                              </DropdownMenuItem>
+                            </Link>
+                            {/* TODO */}
+                            <DropdownMenuItem>
+                              <Forward className="h-4 w-4 mr-2" />
+                              Share
+                            </DropdownMenuItem>
+                            <AlertDialogTrigger asChild>
+                              <DropdownMenuItem className="!text-destructive">
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
+                              </DropdownMenuItem>
+                            </AlertDialogTrigger>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete these notes.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => {
+                                deleteNotes(notes.id);
+                              }}
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  ))
+              ) : (
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Oops</AlertTitle>
+                  <AlertDescription>
+                    No notes match your search.
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
           )
         ) : (
