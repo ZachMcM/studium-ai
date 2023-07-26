@@ -20,13 +20,6 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import Link from "next/link";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogCancel,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import {
@@ -35,7 +28,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useToast } from "../ui/use-toast";
+import DeleteNotes from "./DeleteNotes";
 
 export default function NotesList() {
   const { data: session } = useSession({
@@ -54,26 +47,7 @@ export default function NotesList() {
     },
   });
 
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
   const router = useRouter();
-
-  const { mutate: deleteNotes } = useMutation({
-    mutationFn: async (id: string): Promise<Notes> => {
-      const res = await fetch(`/api/notes/${id}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      toast({
-        title: "Successfully deleted the notes.",
-      });
-    },
-  });
 
   const { mutate: createNotes, isLoading: creatingNotes } = useMutation({
     mutationFn: async (): Promise<Notes> => {
@@ -169,27 +143,7 @@ export default function NotesList() {
                             </AlertDialogTrigger>
                           </DropdownMenuContent>
                         </DropdownMenu>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Are you absolutely sure?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will
-                              permanently delete these notes.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => {
-                                deleteNotes(notes.id);
-                              }}
-                            >
-                              Continue
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
+                        {notes && <DeleteNotes id={notes.id}/>}
                       </AlertDialog>
                     </div>
                   ))

@@ -1,17 +1,13 @@
 "use client";
 
-import { Copy, Forward, Loader2, MoreHorizontal, Trash2 } from "lucide-react";
+import { Copy, Forward, MoreHorizontal, Trash2 } from "lucide-react";
 import {
   AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
+
 import { Button } from "../ui/button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,27 +17,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Notes } from "@prisma/client";
-import { useMutation, useQueryClient } from "react-query";
-import { useRouter } from "next/navigation";
+import DeleteNotes from "./DeleteNotes";
+
 
 export default function NotesMore({ notes }: { notes?: Notes }) {
-  const queryClient = useQueryClient();
-  const router = useRouter();
 
-  const { mutate: deleteNotes, isLoading: isDeleting } = useMutation({
-    mutationFn: async () => {
-      const res = await fetch(`/api/notes/${notes?.id}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      router.push("/dashboard/notes");
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
-  });
 
   return (
     <AlertDialog>
@@ -74,24 +54,7 @@ export default function NotesMore({ notes }: { notes?: Notes }) {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This preset will no longer be
-            accessible by you or others you've shared it with.
-          </AlertDialogDescription>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <Button
-              onClick={() => deleteNotes()}
-              variant="destructive"
-            >
-              {isDeleting ? <Loader2 className="h-4 w-4 animate-spin"/> : "Delete"}
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogHeader>
-      </AlertDialogContent>
+      {notes && <DeleteNotes id={notes.id}/>}
     </AlertDialog>
   );
 }

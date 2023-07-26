@@ -13,6 +13,7 @@ import NotesConfig from "./NotesConfig";
 import NotesMore from "./NotesMore";
 import { toast } from "../ui/use-toast";
 import { Loader2 } from "lucide-react";
+import NotesSiderbar from "./NotesSidebar";
 
 export default function NotesClient({ id }: { id: string }) {
 
@@ -77,9 +78,9 @@ export default function NotesClient({ id }: { id: string }) {
   return (
     <Tabs defaultValue="preview">
       <div className="w-full h-16 border-b flex items-center px-6 md:px-10 justify-between">
-        <div className="flex space-x-4 items-center">
-          <UserDropdown />
-          <span className="text-3xl font-extralight text-muted">/</span>
+        <div className="flex items-center">
+          <div className="hidden md:block mr-4"><UserDropdown /></div>
+          <span className="hidden md:block mr-4 text-3xl font-extralight text-muted">/</span>
           {notesLoading ? (
             <Skeleton className="h-4 w-[150px]" />
           ) : (
@@ -91,16 +92,18 @@ export default function NotesClient({ id }: { id: string }) {
           )}
         </div>
         <div className="flex space-x-2 items-center">
-          <NotesConfig notes={notes} />
-          <TabsList>
-            <TabsTrigger value="preview">Preview</TabsTrigger>
-            <TabsTrigger value="markdown">Markdown</TabsTrigger>
-          </TabsList>
-          {/* TODO */}
+          <div className="hidden md:flex space-x-2 items-center">
+            <NotesConfig notes={notes} />
+            <TabsList>
+              <TabsTrigger value="preview">Preview</TabsTrigger>
+              <TabsTrigger value="markdown">Markdown</TabsTrigger>
+            </TabsList>
+            <NotesMore notes={notes} />
+          </div>
+          <NotesSiderbar/>
           <Button onClick={() => save()} variant="secondary">
             Save {isSaving && <Loader2 className="h-4 w-4 ml-2" />}
           </Button>
-          <NotesMore notes={notes} />
         </div>
       </div>
     </Tabs>
