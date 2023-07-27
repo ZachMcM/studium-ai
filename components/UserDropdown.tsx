@@ -28,6 +28,9 @@ export default function UserDropdown() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator/>
         <DropdownMenuGroup>
+          <Link href="/feedback">
+            <DropdownMenuItem>Feedback</DropdownMenuItem>
+          </Link>
           <Link href="/dashboard/notes">
             <DropdownMenuItem>Dashboard</DropdownMenuItem>
           </Link>

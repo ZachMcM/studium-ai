@@ -20,17 +20,12 @@ export async function POST(req: NextRequest) {
   const session = await getAuthSession();
 
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized request", status: 400 });
+    return NextResponse.json({ error: "Unauthorized request", status: 401 });
   } else {
     const response = await openai.createChatCompletion({
       model: "gpt-4",
       stream: true,
       messages: buildPrompt(structuredPrompt),
-      max_tokens: 500,
-      temperature: 0.7,
-      top_p: 1,
-      frequency_penalty: 1,
-      presence_penalty: 1,
     });
 
     const stream = OpenAIStream(response);

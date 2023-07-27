@@ -13,7 +13,7 @@ import {
   MoreVertical,
   Trash2,
 } from "lucide-react";
-import { Notes } from "@prisma/client";
+import { FlashcardSet } from "@prisma/client";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -28,14 +28,14 @@ import {
 import SearchAlert from "../SearchAlert";
 import ErrorAlert from "../ErrorAlert";
 import EmptyAlert from "../EmptyAlert";
-import NewNotes from "./NewNotes";
 import DeleteDialog from "../DeleteDialog";
+import NewSet from "./NewSet";
 
-export default function NotesList() {
-  const { data: notesList, isLoading: notesLoading } = useQuery({
-    queryKey: ["notes"],
-    queryFn: async (): Promise<Notes[]> => {
-      const res = await fetch("/api/notes");
+export default function FlashcardsList() {
+  const { data: sets, isLoading: setsLoading } = useQuery({
+    queryKey: ["sets"],
+    queryFn: async (): Promise<FlashcardSet[]> => {
+      const res = await fetch("/api/flashcards");
       const data = await res.json();
       return data;
     },
@@ -45,9 +45,9 @@ export default function NotesList() {
   const queryClient = useQueryClient();
   const pathname = usePathname()
 
-  const { mutate: deleteNotes, isLoading: isDeleting } = useMutation({
+  const { mutate: deleteSet, isLoading: isDeleting } = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/notes/${id}`, {
+      const res = await fetch(`/api/flashcards/${id}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -55,10 +55,10 @@ export default function NotesList() {
     },
     onSuccess: (data) => {
       console.log(data);
-      if (pathname != "/dashboard/notes") {
-        router.push("/dashboard/notes");
+      if (pathname != "/dashboard/flashcards") {
+        router.push("/dashboard/flashcards");
       }
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      queryClient.invalidateQueries({ queryKey: ["sets"] });
     },
   });
 
@@ -70,36 +70,36 @@ export default function NotesList() {
         <Input
           onChange={(e) => setSearch(e.target.value)}
           value={search}
-          placeholder="Search notes..."
+          placeholder="Search flashcard sets..."
         />
-        <NewNotes/>
+        <NewSet/>
       </div>
       <div className="mt-6">
-        {notesLoading ? (
+        {setsLoading ? (
           <Loader2 className="h-4 w-4 animate-spin" />
-        ) : notesList ? (
-          notesList.length == 0 ? (
+        ) : sets ? (
+          sets.length == 0 ? (
             <EmptyAlert/>
           ) : (
             <div className="flex flex-col border rounded-lg">
-              {notesList.filter((notes) =>
-                notes.title.toLowerCase().includes(search.toLowerCase())
+              {sets.filter((flashcards) =>
+                flashcards.title.toLowerCase().includes(search.toLowerCase())
               ).length !== 0 ? (
-                notesList
-                  .filter((notes) =>
-                    notes.title.toLowerCase().includes(search.toLowerCase())
+                sets
+                  .filter((flashcards) =>
+                    flashcards.title.toLowerCase().includes(search.toLowerCase())
                   )
-                  .map((notes) => (
+                  .map((flashcards) => (
                     <div className="flex items-center justify-between border-b last:border-none px-6 py-4">
                       <div className="space-y-1">
                         <Link
-                          href={`/notes/${notes.id}`}
+                          href={`/flashcards/${flashcards.id}`}
                           className="text-lg hover:underline font-semibold"
                         >
-                          {notes.title}
+                          {flashcards.title}
                         </Link>
                         <p className="text-muted-foreground font-medium text-sm">
-                          {new Date(notes.createdAt).toLocaleDateString()}
+                          {new Date(flashcards.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <AlertDialog>
@@ -110,7 +110,7 @@ export default function NotesList() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
-                            <Link href={`/notes/${notes.id}`}>
+                            <Link href={`/flashcards/${flashcards.id}`}>
                               <DropdownMenuItem>
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
@@ -129,7 +129,7 @@ export default function NotesList() {
                             </AlertDialogTrigger>
                           </DropdownMenuContent>
                         </DropdownMenu>
-                        {notes && <DeleteDialog deleteFunction={() => deleteNotes(notes.id)} isDeleting={isDeleting}/>}
+                        {flashcards && <DeleteDialog deleteFunction={() => deleteSet(flashcards.id)} isDeleting={isDeleting}/>}
                       </AlertDialog>
                     </div>
                   ))

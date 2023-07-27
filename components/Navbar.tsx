@@ -1,15 +1,14 @@
 import Link, { LinkProps } from "next/link";
-import { Button } from "./ui/button";
 import { ReactNode } from "react";
 import NavAuth from "./NavAuth";
-import { BookOpenCheck } from "lucide-react";
+import LogoIcon from "./LogoIcon";
 
 export default function Navbar() {
   return (
-    <nav className="h-16 bg-background sticky flex items-center justify-between px-6 md:px-10">
+    <nav className="h-16 bg-background sticky flex items-center justify-between px-6">
       <div className="flex items-center">
-        <div className="flex items-center mr-10">
-          <BookOpenCheck className="mr-2"/>
+        <div className="flex space-x-4 items-center mr-10">
+          <LogoIcon/>
           <span className="font-bold">Study AI</span>
         </div>
         <div className="flex items-center space-x-8">

@@ -13,7 +13,7 @@ export async function GET() {
     });
     return NextResponse.json(notes);
   } else {
-    return NextResponse.json({ error: "Unauthorized Request", status: 400 });
+    return NextResponse.json({ error: "Unauthorized Request", status: 401 });
   }
 }
 
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   const session = await getAuthSession();
 
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized request", status: 400 });
+    return NextResponse.json({ error: "Unauthorized request", status: 401 });
   } else {
     // TODO
     const newNotes = await prisma.notes.create({

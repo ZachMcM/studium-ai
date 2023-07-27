@@ -5,3 +5,9 @@ export type ExtendedQuiz = Prisma.QuizGetPayload<{
     questions: true,
   }
 }>
+
+export type ExtendedFlashCardSet = Prisma.FlashcardSetGetPayload<{
+  include: {
+    cards: true
+  }
+}>

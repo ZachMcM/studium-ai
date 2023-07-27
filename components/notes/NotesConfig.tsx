@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Settings2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -10,21 +10,15 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { Notes } from "@prisma/client";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { RequestOptions } from "ai";
+import { useSearchParams } from "next/navigation";
+import SourceConfig from "../SourceConfig";
 
 type Props = {
   input: string;
@@ -37,91 +31,60 @@ type Props = {
 
 export default function NotesConfig({ input, setInput, complete }: Props) {
   const [open, setOpen] = useState<boolean>(false);
+  const [fileInput, setFileInput] = useState<FileList | null>(null)
+  const [tabValue, setTabValue] = useState<"upload" | "paste">("upload")
 
-  function handleSave() {
-    console.log(input)
-    complete(input);
+  async function handleSave() {
     setOpen(false);
-  }
-
-  async function handleFileUplaod(e: ChangeEvent<HTMLInputElement>) {
-    const fileList = e.target.files;
-    if (fileList) {
-      const fileContents = await fileList[0].text();
-      setInput(fileContents);
+    if (tabValue == "upload" && fileInput) {
+      const formData = new FormData()
+      formData.append("file", fileInput[0])
+      const res = await fetch("/api/files", {
+        method: "POST",
+        body: formData
+      })
+      const data = await res.json() as string
+      complete(data);
+    } else {
+      complete(input)
     }
   }
+
+  const searchParams = useSearchParams();
+  const isNew = new Boolean(searchParams.get("new")).valueOf();
+
+  useEffect(() => {
+    if (isNew) setOpen(true);
+  }, [isNew]);
+
+  useEffect(() => {
+    setInput("")
+    setFileInput(null)
+    setTabValue("upload")
+  }, [open])
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          Configuration <Settings2 className="h-4 w-4 ml-2" />
+          Generate... <Plus className="h-4 w-4 ml-2" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[425px] md:max-w-[525px]">
         <DialogHeader>
-          <DialogTitle>Configure notes</DialogTitle>
+          <DialogTitle>Generate notes</DialogTitle>
           <DialogDescription>
-            Generate your notes be either uploading a txt file or pasting text
+            Generate your notes by either uploading a pasting the soure or
+            uploading a pdf, txt, image, or video file.
           </DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="upload">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="upload">Upload</TabsTrigger>
-            <TabsTrigger value="paste">Paste</TabsTrigger>
-          </TabsList>
-          <TabsContent value="upload">
-            <Card>
-              <CardHeader>
-                <CardTitle>Upload data source file</CardTitle>
-                <CardDescription>
-                  Generate your notes using a txt file.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Label htmlFor="dataFile">Data Source File</Label>
-                <Input
-                  id="dataFile"
-                  type="file"
-                  accept=".txt"
-                  onChange={handleFileUplaod}
-                />
-              </CardContent>
-              <CardFooter>
-                {/* TODO */}
-                <Button onClick={handleSave}>
-                  Save <Check className="h-4 w-4 ml-2" />
-                </Button>
-              </CardFooter>
-            </Card>
-          </TabsContent>
-          <TabsContent value="paste">
-            <Card>
-              <CardHeader>
-                <CardTitle>Paste data source</CardTitle>
-                <CardDescription>
-                  Generate your notes by pasting the text.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Label htmlFor="sourceText">Data Source Text</Label>
-                <Textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  className="min-h-[200px]"
-                  id="sourceText"
-                />
-              </CardContent>
-              <CardFooter>
-                {/* TODO */}
-                <Button onClick={handleSave}>
-                  Save <Check className="h-4 w-4 ml-2" />
-                </Button>
-              </CardFooter>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        <SourceConfig
+          setTabValue={setTabValue}
+          setFileInput={setFileInput}
+          input={input}
+          setInput={setInput}
+          onContinue={() => handleSave()}
+        />
       </DialogContent>
     </Dialog>
   );

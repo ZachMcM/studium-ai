@@ -8,7 +8,7 @@ import { ReactNode } from "react";
 
 export default function DashboardSidebar() {
   return (
-    <aside className="hidden md:flex flex-col p-6 basis-1/6">
+    <aside className="hidden md:flex flex-col p-6 basis-1/5 lg:basis-1/6">
       <div className="flex flex-col space-y-2">
         <DashboardButton link="notes">
           <FileText className="h-4 w-4 mr-2" />
@@ -16,15 +16,11 @@ export default function DashboardSidebar() {
         </DashboardButton>
         <DashboardButton link="flashcards">
           <StickyNote className="h-4 w-4 mr-2" />
-          Flash Cards
+          Flashcards
         </DashboardButton>
         <DashboardButton link="quizes">
           <Dumbbell className="h-4 w-4 mr-2" />
           Quizes
-        </DashboardButton>
-        <DashboardButton link="files">
-          <Database className="h-4 w-4 mr-2" />
-          Files
         </DashboardButton>
       </div>
     </aside>

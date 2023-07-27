@@ -9,13 +9,13 @@ import { Button } from "../ui/button";
 import ReactMarkdown from "react-markdown";
 import TextareaAutosize from "react-textarea-autosize";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import UserDropdown from "../UserDropdown";
 import NotesConfig from "./NotesConfig";
 import NotesMore from "./NotesMore";
 import { toast } from "../ui/use-toast";
-import { AlertCircle, Loader2, Terminal } from "lucide-react";
+import { Loader2, StopCircle } from "lucide-react";
 import NotesSiderbar from "./NotesSidebar";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import Link from "next/link";
+import LogoIcon from "../LogoIcon";
 
 export default function NotesClient({ id }: { id: string }) {
   const { data: notes, isLoading: notesLoading } = useQuery({
@@ -30,8 +30,6 @@ export default function NotesClient({ id }: { id: string }) {
       setContent(data.content);
     },
   });
-
-  const queryClient = useQueryClient();
 
   const { mutate: save, isLoading: isSaving } = useMutation({
     mutationFn: async (): Promise<Notes> => {
@@ -63,6 +61,8 @@ export default function NotesClient({ id }: { id: string }) {
     },
   });
 
+  const queryClient = useQueryClient();
+
   const [title, setTitle] = useState<string>("");
 
   const {
@@ -72,6 +72,7 @@ export default function NotesClient({ id }: { id: string }) {
     completion: content,
     isLoading: completionLoading,
     setCompletion: setContent,
+    stop,
   } = useCompletion({
     api: "/api/ai/notes",
   });
@@ -92,12 +93,12 @@ export default function NotesClient({ id }: { id: string }) {
 
   return (
     <Tabs defaultValue="preview">
-      <div className="w-full sticky top-0 left-0 h-16 border-b flex items-center px-6 md:px-10 justify-between bg-background">
-        <div className="flex items-center">
-          <div className="hidden md:block mr-4">
-            <UserDropdown />
-          </div>
-          <span className="hidden md:block mr-4 text-3xl font-extralight text-muted">
+      <div className="w-full sticky top-0 left-0 h-16 border-b flex items-center px-6 justify-between bg-background">
+        <div className="flex items-center space-x-3">
+          <Link href="/dashboard/notes">
+            <LogoIcon />
+          </Link>
+          <span className="hidden md:block text-4xl font-extralight text-muted">
             /
           </span>
           {notesLoading ? (
@@ -139,7 +140,7 @@ export default function NotesClient({ id }: { id: string }) {
           </Button>
         </div>
       </div>
-      <div className="py-16 mx-auto max-w-3xl">
+      <div className="p-6 md:py-16 mx-auto max-w-3xl">
         {notesLoading ? (
           <div className="space-y-4 px-6">
             <Skeleton className="h-4 w-[400px]" />
@@ -153,19 +154,9 @@ export default function NotesClient({ id }: { id: string }) {
               {completionLoading && content.length == 0 && (
                 <Loader2 className="h-4 w-4 animate-spin" />
               )}
-              {content.length === 0 && !completionLoading && (
-                <Alert>
-                  <Terminal />
-                  <AlertTitle>Oops</AlertTitle>
-                  <AlertDescription>
-                    Your notes are empty currently. Try writing your own in the
-                    markdown editor or generating by configuring your notes.
-                  </AlertDescription>
-                </Alert>
-              )}
               <ReactMarkdown
                 children={content}
-                className="prose prose-zinc prose-lg dark:prose-invert"
+                className="prose prose-zincmd:prose-lg dark:prose-invert"
               />
               <div ref={previewEnd}></div>
             </TabsContent>
@@ -184,6 +175,13 @@ export default function NotesClient({ id }: { id: string }) {
               <div ref={markdownEnd}></div>
             </TabsContent>
           </>
+        )}
+      </div>
+      <div className="absolute bottom-0 right-0 m-6">
+        {completionLoading && (
+          <Button onClick={stop} variant="secondary" size="icon">
+            <StopCircle className="h-5 w-5" />
+          </Button>
         )}
       </div>
     </Tabs>

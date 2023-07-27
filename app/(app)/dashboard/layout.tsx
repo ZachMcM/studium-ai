@@ -8,8 +8,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <DashboardHeader />
       <div className="flex flex-1">
         <DashboardSidebar />
-        <div className="md:basis-5/6 w-full overflow-y-auto">
-          <main className="px-12 py-6">{children}</main>
+        <div className="md:basis-4/5 lg:basis-5/6 w-full overflow-y-auto">
+          <main className="p-6 lg:px-12">{children}</main>
         </div>
       </div>
     </div>

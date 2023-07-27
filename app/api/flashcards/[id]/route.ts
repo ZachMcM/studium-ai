@@ -7,12 +7,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   const { searchParams } = new URL(req.url)
 
   if (session || searchParams.get("secret") == process.env.NEXTAUTH_SECRET) {
-    const notes = await prisma.notes.findUnique({
+    const flashCardSet = await prisma.flashcardSet.findUnique({
       where: {
+        userId: session?.user.id,
         id: params.id
       }
     })
-    return NextResponse.json(notes)
+    return NextResponse.json(flashCardSet)
   } else {
     return NextResponse.json({ error: "Unauthorized request", status: 401 })
   }
@@ -26,17 +27,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   if (!session) return NextResponse.json({ error: "Unauthorized request", status: 401 })
   if (!title) return NextResponse.json({ error: "Invalid request", status: 400 })
 
-  const updatedNotes = await prisma.notes.update({
-    where: {
-      id: params.id,
-      userId: session.user.id
-    },
-    data: {
-      title: title,
-      content: content
-    }
-  })
-  return NextResponse.json(updatedNotes)
+  // TODO
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string }}) {
@@ -45,7 +36,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   console.log(params.id)
 
   if (session) {
-    const deletedNotes = await prisma.notes.delete({
+    const deletedNotes = await prisma.flashcardSet.delete({
       where: {
         id: params.id,
         userId: session.user.id

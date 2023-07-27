@@ -15,7 +15,7 @@ import { TabsList, TabsTrigger } from "../ui/tabs";
 import NotesConfig from "./NotesConfig";
 import UserDropdown from "../UserDropdown";
 import { AlertDialog, AlertDialogTrigger } from "../ui/alert-dialog";
-import DeleteNotes from "./DeleteNotes";
+import DeleteNotes from "../DeleteDialog";
 import { RequestOptions } from "ai";
 import { Dispatch, SetStateAction } from "react";
 
@@ -43,15 +43,8 @@ export default function NotesSiderbar({
         </Button>
       </SheetTrigger>
       <SheetContent side="right">
-        <SheetHeader>
-          <UserDropdown />
-        </SheetHeader>
-        <div className="flex flex-col space-y-2.5 mt-6">
-          <NotesConfig
-            input={input}
-            setInput={setInput}
-            complete={complete}
-          />
+        <div className="flex flex-col space-y-2.5 mt-8">
+          <NotesConfig input={input} setInput={setInput} complete={complete} />
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="preview">Preview</TabsTrigger>
             <TabsTrigger value="markdown">Markdown</TabsTrigger>
@@ -63,7 +56,7 @@ export default function NotesSiderbar({
           </Button>
           <AlertDialog>
             <AlertDialogTrigger>
-              <Button variant="destructive" className="w-full">
+              <Button variant="secondary" className="w-full text-destructive">
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
               </Button>

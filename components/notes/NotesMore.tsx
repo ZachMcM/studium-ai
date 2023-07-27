@@ -1,10 +1,7 @@
 "use client";
 
 import { Copy, Forward, MoreHorizontal, Trash2 } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-} from "../ui/alert-dialog";
+import { AlertDialog, AlertDialogTrigger } from "../ui/alert-dialog";
 
 import { Button } from "../ui/button";
 
@@ -17,11 +14,31 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Notes } from "@prisma/client";
-import DeleteNotes from "./DeleteNotes";
-
+import DeleteDialog from "../DeleteDialog";
+import { useMutation, useQueryClient } from "react-query";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function NotesMore({ notes }: { notes?: Notes }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
+  const { mutate: deleteNotes, isLoading: isDeleting } = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/notes/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      if (pathname != "/dashboard/notes") {
+        router.push("/dashboard/notes");
+      }
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+    },
+  });
 
   return (
     <AlertDialog>
@@ -54,7 +71,12 @@ export default function NotesMore({ notes }: { notes?: Notes }) {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      {notes && <DeleteNotes id={notes.id}/>}
+      {notes && (
+        <DeleteDialog
+          deleteFunction={() => deleteNotes(notes.id)}
+          isDeleting={isDeleting}
+        />
+      )}
     </AlertDialog>
   );
 }

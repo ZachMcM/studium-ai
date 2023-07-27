@@ -34,6 +34,8 @@
     "next-auth": "^4.22.3",
     "next-themes": "^0.2.1",
     "openai-edge": "^1.2.1",
+    "pdf-parse": "^1.1.1",
+    "pdf2json": "^3.0.4",
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -51,6 +53,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
+    "@types/pdf-parse": "^1.1.1",
     "encoding": "^0.1.13",
     "prisma": "^5.0.0"
   }

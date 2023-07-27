@@ -50,7 +50,7 @@ model User {
   joined        DateTime       @default(now())
   sessions      Session[]
   notesList     Notes[]
-  flashCardSets FlashCardSet[]
+  flashcardSets FlashcardSet[]
   quizes        Quiz[]
 }
 
@@ -84,20 +84,20 @@ model Notes {
   createdAt DateTime @default(now())
 }
 
-model FlashCardSet {
+model FlashcardSet {
   id        String      @id @default(cuid())
   title     String
-  cards     FlashCard[]
+  cards     Flashcard[]
   userId    String
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime    @default(now())
 }
 
-model FlashCard {
+model Flashcard {
   id       String       @id @default(cuid())
   question String
   answer   String
-  set      FlashCardSet @relation(fields: [setId], references: [id], onDelete: Cascade)
+  set      FlashcardSet @relation(fields: [setId], references: [id], onDelete: Cascade)
   setId    String
 }
 
