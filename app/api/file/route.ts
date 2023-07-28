@@ -1,13 +1,16 @@
 import { getAuthSession } from "@/lib/auth";
 import { openai } from "@/lib/openai";
 import { NextRequest, NextResponse } from "next/server";
+import { ResponseTypes } from "openai-edge";
 import pdf from 'pdf-parse'
-
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const file = formData.get("file") as File | null | undefined;
   const session = await getAuthSession();
+
+  console.log(file)
+  console.log(file?.type)
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized request", status: 401 });
@@ -33,7 +36,10 @@ export async function POST(req: NextRequest) {
   }
 
   if (file.type.includes("audio/") || file.type.includes("video/")) {
+    console.log("is video")
     const response = await openai.createTranscription(file, "whisper-1");
-    return NextResponse.json(response);
+    const data = (await response.json()) as ResponseTypes["createTranscription"]
+    console.log(data)
+    return NextResponse.json(data);
   }
 }

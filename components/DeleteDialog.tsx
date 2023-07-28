@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -9,7 +10,6 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog";
 import { Loader2 } from "lucide-react";
-import { Button } from "./ui/button";
 
 export default function DeleteDialog({
   deleteFunction,
@@ -28,10 +28,10 @@ export default function DeleteDialog({
         </AlertDialogDescription>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button onClick={deleteFunction} variant="destructive">
+          <AlertDialogAction onClick={deleteFunction}>
             Delete
             {isDeleting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
-          </Button>
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogHeader>
     </AlertDialogContent>

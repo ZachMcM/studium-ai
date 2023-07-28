@@ -18,28 +18,13 @@ import DeleteDialog from "../DeleteDialog";
 import { useMutation, useQueryClient } from "react-query";
 import { usePathname, useRouter } from "next/navigation";
 
-export default function NotesMore({ notes }: { notes?: Notes }) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
-  const { mutate: deleteNotes, isLoading: isDeleting } = useMutation({
-    mutationFn: async (id: string) => {
-      const res = await fetch(`/api/notes/${id}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      if (pathname != "/dashboard/notes") {
-        router.push("/dashboard/notes");
-      }
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
-  });
-
+export default function NotesMore({
+  deleteFunction,
+  isDeleting,
+}: {
+  deleteFunction: () => void;
+  isDeleting: boolean;
+}) {
   return (
     <AlertDialog>
       <DropdownMenu>
@@ -71,12 +56,7 @@ export default function NotesMore({ notes }: { notes?: Notes }) {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      {notes && (
-        <DeleteDialog
-          deleteFunction={() => deleteNotes(notes.id)}
-          isDeleting={isDeleting}
-        />
-      )}
+      <DeleteDialog deleteFunction={deleteFunction} isDeleting={isDeleting} />
     </AlertDialog>
   );
 }

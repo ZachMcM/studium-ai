@@ -1,28 +1,19 @@
 "use client";
 
 import { Notes } from "@prisma/client";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { Forward, Menu, Trash2 } from "lucide-react";
-import NotesMore from "./NotesMore";
 import { TabsList, TabsTrigger } from "../ui/tabs";
 import NotesConfig from "./NotesConfig";
-import UserDropdown from "../UserDropdown";
 import { AlertDialog, AlertDialogTrigger } from "../ui/alert-dialog";
-import DeleteNotes from "../DeleteDialog";
 import { RequestOptions } from "ai";
 import { Dispatch, SetStateAction } from "react";
+import DeleteDialog from "../DeleteDialog";
 
 type Props = {
-  notes?: Notes;
-  input: string;
-  setInput: Dispatch<SetStateAction<string>>;
+  deleteFunction: () => void;
+  isDeleting: boolean;
   complete: (
     prompt: string,
     options?: RequestOptions | undefined
@@ -30,10 +21,9 @@ type Props = {
 };
 
 export default function NotesSiderbar({
-  notes,
-  input,
-  setInput,
   complete,
+  deleteFunction,
+  isDeleting,
 }: Props) {
   return (
     <Sheet>
@@ -44,7 +34,7 @@ export default function NotesSiderbar({
       </SheetTrigger>
       <SheetContent side="right">
         <div className="flex flex-col space-y-2.5 mt-8">
-          <NotesConfig input={input} setInput={setInput} complete={complete} />
+          <NotesConfig complete={complete} />
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="preview">Preview</TabsTrigger>
             <TabsTrigger value="markdown">Markdown</TabsTrigger>
@@ -61,7 +51,10 @@ export default function NotesSiderbar({
                 Delete
               </Button>
             </AlertDialogTrigger>
-            {notes && <DeleteNotes id={notes?.id} />}
+            <DeleteDialog
+              deleteFunction={deleteFunction}
+              isDeleting={isDeleting}
+            />
           </AlertDialog>
         </div>
       </SheetContent>

@@ -7,7 +7,7 @@ export default function Navbar() {
   return (
     <nav className="h-16 bg-background sticky flex items-center justify-between px-6">
       <div className="flex items-center">
-        <div className="flex space-x-4 items-center mr-10">
+        <div className="flex space-x-2 items-center mr-10">
           <LogoIcon/>
           <span className="font-bold">Study AI</span>
         </div>

@@ -1,5 +1,4 @@
 import FlashcardsList from "@/components/flashcards/FlashcardsList"
-import NotesList from "@/components/notes/NotesList"
 import { getAuthSession } from "@/lib/auth"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"

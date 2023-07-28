@@ -8,18 +8,64 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTrigger,
-  DialogTitle
+  DialogTitle,
 } from "../ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SourceConfig from "../SourceConfig";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { useMutation } from "react-query";
+import { Input } from "../ui/input";
+
+const formSchema = z.object({
+  title: z
+    .string()
+    .min(5, { message: "Your title must be at least 5 characters." })
+    .max(50, { message: "Your title must be less than 50 characters." }),
+});
 
 export default function NewSet() {
-  const [page, setPage] = useState<number>(1);
-  const [input, setInput] = useState<string>("");
-  const [fileInput, setFileInput] = useState<FileList>()
+  const [page, setPage] = useState<"config" | "submit">("config");
+  const [open, setOpen] = useState<boolean>(false);
+  const [sourceText, setSourceText] = useState<string>("");
+
+  function toSubmitPage(text: string) {
+    setSourceText(text);
+    setPage("submit");
+  }
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+    },
+  });
+
+  // TODO
+  const {} = useMutation({
+    mutationFn: async () => {},
+  });
+
+  // TODO
+  function onSubmit() {}
+
+  useEffect(() => {
+    setSourceText(sourceText);
+    setPage("config");
+  }, [open]);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger asChild className="shrink-0">
         <Button>
           Add New...
@@ -30,15 +76,41 @@ export default function NewSet() {
         <DialogHeader>
           <DialogTitle>Generate a flashcard set</DialogTitle>
           <DialogDescription>
-            Generate a flashcard set by either uploading a pasting the soure or
-            uploading a pdf, txt, image, or video file.
+            Generate your flashcard set by uploading a file, pasting text, or
+            uploading a link to a website.
           </DialogDescription>
         </DialogHeader>
-        <SourceConfig
-          input={input}
-          setInput={setInput}
-          onContinue={() => setPage(2)}
-        />
+        {page == "config" && (
+          <SourceConfig open={open} onContinue={toSubmitPage} />
+        )}
+        {page == "submit" && (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your flashcard set title..."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      This will be how you identify your flashcard set.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full">
+                Submit
+              </Button>
+            </form>
+          </Form>
+        )}
       </DialogContent>
     </Dialog>
   );

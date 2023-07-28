@@ -16,6 +16,7 @@ import { Loader2, StopCircle } from "lucide-react";
 import NotesSiderbar from "./NotesSidebar";
 import Link from "next/link";
 import LogoIcon from "../LogoIcon";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function NotesClient({ id }: { id: string }) {
   const { data: notes, isLoading: notesLoading } = useQuery({
@@ -61,13 +62,10 @@ export default function NotesClient({ id }: { id: string }) {
     },
   });
 
-  const queryClient = useQueryClient();
-
   const [title, setTitle] = useState<string>("");
+  const searchParams = useSearchParams();
 
   const {
-    input,
-    setInput,
     complete,
     completion: content,
     isLoading: completionLoading,
@@ -75,7 +73,37 @@ export default function NotesClient({ id }: { id: string }) {
     stop,
   } = useCompletion({
     api: "/api/ai/notes",
+    onFinish: removeNew,
   });
+
+  const pathname = usePathname();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteNotes, isLoading: isDeleting } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/notes/${notes?.id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      if (pathname != "/dashboard/notes") {
+        router.push("/dashboard/notes");
+      }
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+    },
+  });
+
+  // TODO
+  function removeNew() {
+    console.log(pathname)
+    if (Boolean(searchParams.get("new"))) {
+      router.replace(`/notes/${notes?.id}`)
+    }
+  }
 
   useEffect(() => {
     if (markdownEnd.current) {
@@ -94,7 +122,7 @@ export default function NotesClient({ id }: { id: string }) {
   return (
     <Tabs defaultValue="preview">
       <div className="w-full sticky top-0 left-0 h-16 border-b flex items-center px-6 justify-between bg-background">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 shrink-0">
           <Link href="/dashboard/notes">
             <LogoIcon />
           </Link>
@@ -113,11 +141,7 @@ export default function NotesClient({ id }: { id: string }) {
         </div>
         <div className="flex space-x-2 items-center">
           <div className="hidden md:flex space-x-2 items-center">
-            <NotesConfig
-              input={input}
-              setInput={setInput}
-              complete={complete}
-            />
+            <NotesConfig complete={complete} />
             <TabsList>
               <TabsTrigger value="preview">Preview</TabsTrigger>
               <TabsTrigger
@@ -127,12 +151,14 @@ export default function NotesClient({ id }: { id: string }) {
                 Markdown
               </TabsTrigger>
             </TabsList>
-            <NotesMore notes={notes} />
+            <NotesMore
+              deleteFunction={() => deleteNotes()}
+              isDeleting={isDeleting}
+            />
           </div>
           <NotesSiderbar
-            notes={notes}
-            input={input}
-            setInput={setInput}
+            isDeleting={isDeleting}
+            deleteFunction={() => deleteNotes()}
             complete={complete}
           />
           <Button onClick={() => save()} variant="secondary">
@@ -177,9 +203,12 @@ export default function NotesClient({ id }: { id: string }) {
           </>
         )}
       </div>
-      <div className="absolute bottom-0 right-0 m-6">
+      <div className="fixed bottom-0 right-0 m-6">
         {completionLoading && (
-          <Button onClick={stop} variant="secondary" size="icon">
+          <Button onClick={() => {
+            stop()
+            removeNew()
+          }} variant="secondary" size="icon">
             <StopCircle className="h-5 w-5" />
           </Button>
         )}
