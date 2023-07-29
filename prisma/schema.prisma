@@ -50,8 +50,7 @@ model User {
   joined        DateTime       @default(now())
   sessions      Session[]
   notesList     Notes[]
-  flashcardSets FlashcardSet[]
-  quizes        Quiz[]
+  studySets     StudySet[]
 }
 
 model VerificationToken {
@@ -84,37 +83,20 @@ model Notes {
   createdAt DateTime @default(now())
 }
 
-model FlashcardSet {
+model StudySet {
   id        String      @id @default(cuid())
   title     String
-  cards     Flashcard[]
+  items     SetItem[]
   userId    String
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime    @default(now())
 }
 
-model Flashcard {
+model SetItem {
   id       String       @id @default(cuid())
   question String
   answer   String
-  set      FlashcardSet @relation(fields: [setId], references: [id], onDelete: Cascade)
+  set      StudySet     @relation(fields: [setId], references: [id], onDelete: Cascade)
   setId    String
 }
 
-model Quiz {
-  id        String     @id @default(cuid())
-  title     String
-  questions Question[]
-  userId    String
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime   @default(now())
-}
-
-model Question {
-  id          String   @id @default(cuid())
-  question    String
-  choices     String[]
-  answerIndex Int
-  quizId      String
-  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
-}

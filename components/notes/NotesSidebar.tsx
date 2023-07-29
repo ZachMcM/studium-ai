@@ -46,7 +46,7 @@ export default function NotesSiderbar({
           </Button>
           <AlertDialog>
             <AlertDialogTrigger>
-              <Button variant="secondary" className="w-full text-destructive">
+              <Button variant="outline" className="w-full !text-destructive">
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
               </Button>

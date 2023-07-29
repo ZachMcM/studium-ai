@@ -12,12 +12,19 @@ import {
 import { Monitor, MoonStar, Sun } from "lucide-react";
 
 export default function ThemeButton() {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
 
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
-        <span>Theme</span>
+        {theme == "system" ? (
+          <Monitor className="h-4 w-4 mr-2" />
+        ) : theme == "light" ? (
+          <Sun className="h-4 w-4 mr-2" />
+        ) : (
+          <MoonStar className="h-4 w-4 mr-2" />
+        )}
+        Theme
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>
         <DropdownMenuSubContent>

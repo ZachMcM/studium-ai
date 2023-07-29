@@ -13,7 +13,7 @@ import {
   MoreVertical,
   Trash2,
 } from "lucide-react";
-import { FlashcardSet } from "@prisma/client";
+import { StudySet } from "@prisma/client";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -31,11 +31,11 @@ import EmptyAlert from "../EmptyAlert";
 import DeleteDialog from "../DeleteDialog";
 import NewSet from "./NewSet";
 
-export default function FlashcardsList() {
+export default function SetsList() {
   const { data: sets, isLoading: setsLoading } = useQuery({
     queryKey: ["sets"],
-    queryFn: async (): Promise<FlashcardSet[]> => {
-      const res = await fetch("/api/flashcards");
+    queryFn: async (): Promise<StudySet[]> => {
+      const res = await fetch("/api/study-sets");
       const data = await res.json();
       return data;
     },
@@ -47,7 +47,7 @@ export default function FlashcardsList() {
 
   const { mutate: deleteSet, isLoading: isDeleting } = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/flashcards/${id}`, {
+      const res = await fetch(`/api/study-sets/${id}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -55,8 +55,8 @@ export default function FlashcardsList() {
     },
     onSuccess: (data) => {
       console.log(data);
-      if (pathname != "/dashboard/flashcards") {
-        router.push("/dashboard/flashcards");
+      if (pathname != "/dashboard/study-sets") {
+        router.push("/dashboard/study-sets");
       }
       queryClient.invalidateQueries({ queryKey: ["sets"] });
     },
@@ -70,7 +70,7 @@ export default function FlashcardsList() {
         <Input
           onChange={(e) => setSearch(e.target.value)}
           value={search}
-          placeholder="Search flashcard sets..."
+          placeholder="Search study sets..."
         />
         <NewSet/>
       </div>
@@ -82,24 +82,24 @@ export default function FlashcardsList() {
             <EmptyAlert/>
           ) : (
             <div className="flex flex-col border rounded-lg">
-              {sets.filter((flashcards) =>
-                flashcards.title.toLowerCase().includes(search.toLowerCase())
+              {sets.filter((set) =>
+                set.title.toLowerCase().includes(search.toLowerCase())
               ).length !== 0 ? (
                 sets
-                  .filter((flashcards) =>
-                    flashcards.title.toLowerCase().includes(search.toLowerCase())
+                  .filter((set) =>
+                    set.title.toLowerCase().includes(search.toLowerCase())
                   )
-                  .map((flashcards) => (
-                    <div className="flex items-center justify-between border-b last:border-none px-6 py-4">
+                  .map((set) => (
+                    <div key={set.id} className="flex items-center justify-between border-b last:border-none px-6 py-4">
                       <div className="space-y-1">
                         <Link
-                          href={`/flashcards/${flashcards.id}`}
+                          href={`/study-sets/${set.id}`}
                           className="text-lg hover:underline font-semibold"
                         >
-                          {flashcards.title}
+                          {set.title || "Untitled Set"}
                         </Link>
                         <p className="text-muted-foreground font-medium text-sm">
-                          {new Date(flashcards.createdAt).toLocaleDateString()}
+                          {new Date(set.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <AlertDialog>
@@ -110,7 +110,7 @@ export default function FlashcardsList() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
-                            <Link href={`/flashcards/${flashcards.id}`}>
+                            <Link href={`/study-sets/${set.id}`}>
                               <DropdownMenuItem>
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
@@ -129,7 +129,7 @@ export default function FlashcardsList() {
                             </AlertDialogTrigger>
                           </DropdownMenuContent>
                         </DropdownMenu>
-                        {flashcards && <DeleteDialog deleteFunction={() => deleteSet(flashcards.id)} isDeleting={isDeleting}/>}
+                        {set && <DeleteDialog deleteFunction={() => deleteSet(set.id)} isDeleting={isDeleting}/>}
                       </AlertDialog>
                     </div>
                   ))

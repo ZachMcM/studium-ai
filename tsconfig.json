@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(app)/dashboard/flashcards", "app/api/ai/whisper"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(app)/dashboard/study-sets", "app/api/ai/whisper"],
   "exclude": ["node_modules"]
 }

@@ -96,7 +96,7 @@ export default function NotesList() {
                           href={`/notes/${notes.id}`}
                           className="text-lg hover:underline font-semibold"
                         >
-                          {notes.title}
+                          {notes.title || "Untitled Notes"}
                         </Link>
                         <p className="text-muted-foreground font-medium text-sm">
                           {new Date(notes.createdAt).toLocaleDateString()}

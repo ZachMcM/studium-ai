@@ -13,10 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Notes } from "@prisma/client";
 import DeleteDialog from "../DeleteDialog";
-import { useMutation, useQueryClient } from "react-query";
-import { usePathname, useRouter } from "next/navigation";
 
 export default function NotesMore({
   deleteFunction,
@@ -29,7 +26,7 @@ export default function NotesMore({
     <AlertDialog>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="secondary">
+          <Button size="icon" variant="secondary">
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>

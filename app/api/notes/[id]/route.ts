@@ -21,6 +21,34 @@ export async function GET(
   }
 }
 
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const session = await getAuthSession();
+
+  const { content, title } = (await req.json()) as {
+    content?: string;
+    title?: string;
+  };
+
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized request", status: 401 });
+
+  const updatedNotes = await prisma.notes.update({
+    where: {
+      id: params.id,
+      userId: session.user.id,
+    },
+    data: {
+      title,
+      content
+    },
+  });
+  return NextResponse.json(updatedNotes);
+}
+
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
