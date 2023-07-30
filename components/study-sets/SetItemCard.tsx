@@ -38,6 +38,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 const formSchema = z.object({
   question: z
@@ -116,8 +117,8 @@ export default function SetItemCard({
 
   return (
     <Card>
-      <CardContent className="pt-6 flex items-center space-x-6 text-sm font-medium">
-        <p className="text-muted-foreground basis-1/4 pr-6 border-r">
+      <CardContent className="pt-6 flex flex-col md:flex-row md:items-center space-y-6 md:space-y-0 items-start md:space-x-6 text-sm font-medium">
+        <p className="text-muted-foreground basis-1/4 pb-6 md:pb-0 md:pr-6 border-b md:border-b-0 md:border-r">
           {item.question}
         </p>
         <p className="basis-3/4">{item.answer}</p>
@@ -125,7 +126,7 @@ export default function SetItemCard({
           <Dialog>
             <AlertDialog>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger asChild className="self-end md:self-center">
                   <Button variant="outline" size="icon" className="shrink-0">
                     <MoreVertical className="h-4 w-4" />
                   </Button>
@@ -155,7 +156,7 @@ export default function SetItemCard({
                 isDeleting={isItemDeleting}
               />
             </AlertDialog>
-            <DialogContent>
+            <DialogContent className="max-w-[425px] md:max-w-[525px] !rounded-lg">
               <DialogHeader>
                 <DialogTitle>Edit</DialogTitle>
                 <DialogDescription>
@@ -174,7 +175,7 @@ export default function SetItemCard({
                       <FormItem>
                         <FormLabel>Question</FormLabel>
                         <FormControl>
-                          <Input
+                          <Textarea
                             placeholder="Enter the item question..."
                             {...field}
                           />
@@ -190,7 +191,7 @@ export default function SetItemCard({
                       <FormItem>
                         <FormLabel>Answer</FormLabel>
                         <FormControl>
-                          <Input
+                          <Textarea
                             placeholder="Enter the item answer..."
                             {...field}
                           />

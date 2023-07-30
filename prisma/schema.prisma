@@ -99,4 +99,3 @@ model SetItem {
   set      StudySet     @relation(fields: [setId], references: [id], onDelete: Cascade)
   setId    String
 }
-

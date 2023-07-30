@@ -84,10 +84,6 @@ export default function SetHeader({ id }: { id: string }) {
                     <Forward className="h-4 w-4 mr-2" />
                     Share
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Copy className="h-4 w-4 mr-2" />
-                    Duplicate
-                  </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>

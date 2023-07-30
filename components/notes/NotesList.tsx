@@ -1,35 +1,16 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import {
-  Edit,
-  Forward,
-  Loader2,
-  MoreVertical,
-  Trash2,
-} from "lucide-react";
 import { Notes } from "@prisma/client";
-import Link from "next/link";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import SearchAlert from "../SearchAlert";
 import ErrorAlert from "../ErrorAlert";
 import EmptyAlert from "../EmptyAlert";
 import NewNotes from "./NewNotes";
-import DeleteDialog from "../DeleteDialog";
+import ItemsLoading from "../ItemsLoading";
+import ItemCard from "../ItemCard";
 
 export default function NotesList() {
   const { data: notesList, isLoading: notesLoading } = useQuery({
@@ -76,7 +57,7 @@ export default function NotesList() {
       </div>
       <div className="mt-6">
         {notesLoading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <ItemsLoading/>
         ) : notesList ? (
           notesList.length == 0 ? (
             <EmptyAlert/>
@@ -90,48 +71,14 @@ export default function NotesList() {
                     notes.title.toLowerCase().includes(search.toLowerCase())
                   )
                   .map((notes) => (
-                    <div className="flex items-center justify-between border-b last:border-none px-6 py-4">
-                      <div className="space-y-1">
-                        <Link
-                          href={`/notes/${notes.id}`}
-                          className="text-lg hover:underline font-semibold"
-                        >
-                          {notes.title || "Untitled Notes"}
-                        </Link>
-                        <p className="text-muted-foreground font-medium text-sm">
-                          {new Date(notes.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <AlertDialog>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="icon">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <Link href={`/notes/${notes.id}`}>
-                              <DropdownMenuItem>
-                                <Edit className="h-4 w-4 mr-2" />
-                                Edit
-                              </DropdownMenuItem>
-                            </Link>
-                            {/* TODO */}
-                            <DropdownMenuItem>
-                              <Forward className="h-4 w-4 mr-2" />
-                              Share
-                            </DropdownMenuItem>
-                            <AlertDialogTrigger asChild>
-                              <DropdownMenuItem className="!text-destructive">
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            </AlertDialogTrigger>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                        {notes && <DeleteDialog deleteFunction={() => deleteNotes(notes.id)} isDeleting={isDeleting}/>}
-                      </AlertDialog>
-                    </div>
+                    <ItemCard
+                      title={notes.title}
+                      deleteFunction={() => deleteNotes(notes.id)}
+                      isDeleting={isDeleting}
+                      link={`/notes/${notes.id}`}
+                      createdAt={(new Date(notes.createdAt)).toLocaleDateString()}
+                      itemType="Notes"
+                    />
                   ))
               ) : (
                 <SearchAlert/>

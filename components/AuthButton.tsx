@@ -1,17 +1,12 @@
 "use client";
 
-import { useSession, signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { FaGoogle } from "react-icons/fa6"
 
 export default function AuthButton() {
-  const { data: session } = useSession();
-
-  if (session) redirect("/dashboard/notes");
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (

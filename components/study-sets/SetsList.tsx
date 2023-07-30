@@ -1,35 +1,16 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import {
-  Edit,
-  Forward,
-  Loader2,
-  MoreVertical,
-  Trash2,
-} from "lucide-react";
 import { StudySet } from "@prisma/client";
-import Link from "next/link";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import SearchAlert from "../SearchAlert";
 import ErrorAlert from "../ErrorAlert";
 import EmptyAlert from "../EmptyAlert";
-import DeleteDialog from "../DeleteDialog";
 import NewSet from "./NewSet";
+import ItemCard from "../ItemCard";
+import ItemsLoading from "../ItemsLoading";
 
 export default function SetsList() {
   const { data: sets, isLoading: setsLoading } = useQuery({
@@ -76,7 +57,7 @@ export default function SetsList() {
       </div>
       <div className="mt-6">
         {setsLoading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <ItemsLoading/>
         ) : sets ? (
           sets.length == 0 ? (
             <EmptyAlert/>
@@ -90,48 +71,14 @@ export default function SetsList() {
                     set.title.toLowerCase().includes(search.toLowerCase())
                   )
                   .map((set) => (
-                    <div key={set.id} className="flex items-center justify-between border-b last:border-none px-6 py-4">
-                      <div className="space-y-1">
-                        <Link
-                          href={`/study-sets/${set.id}`}
-                          className="text-lg hover:underline font-semibold"
-                        >
-                          {set.title || "Untitled Set"}
-                        </Link>
-                        <p className="text-muted-foreground font-medium text-sm">
-                          {new Date(set.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <AlertDialog>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="icon">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <Link href={`/study-sets/${set.id}`}>
-                              <DropdownMenuItem>
-                                <Edit className="h-4 w-4 mr-2" />
-                                Edit
-                              </DropdownMenuItem>
-                            </Link>
-                            {/* TODO */}
-                            <DropdownMenuItem>
-                              <Forward className="h-4 w-4 mr-2" />
-                              Share
-                            </DropdownMenuItem>
-                            <AlertDialogTrigger asChild>
-                              <DropdownMenuItem className="!text-destructive">
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            </AlertDialogTrigger>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                        {set && <DeleteDialog deleteFunction={() => deleteSet(set.id)} isDeleting={isDeleting}/>}
-                      </AlertDialog>
-                    </div>
+                    <ItemCard
+                      title={set.title}
+                      deleteFunction={() => deleteSet(set.id)}
+                      isDeleting={isDeleting}
+                      link={`/study-sets/${set.id}`}
+                      createdAt={(new Date(set.createdAt)).toLocaleDateString()}
+                      itemType="Study Set"
+                    />
                   ))
               ) : (
                 <SearchAlert/>

@@ -2,7 +2,8 @@
 
 import ErrorAlert from "@/components/ErrorAlert";
 import FlashcardCarousel from "@/components/flashcards/FlashcardCarousel";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ExtendedStudySet } from "@/types/prisma";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -27,9 +28,24 @@ export default function SetFlashcards({ params }: { params: { id: string } }) {
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back
       </Link>
-      <h3 className="font-bold text-3xl">Flashcards</h3>
+      {isSetLoading ? 
+      <Skeleton className="h-4 w-3/5"/> : 
+      <h3 className="font-bold text-3xl">Flashcards | {set?.title}</h3>
+      }
       {isSetLoading ? (
-        <div className="p-6 h-[200px] overflow-auto bg-secondary rounded-lg animate-pulse"/>
+        <Card className="h-[200px]">
+          <CardHeader>
+            <Skeleton className="h-4 w-3/5"/>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <Skeleton className="h-3 w-4/5"/>
+              <Skeleton className="h-3 w-3/5"/>
+              <Skeleton className="h-3 w-2/5"/>
+              <Skeleton className="h-3 w-5/5"/>
+            </div>
+          </CardContent>
+        </Card>
       ) : set ? (
         <FlashcardCarousel set={set} />
       ) : (

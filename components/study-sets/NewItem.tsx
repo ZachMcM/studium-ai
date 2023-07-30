@@ -78,7 +78,7 @@ export default function NewItem({ set }: { set: StudySet }) {
           Add new item to study set <CopyPlus className="h-4 w-4 ml-2" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-[425px] md:max-w-[525px] !rounded-lg">
         <DialogHeader>
           <DialogTitle>Add new study set item</DialogTitle>
           <DialogDescription>

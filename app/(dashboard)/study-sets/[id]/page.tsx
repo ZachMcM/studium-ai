@@ -57,15 +57,20 @@ export default function StudySetPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="w-full flex-col space-y-6">
-      <TextareaAutosize
-        className="font-extrabold text-4xl lg:text-5xl tracking-tight bg-transparent focus:outline-none resize-none w-full"
-        value={title}
-        onChange={(e) => {
-          updateTitle(e.target.value);
-          setTitle(e.target.value);
-        }}
-        placeholder="Set Title"
-      />
+      {isSetLoading ? (
+        <Skeleton className="h-7 w-4/5 mb-6" />
+      ) : (
+        <TextareaAutosize
+          className="font-extrabold text-4xl lg:text-5xl tracking-tight bg-transparent focus:outline-none resize-none w-full"
+          value={title || set?.title}
+          onChange={(e) => {
+            updateTitle(e.target.value);
+            setTitle(e.target.value);
+          }}
+          placeholder="Set Title"
+        />
+      )}
+
       <div className="w-full flex justify-between items-center">
         <div className="flex space-x-2 items-center">
           <Link href={`/study-sets/${set?.id}/flashcards`}>

@@ -24,11 +24,10 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useMutation, useQueries, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/use-toast";
-import { cn } from "@/lib/utils";
 import { ExtendedStudySet } from "@/types/prisma";
 
 const formSchema = z.object({
@@ -107,7 +106,7 @@ export default function NewSet() {
           <Plus className="h-4 w-4 ml-2" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[425px] md:max-w-[525px]">
+      <DialogContent className="max-w-[425px] md:max-w-[525px] !rounded-lg">
         <DialogHeader>
           <DialogTitle>Generate a study set</DialogTitle>
           <DialogDescription>

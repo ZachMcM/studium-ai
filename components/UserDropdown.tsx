@@ -31,7 +31,7 @@ export default function UserDropdown() {
           <Link href="/feedback">
             <DropdownMenuItem>Feedback</DropdownMenuItem>
           </Link>
-          <Link href="/dashboard/notes">
+          <Link href="/dashboard">
             <DropdownMenuItem>Dashboard</DropdownMenuItem>
           </Link>
           <ThemeButton/>

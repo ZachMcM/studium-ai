@@ -19,7 +19,7 @@ export default function DeleteDialog({
   isDeleting: boolean;
 }) {
   return (
-    <AlertDialogContent className="max-w-[425px] md:max-w-[525px]">
+    <AlertDialogContent className="max-w-[425px] md:max-w-[525px] !rounded-lg">
       <AlertDialogHeader>
         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
         <AlertDialogDescription>

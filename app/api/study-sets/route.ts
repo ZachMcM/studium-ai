@@ -75,6 +75,7 @@ async function createSet(sourceText: string, numCards: number): Promise<StudySet
   });
 
   const data = (await response.json()) as ResponseTypes["createChatCompletion"];
+  console.log(data)
   console.log(data.choices[0].message?.function_call?.arguments)
   return JSON.parse(data.choices[0].message?.function_call?.arguments || "");
 }

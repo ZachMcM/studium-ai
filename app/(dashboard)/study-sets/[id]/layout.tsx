@@ -42,7 +42,7 @@ export default async function SetLayout({
   return (
     <div className="flex flex-col w-full">
       <SetHeader id={params.id} />
-      <main className="p-6 md:py-16 w-full mx-auto max-w-3xl">{children}</main>
+      <main className="p-6 md:py-16 w-full mx-auto max-w-4xl">{children}</main>
     </div>
   );
 }

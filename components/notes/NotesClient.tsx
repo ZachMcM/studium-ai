@@ -11,7 +11,6 @@ import TextareaAutosize from "react-textarea-autosize";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import NotesConfig from "./NotesConfig";
 import NotesMore from "./NotesMore";
-import { toast } from "../ui/use-toast";
 import { Loader2, StopCircle } from "lucide-react";
 import NotesSiderbar from "./NotesSidebar";
 import Link from "next/link";
@@ -45,7 +44,9 @@ export default function NotesClient({ id }: { id: string }) {
     stop,
   } = useCompletion({
     api: "/api/notes/generate",
-    onFinish: removeNew,
+    onFinish(prompt, completion) {
+      updateContent(completion);
+    },
   });
 
   const pathname = usePathname();
@@ -58,6 +59,12 @@ export default function NotesClient({ id }: { id: string }) {
       router.push("/sigin");
     },
   });
+
+  useEffect(() => {
+    if (!notesLoading) {
+      updateContent(content);
+    }
+  }, [content]);
 
   const { mutate: deleteNotes, isLoading: isDeleting } = useMutation({
     mutationFn: async (): Promise<Notes> => {
@@ -107,14 +114,6 @@ export default function NotesClient({ id }: { id: string }) {
       console.log(data);
     },
   });
-
-  // TODO
-  function removeNew() {
-    console.log(pathname);
-    if (Boolean(searchParams.get("new"))) {
-      router.replace(`/notes/${notes?.id}`);
-    }
-  }
 
   useEffect(() => {
     if (completionLoading && markdownEnd.current) {
@@ -167,16 +166,20 @@ export default function NotesClient({ id }: { id: string }) {
         </div>
       </div>
       <div className="p-6 md:py-16 mx-auto max-w-3xl">
-        <TextareaAutosize
-          value={title}
-          onChange={(e) => {
-            updateTitle(e.target.value);
-            setTitle(e.target.value);
-          }}
-          className="font-extrabold text-4xl lg:text-5xl tracking-tight bg-transparent focus:outline-none resize-none w-full mb-6"
-          placeholder="Notes Title"
-          autoFocus
-        />
+        {notesLoading ? (
+          <Skeleton className="h-7 w-4/5 mb-6" />
+        ) : (
+          <TextareaAutosize
+            value={title}
+            onChange={(e) => {
+              updateTitle(e.target.value);
+              setTitle(e.target.value);
+            }}
+            className="font-extrabold text-4xl lg:text-5xl tracking-tight bg-transparent focus:outline-none resize-none w-full mb-6"
+            placeholder="Notes Title"
+            autoFocus
+          />
+        )}
         {notesLoading ? (
           <div className="space-y-4">
             <Skeleton className="h-4 w-5/5" />
@@ -221,7 +224,6 @@ export default function NotesClient({ id }: { id: string }) {
           <Button
             onClick={() => {
               stop();
-              removeNew();
             }}
             variant="secondary"
             size="icon"
