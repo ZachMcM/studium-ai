@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
 import { ExtendedFlashcardSet } from "@/types/prisma";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flashcard } from "@prisma/client";
 
 const variants = {
   enter: (direction: number) => {
