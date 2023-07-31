@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FlashcardDisplay from "./FlashcardDisplay";
 import { Button } from "../ui/button";
-import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ExtendedFlashcardSet } from "@/types/prisma";
 import { motion, AnimatePresence } from "framer-motion";
 
