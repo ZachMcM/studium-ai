@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 
-export type ExtendedStudySet = Prisma.StudySetGetPayload<{
+export type ExtendedFlashcardSet = Prisma.FlashcardSetGetPayload<{
   include: {
-    items: true
+    flashcards: true
   }
 }>

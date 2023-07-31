@@ -26,7 +26,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import DeleteDialog from "../DeleteDialog";
+import DeleteDialog from "../cards/DeleteDialog";
 import {
   Form,
   FormControl,

@@ -49,8 +49,8 @@ model User {
   accounts      Account[]
   joined        DateTime       @default(now())
   sessions      Session[]
-  notesList     Notes[]
-  studySets     StudySet[]
+  flashcardSets FlashcardSet[]
+  flashcards    Flashcard[]
 }
 
 model VerificationToken {
@@ -72,30 +72,23 @@ model VerificationRequest {
   @@unique([identifier, token])
 }
 
-// data related tables
-
-model Notes {
-  id        String   @id @default(cuid())
-  title     String
-  content   String
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+model FlashcardSet {
+  id          String      @id @default(cuid())
+  title       String
+  description String
+  flashcards  Flashcard[]
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
 }
 
-model StudySet {
-  id        String      @id @default(cuid())
-  title     String
-  items     SetItem[]
+model Flashcard {
+  id        String       @id @default(cuid())
+  question  String
+  answer    String
+  set       FlashcardSet @relation(fields: [setId], references: [id], onDelete: Cascade)
+  setId     String
+  createdAt DateTime     @default(now())
   userId    String
-  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime    @default(now())
-}
-
-model SetItem {
-  id       String       @id @default(cuid())
-  question String
-  answer   String
-  set      StudySet     @relation(fields: [setId], references: [id], onDelete: Cascade)
-  setId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
