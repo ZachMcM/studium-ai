@@ -7,7 +7,7 @@ import { useState } from "react";
 import SearchAlert from "../alerts/SearchAlert";
 import ErrorAlert from "../alerts/ErrorAlert";
 import EmptyAlert from "../alerts/EmptyAlert";
-import { FlashcardSet } from "@prisma/client";
+import { Tutor } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { AlertCircle, Check, Plus } from "lucide-react";
@@ -16,22 +16,22 @@ import ListCard from "../cards/ListCard";
 import { toast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
 
-export default function SetsList() {
+export default function TutorsList() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const pathname = usePathname();
 
-  const { data: sets, isLoading: setsLoading } = useQuery({
-    queryKey: ["sets"],
-    queryFn: async (): Promise<FlashcardSet[]> => {
-      const res = await fetch("/api/flashcard-sets");
+  const { data: tutors, isLoading: tutorsLoading } = useQuery({
+    queryKey: ["tutors"],
+    queryFn: async (): Promise<Tutor[]> => {
+      const res = await fetch("/api/tutors");
       const data = await res.json();
       return data;
     },
     onError: () => {
       toast({
         title: "Uh oh, something went wrong!",
-        description: <p>There was an error loading the flashcard sets.</p>,
+        description: <p>There was an error loading your AI tutors.</p>,
         variant: "destructive",
         action: (
           <ToastAction altText="Try again" onClick={() => router.refresh()}>
@@ -42,9 +42,9 @@ export default function SetsList() {
     }
   });
 
-  const { mutate: deleteSet, isLoading: isDeleting } = useMutation({
+  const { mutate: deleteTutor, isLoading: isDeleting } = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/flashcard-sets/${id}`, {
+      const res = await fetch(`/api/tutors/${id}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -52,18 +52,18 @@ export default function SetsList() {
     },
     onSuccess: (data) => {
       console.log(data);
-      if (pathname != "/dashboard/flashcard-sets") {
-        router.push("/dashboard/flashcard-sets");
+      if (pathname != "/dashboard/tutors") {
+        router.push("/dashboard/tutors");
       }
-      queryClient.invalidateQueries({ queryKey: ["sets"] });
+      queryClient.invalidateQueries({ queryKey: ["tutors"] });
       toast({
-        description: <p className="flex items-center"><Check className="h-4 w-4  mr-2"/>Successfully deleted the flashcard set.</p>
+        description: <p className="flex items-center"><Check className="h-4 w-4  mr-2"/>Successfully deleted the tutor.</p>
       })
     },
     onError(mutation: Mutation) {
       toast({
         title: "Uh oh, something went wrong!",
-        description: <p>There was an error deleting the flashcard sets.</p>,
+        description: <p>There was an error deleting the tutor.</p>,
         variant: "destructive",
         action: (
           <ToastAction altText="Try again" onClick={() => mutation.execute()}>
@@ -82,9 +82,9 @@ export default function SetsList() {
         <Input
           onChange={(e) => setSearch(e.target.value)}
           value={search}
-          placeholder="Search flashcard sets..."
+          placeholder="Search AI tutors..."
         />
-        <Link href="/flashcard-sets/new" className="shrink-0">
+        <Link href="/tutors/new" className="shrink-0">
           <Button>
             Add New...
             <Plus className="h-4 w-4 ml-2" />
@@ -92,29 +92,29 @@ export default function SetsList() {
         </Link>
       </div>
       <div className="mt-6">
-        {setsLoading ? (
+        {tutorsLoading ? (
           <LoadingCards />
-        ) : sets ? (
-          sets.length == 0 ? (
+        ) : tutors ? (
+          tutors.length == 0 ? (
             <EmptyAlert />
           ) : (
             <div className="flex flex-col border rounded-lg">
-              {sets.filter((set) =>
-                set.title.toLowerCase().includes(search.toLowerCase())
+              {tutors.filter((tutor) =>
+                tutor.title.toLowerCase().includes(search.toLowerCase())
               ).length !== 0 ? (
-                sets
-                  .filter((set) =>
-                    set.title.toLowerCase().includes(search.toLowerCase())
+                tutors
+                  .filter((tutor) =>
+                    tutor.title.toLowerCase().includes(search.toLowerCase())
                   )
-                  .map((set) => (
+                  .map((tutor) => (
                     <ListCard
-                      key={set.id}
-                      title={set.title}
-                      description={set.description}
-                      deleteFunction={() => deleteSet(set.id)}
+                      key={tutor.id}
+                      title={tutor.title}
+                      description={tutor.description}
+                      deleteFunction={() => deleteTutor(tutor.id)}
                       isDeleting={isDeleting}
-                      link={`/flashcard-sets/${set.id}`}
-                      itemType="Flashcards"
+                      link={`/tutors/${tutor.id}`}
+                      itemType="Tutor"
                     />
                   ))
               ) : (

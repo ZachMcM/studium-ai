@@ -7,9 +7,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { Edit, Forward, MoreVertical, Trash2 } from "lucide-react";
+import { ExternalLink, Forward, MoreVertical, Trash2 } from "lucide-react";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
 import DeleteDialog from "./DeleteDialog";
+import { useAbsoluteUrl } from "@/lib/absolute-url";
+import { share } from "@/lib/share";
 
 export default function ListCard({
   title,
@@ -17,7 +19,6 @@ export default function ListCard({
   deleteFunction,
   isDeleting,
   link,
-  createdAt,
   itemType,
 }: {
   title: string;
@@ -25,19 +26,23 @@ export default function ListCard({
   deleteFunction: () => void;
   isDeleting: boolean;
   link: string;
-  createdAt: string;
-  itemType: "Quiz" | "Flashcards" | "Chatbot";
+  itemType: "Quiz" | "Flashcards" | "Chatbot" | "Tutor";
 }) {
+  const shareData = {
+    title: `Check out these ${itemType.toLowerCase()} on Study AI!`,
+    text: `${title}: ${description}`,
+    url: useAbsoluteUrl(),
+  };
+
   return (
-    <div className="flex items-center justify-between border-b last:border-none px-6 py-4">
-      <div className="space-y-4">
-        <div>
-          <Link href={link} className="text-lg hover:underline font-semibold">
-            {title || "Untitled" + itemType}
-          </Link>
-          <p className="text-muted-foreground font-medium text-sm">{description}</p>
-        </div>
-        <p className="text-muted-foreground font-medium text-xs">{createdAt}</p>
+    <div className="flex items-center justify-between border-b last:border-none py-6 px-8">
+      <div className="space-y-0.5">
+        <Link href={link} className="text-xl hover:underline font-semibold">
+          {title || "Untitled" + itemType}
+        </Link>
+        <p className="text-muted-foreground font-medium text-sm">
+          {description}
+        </p>
       </div>
       <AlertDialog>
         <DropdownMenu>
@@ -49,12 +54,12 @@ export default function ListCard({
           <DropdownMenuContent>
             <Link href={link}>
               <DropdownMenuItem>
-                <Edit className="h-4 w-4 mr-2" />
-                Edit
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Open
               </DropdownMenuItem>
             </Link>
             {/* TODO */}
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => share(shareData)}>
               <Forward className="h-4 w-4 mr-2" />
               Share
             </DropdownMenuItem>

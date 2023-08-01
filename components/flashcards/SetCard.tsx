@@ -5,9 +5,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Card } from "../ui/card";
 import CardMore from "./CardMore";
-import { DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { MoreVertical } from "lucide-react";
 
 export default function SetCard({ flashcard }: { flashcard: Flashcard }) {
   const router = useRouter();

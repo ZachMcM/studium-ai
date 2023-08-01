@@ -58,17 +58,17 @@ export default function DashboardPage() {
           </Card>
         </Link>
         <Link
-          href="/chatbots"
+          href="/tutors"
           className="hover:opacity-70 duration-500"
         >
           <Card className="flex justify-between items-center h-full">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <MessagesSquare className="h-5 w-5 mr-2" />
-                Chat Bots
+                AI Tutors
               </CardTitle>
               <CardDescription>
-                View, create, edit, and deleted AI chat bots!
+                View, create, edit, and deleted AI tutors!
               </CardDescription>
             </CardHeader>
             <CardContent>

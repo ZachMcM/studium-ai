@@ -28,7 +28,7 @@ const formSchema = z.object({
   description: z
     .string()
     .min(5, { message: "Your description must be at least 5 characters." })
-    .max(50, { message: "Your title must be less than 200 characters." }),
+    .max(200, { message: "Your title must be less than 200 characters." }),
 });
 
 export type FormSubmitVaues = z.infer<typeof formSchema>;

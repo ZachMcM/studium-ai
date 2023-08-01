@@ -12,13 +12,41 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         id: params.id
       },
       include: {
-        flashcards: true
+        flashcards: {
+          orderBy: {
+            createdAt: "desc"
+          }
+        }
       }
     })
     return NextResponse.json(flashcardSet)
   } else {
     return NextResponse.json({ error: "Unauthorized request", status: 401 })
   }
+}
+
+export async function PUT(req: NextRequest, { params }: { params: { id: string }}) {
+  const session = await getAuthSession()
+  const { title, description } = await req.json() as {
+    title?: string,
+    description?: string
+  }
+
+  if (!session) return NextResponse.json({ error: "Unauthorized request", status: 401 })
+  if (!title || !description) return NextResponse.json({ error: "Inavlid request, incorrect payload", status: 401 })
+
+  const updatedFlashcardSet = await prisma.flashcardSet.update({
+    where: {
+      userId: session.user.id,
+      id: params.id
+    },
+    data: {
+      title,
+      description
+    }
+  })
+
+  return NextResponse.json(updatedFlashcardSet)
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string }}) {

@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Progress } from "./ui/progress";
+import { motion } from "framer-motion"
 
 export default function LoadingPage({ finished }: { finished: boolean }) {
   const [progress, setProgess] = useState<number>(0);
@@ -35,7 +36,12 @@ export default function LoadingPage({ finished }: { finished: boolean }) {
   const { theme } = useTheme();
 
   return (
-    <div className="absolute inset-0 bg-background flex justify-center w-full">
+    <motion.div 
+      className="absolute inset-0 bg-background flex justify-center w-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <div className="flex flex-col items-center space-y-10 w-full">
         <Image
           src={theme == "light" ? "/loading-light.gif" : "/loading-dark.gif"}
@@ -48,6 +54,6 @@ export default function LoadingPage({ finished }: { finished: boolean }) {
           <p className="text-center font-medium text-lg">{currText}</p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

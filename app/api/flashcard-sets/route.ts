@@ -16,9 +16,9 @@ export async function GET() {
       include: {
         flashcards: {
           orderBy: {
-            createdAt: "desc"
-          }
-        }
+            createdAt: "desc",
+          },
+        },
       },
     });
     return NextResponse.json(flashcardSets);
@@ -32,22 +32,29 @@ export async function POST(req: NextRequest) {
     sourceText?: string;
     num?: number;
     title?: string;
-    description?: string
+    description?: string;
   };
 
-  const session = await getAuthSession()
-  if (!session) return NextResponse.json({ error: "Unauthorized Request", status: 401 })
-  if (!sourceText || !num || !title || !description) return NextResponse.json({ error: "Invalid request, incorrect paylod", status: 400 })
+  const session = await getAuthSession();
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized Request", status: 401 });
+  if (!sourceText || !num || !title || !description)
+    return NextResponse.json({
+      error: "Invalid request, incorrect paylod",
+      status: 400,
+    });
 
-  const aiCardsGeneration = await createSet(sourceText, num)
-  const generatedSet = aiCardsGeneration.flashcards.map((flashcard: Pick<Flashcard, "answer" | "question">) => {
-    return {
-      userId: session.user.id,
-      answer: flashcard.answer,
-      question: flashcard.question
+  const aiCardsGeneration = await createSet(sourceText, num);
+  const generatedSet = aiCardsGeneration.flashcards.map(
+    (flashcard: Pick<Flashcard, "answer" | "question">) => {
+      return {
+        userId: session.user.id,
+        answer: flashcard.answer,
+        question: flashcard.question,
+      };
     }
-  })
-  
+  );
+
   const newFlashcardSet = await prisma.flashcardSet.create({
     data: {
       title,
@@ -55,22 +62,25 @@ export async function POST(req: NextRequest) {
       userId: session.user.id,
       flashcards: {
         createMany: {
-          data: generatedSet
-        }
-      }
-    }
-  })
+          data: generatedSet,
+        },
+      },
+    },
+  });
 
-  return NextResponse.json(newFlashcardSet)
+  return NextResponse.json(newFlashcardSet);
 }
 
-async function createSet(sourceText: string, numCards: number): Promise<FlashcardGeneration> {
+async function createSet(
+  sourceText: string,
+  numCards: number
+): Promise<FlashcardGeneration> {
   const response = await openai.createChatCompletion({
     model: "gpt-4",
     messages: [
       {
         role: "system",
-        content: `You area a flashcard set generation AI. when given a data source, create a flashcard set of ${numCards} cards based on that data source.`,
+        content: `You area a flashcard set generation AI. when given a data source, create a flashcard set of ${numCards} cards based on that data source. If the data source has insufficient data, use your own information and training data to create the flashcards.`,
       },
       {
         role: "user",
@@ -86,10 +96,12 @@ async function createSet(sourceText: string, numCards: number): Promise<Flashcar
     function_call: {
       name: "flashcard_set",
     },
+    temperature: 1,
+    max_tokens: 8192
   });
 
   const data = (await response.json()) as ResponseTypes["createChatCompletion"];
-  console.log(data)
-  console.log(data.choices[0].message?.function_call?.arguments)
+  console.log(data);
+  console.log(data.choices[0].message?.function_call?.arguments);
   return JSON.parse(data.choices[0].message?.function_call?.arguments || "");
 }

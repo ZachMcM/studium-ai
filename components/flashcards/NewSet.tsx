@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { Mutation, useMutation, useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/use-toast";
 import { ExtendedFlashcardSet } from "@/types/prisma";
@@ -15,7 +15,10 @@ import {
 import FormConfig from "../forms/FormConfig";
 import FormSubmit, { FormSubmitVaues } from "../forms/FormSubmit";
 import LoadingPage from "../LoadingPage";
-import { AlertCircle, Check } from "lucide-react";
+import { Check } from "lucide-react";
+import { ToastAction } from "../ui/toast";
+import { AnimatePresence } from "framer-motion";
+import { Button } from "../ui/button";
 
 export default function NewSet() {
   const [page, setPage] = useState<"config" | "submit">("config");
@@ -61,6 +64,18 @@ export default function NewSet() {
         router.push(`/flashcard-sets/${data.id}`);
       }, 1500);
     },
+    onError: (mutate: Mutation) => {
+      toast({
+        title: "Uh oh, something went wrong!",
+        description: <p>There was an error loading the flashcard set.</p>,
+        variant: "destructive",
+        action: (
+          <ToastAction altText="Try again" onClick={() => mutate.execute()}>
+            Try again
+          </ToastAction>
+        ),
+      })
+    }
   });
 
   const submitForm = (values: FormSubmitVaues) => {
@@ -71,7 +86,9 @@ export default function NewSet() {
       console.log(e)
       setIsLoadingPage(false)
       toast({
-        description: <p className="flex items-center"><AlertCircle className="h-4 w-4 mr-2"/>Oops, there was an error generating your flashcard set. Please try again.</p>
+        title: "Uh oh, something went wrong!",
+        description: <p>Oops, there was an error creating a new flashcard set. Please try again.</p>,
+        variant: "destructive",
       })
     }
   };
@@ -97,7 +114,9 @@ export default function NewSet() {
           )}
         </CardContent>
       </Card>
-      {isLoadingPage && <LoadingPage finished={finished}/>}
+      <AnimatePresence>
+        {isLoadingPage && <LoadingPage finished={finished}/>}
+      </AnimatePresence>
     </main>
   );
 }

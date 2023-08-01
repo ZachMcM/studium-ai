@@ -11,18 +11,19 @@ export default function Sidebar() {
       <SheetTrigger asChild className="cursor-pointer md:hidden">
         <PanelLeftOpen className="h-5 w-5"/>
       </SheetTrigger>
-      <SheetContent side="left">
+      <SheetContent side="left" className="w-[275px]">
         <SheetHeader>
         <Link href="/dashboard" className="flex items-center">
-          <GraduationCap className="h-4 w-4 mr-2" />
-          <h1 className="font-semibold">
+          <GraduationCap className="h-6 w-6 mr-2" />
+          <h1 className="font-semibold text-xl">
             study ai
           </h1>
         </Link>
         </SheetHeader>
         <div className="flex flex-col mt-6 space-y-3 font-medium">
-          <HeaderLink href="/flashcards">Flashcards</HeaderLink>
-          <HeaderLink href="/chatbots">Chatbots</HeaderLink>
+          <HeaderLink href="/dashboard">Dashboard</HeaderLink>
+          <HeaderLink href="/flashcard-sets">Flashcards</HeaderLink>
+          <HeaderLink href="/tutors">AI Tutors</HeaderLink>
           <HeaderLink href="/quizes">Quizes</HeaderLink>
         </div>
       </SheetContent>

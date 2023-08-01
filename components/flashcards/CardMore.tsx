@@ -90,8 +90,8 @@ export default function CardMore({ flashcard }: { flashcard: Flashcard }) {
         queryKey: ["sets", { id: flashcard.setId }],
       });
       toast({
-        title: "Successfully deleted this study set item.",
-      });
+        description: <p className="flex items-center"><Check className="h-4 w-4  mr-2"/>Successfully deleted the flashcard.</p>
+      })
     },
   });
 
@@ -145,7 +145,7 @@ export default function CardMore({ flashcard }: { flashcard: Flashcard }) {
         <DialogHeader>
           <DialogTitle>Edit</DialogTitle>
           <DialogDescription>
-            Edit this study set item's answer or question.
+            Edit this flashcard's answer and question.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -158,7 +158,7 @@ export default function CardMore({ flashcard }: { flashcard: Flashcard }) {
                   <FormLabel>Question</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter the item question..."
+                      placeholder="Enter the flashcard question..."
                       {...field}
                     />
                   </FormControl>
@@ -174,7 +174,7 @@ export default function CardMore({ flashcard }: { flashcard: Flashcard }) {
                   <FormLabel>Answer</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter the item answer..."
+                      placeholder="Enter the flashcard answer..."
                       {...field}
                     />
                   </FormControl>

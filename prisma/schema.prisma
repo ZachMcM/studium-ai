@@ -40,17 +40,20 @@ model Session {
 }
 
 model User {
-  id            String         @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
   bio           String?
-  email         String?        @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
-  joined        DateTime       @default(now())
+  joined        DateTime  @default(now())
   sessions      Session[]
+
   flashcardSets FlashcardSet[]
   flashcards    Flashcard[]
+
+  tutors Tutor[]
 }
 
 model VerificationToken {
@@ -91,4 +94,25 @@ model Flashcard {
   createdAt DateTime     @default(now())
   userId    String
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Tutor {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  image       String?
+  source      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  messages    Message[]
+  createdAt   DateTime  @default(now())
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  role      String
+  content   String
+  tutor     Tutor    @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  tutorId   String
+  createdAt DateTime @default(now())
 }

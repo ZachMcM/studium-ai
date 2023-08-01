@@ -5,3 +5,9 @@ export type ExtendedFlashcardSet = Prisma.FlashcardSetGetPayload<{
     flashcards: true
   }
 }>
+
+export type ExtendedTutor = Prisma.TutorGetPayload<{
+  include: {
+    messages: true
+  }
+}>

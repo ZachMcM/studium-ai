@@ -9,7 +9,7 @@ import Sidebar from "./Sidebar";
 
 export default function Header() {
   return (
-    <header className="h-14 border-b z-50 bg-background sticky shrink-0 flex items-center justify-between px-6 md:px-12 lg:px-24 top-0 left-0 shadow-sm bg-background-card">
+    <header className="h-14 border-b z-50 sticky shrink-0 flex items-center justify-between px-6 md:px-12 lg:px-24 top-0 left-0 shadow-sm bg-background">
       <Sidebar/>
       <div className="hidden md:flex items-center space-x-10">
         <Link href="/dashboard" className="flex items-center">
@@ -19,8 +19,9 @@ export default function Header() {
           </h1>
         </Link>
         <div className="flex items-center space-x-6 text-sm font-medium">
+          <HeaderLink href="/dashboard">Dashboard</HeaderLink>
           <HeaderLink href="/flashcard-sets">Flashcards</HeaderLink>
-          <HeaderLink href="/chatbots">Chatbots</HeaderLink>
+          <HeaderLink href="/tutors">AI Tutors</HeaderLink>
           <HeaderLink href="/quizes">Quizes</HeaderLink>
         </div>
       </div>
