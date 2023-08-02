@@ -14,7 +14,7 @@ export default function Header() {
       <div className="hidden md:flex items-center space-x-10">
         <Link href="/dashboard" className="flex items-center">
           <GraduationCap className="h-6 w-6 mr-2.5" />
-          <h1 className="font-semibold">
+          <h1 className="font-semibold font-cal">
             study ai
           </h1>
         </Link>

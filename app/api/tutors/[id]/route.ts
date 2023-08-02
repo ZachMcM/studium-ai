@@ -1,10 +1,9 @@
 import { getAuthSession } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { supabase } from "@/supabase/client";
-import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getAuthSession()
 
   if (!session) return NextResponse.json({ error: "Unauthroized request", status: 401 })
@@ -26,7 +25,7 @@ export async function GET({ params }: { params: { id: string } }) {
   return NextResponse.json(tutor)
 }
 
-export async function DELETE({ params }: { params: { id: string }}) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string }}) {
   const session = await getAuthSession()
 
   if (!session) return NextResponse.json({ error: "Unauthroized request", status: 401 })

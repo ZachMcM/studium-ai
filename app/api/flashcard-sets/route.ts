@@ -6,7 +6,7 @@ import { Flashcard } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { ResponseTypes } from "openai-edge";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const session = await getAuthSession();
   if (session) {
     const flashcardSets = await prisma.flashcardSet.findMany({
@@ -97,7 +97,6 @@ async function createSet(
       name: "flashcard_set",
     },
     temperature: 1,
-    max_tokens: 8192
   });
 
   const data = (await response.json()) as ResponseTypes["createChatCompletion"];

@@ -22,8 +22,5 @@ export async function GET(req: NextRequest) {
     siteText += " " + $(el).text()
   })
 
-  // account for max tokens of model
-  siteText = siteText.substring(0, 8192)
-
   return NextResponse.json(siteText)
 } 

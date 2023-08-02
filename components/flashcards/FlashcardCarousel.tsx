@@ -53,7 +53,7 @@ export default function FlashcardCarousel({
   }
 
   return (
-    <div className="w-full flex flex-col space-y-2">
+    <div className="w-full flex flex-col space-y-2 overflow-x-hidden">
       {set.flashcards.map((flashcard, i) => {
         return (
           <>

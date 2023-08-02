@@ -44,9 +44,9 @@ export default function LoadingPage({ finished }: { finished: boolean }) {
     >
       <div className="flex flex-col items-center space-y-10 w-full">
         <Image
-          src={theme == "light" ? "/loading-light.gif" : "/loading-dark.gif"}
-          height={400}
-          width={400}
+          src={theme == "light" ? "/images/loading-light.gif" : "/images/loading-dark.gif"}
+          height={500}
+          width={500}
           alt="loading"
         />
         <div className="space-y-3 w-3/4">

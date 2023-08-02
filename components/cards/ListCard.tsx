@@ -12,10 +12,14 @@ import { AlertDialogTrigger } from "../ui/alert-dialog";
 import DeleteDialog from "./DeleteDialog";
 import { useAbsoluteUrl } from "@/lib/absolute-url";
 import { share } from "@/lib/share";
+import { Card, CardHeader, CardTitle } from "../ui/card";
+import Image from "next/image";
+import { Avatar, AvatarImage } from "../ui/avatar";
 
 export default function ListCard({
   title,
   description,
+  image,
   deleteFunction,
   isDeleting,
   link,
@@ -23,6 +27,7 @@ export default function ListCard({
 }: {
   title: string;
   description?: string;
+  image?: string;
   deleteFunction: () => void;
   isDeleting: boolean;
   link: string;
@@ -36,13 +41,20 @@ export default function ListCard({
 
   return (
     <div className="flex items-center justify-between border-b last:border-none py-6 px-8">
-      <div className="space-y-0.5">
-        <Link href={link} className="text-xl hover:underline font-semibold">
-          {title || "Untitled" + itemType}
-        </Link>
-        <p className="text-muted-foreground font-medium text-sm">
-          {description}
-        </p>
+      <div className="flex items-center space-x-2">
+        {image && (
+          <Avatar>
+            <AvatarImage src={image}/>
+          </Avatar>
+        )}
+        <div className="space-y-0.5">
+          <Link href={link} className="text-xl hover:underline font-semibold">
+            {title || "Untitled" + itemType}
+          </Link>
+          <p className="text-muted-foreground font-medium text-sm">
+            {description}
+          </p>
+        </div>
       </div>
       <AlertDialog>
         <DropdownMenu>

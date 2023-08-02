@@ -13,7 +13,7 @@ export default function UserDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
-        <Avatar>
+        <Avatar className="!h-7 !w-7">
           <AvatarImage src={session?.user.image || ""} />
           <AvatarFallback>
             <Skeleton className="h-8 w-8 rounded-full"/>

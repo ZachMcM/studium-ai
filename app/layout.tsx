@@ -3,6 +3,12 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Toaster } from '@/components/ui/toaster'
 import Footer from '@/components/Footer'
+import LocalFont from "next/font/local";
+
+const calSans = LocalFont({
+  src: "../public/fonts/CalSans-SemiBold.ttf",
+  variable: "--font-calsans",
+});
 
 export const metadata: Metadata = {
   title: 'Study AI',
@@ -16,12 +22,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning suppressContentEditableWarning>
-      <body>
+      <body className={`${calSans.variable}`}>
         <Provider>
           <div className='min-h-screen'>
             {children}
           </div>
-          <Footer/>
+          {/* <Footer/> */}
           <Toaster/>
         </Provider>
       </body>

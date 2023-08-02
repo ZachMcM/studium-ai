@@ -12,6 +12,8 @@ export async function POST(req: NextRequest) {
   const imageFile = formData.get("image") as File | null
   const source = formData.get("source") as string | null
 
+  console.log(imageFile)
+
   if (!title || !description || !source) return NextResponse.json({ error: "Invalid request, incorrect payload", status: 400 })
   if (!session) return NextResponse.json({ error: "Unauthroized request", status: 401 })
 
@@ -19,6 +21,8 @@ export async function POST(req: NextRequest) {
 
   if (imageFile) {
     const { data: uploadData, error: uploadError } = await supabase.storage.from("files").upload(`/${imageFile.name}`, imageFile)
+    console.log(uploadData)
+    console.log(uploadError)
     if (uploadError) return NextResponse.json(uploadError)
     image = supabase.storage.from("files").getPublicUrl(uploadData.path).data.publicUrl
   }
@@ -34,4 +38,17 @@ export async function POST(req: NextRequest) {
   })
 
   return NextResponse.json(newTutor)
+}
+
+export async function GET(req: NextRequest) {
+  const session = await getAuthSession()
+  if (!session) return NextResponse.json({ error: "Unauthroized request", status: 401 })
+
+  const tutors = await prisma.tutor.findMany({
+    where: {
+      userId: session.user.id
+    }
+  })
+
+  return NextResponse.json(tutors)
 }

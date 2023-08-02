@@ -37,45 +37,47 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const response = await openai.createChatCompletion({
     model: "gpt-4",
     temperature: 1,
-    max_tokens: 8192,
     messages: messages,
     stream: true
   })
 
-  const stream = OpenAIStream(response, {
-    onStart: async () => {
-      await prisma.tutor.update({
-        where: {
-          id: params.id,
-          userId: session.user.id
-        },
-        data: {
-          messages: {
-            create: {
-              role: "user",
-              content: messages[messages.length - 1].content!
-            }
-          }
-        }
-      })
-    },
-    onCompletion: async (completion) => {
-      await prisma.tutor.update({
-        where: {
-          id: params.id,
-          userId: session.user.id
-        },
-        data: {
-          messages: {
-            create: {
-              role: "assistant",
-              content: completion
-            }
-          }
-        }
-      })
-    },
-  })
+  const stream = OpenAIStream(response
+    , 
+  //   {
+  //   onStart: async () => {
+  //     await prisma.tutor.update({
+  //       where: {
+  //         id: params.id,
+  //         userId: session.user.id
+  //       },
+  //       data: {
+  //         messages: {
+  //           create: {
+  //             role: "user",
+  //             content: messages[messages.length - 1].content!
+  //           }
+  //         }
+  //       }
+  //     })
+  //   },
+  //   onCompletion: async (completion) => {
+  //     await prisma.tutor.update({
+  //       where: {
+  //         id: params.id,
+  //         userId: session.user.id
+  //       },
+  //       data: {
+  //         messages: {
+  //           create: {
+  //             role: "assistant",
+  //             content: completion
+  //           }
+  //         }
+  //       }
+  //     })
+  //   },
+  // }
+  )
 
   return new StreamingTextResponse(stream)
 }

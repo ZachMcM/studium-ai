@@ -38,7 +38,7 @@ export default function FlashcardDisplay({
         <Card className="relative flex justify-center items-center flex-1 w-full p-10 h-[450px] overflow-y-auto shadow-sm bg-card">
           <div className="flex flex-col items-center text-center space-y-1">
             <p className="font-medium text-muted-foreground">Question:</p>
-            <p className="font-bold text-3xl ">{flashcard.question}</p>
+            <p className="font-bold text-2xl ">{flashcard.question}</p>
           </div>
           <button
             className="cursor-pointer absolute inset-0"
@@ -56,7 +56,7 @@ export default function FlashcardDisplay({
         <Card className="relative flex justify-center items-center flex-1 w-full p-10 h-[450px] overflow-y-auto shadow-sm">
           <div className="flex flex-col items-center text-center space-y-1">
             <p className="font-medium text-muted-foreground">Answer:</p>
-            <p className="font-bold text-3xl ">{flashcard.answer}</p>
+            <p className="font-bold text-2xl ">{flashcard.answer}</p>
           </div>
           <button
             className="cursor-pointer absolute inset-0"
