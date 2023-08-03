@@ -11,10 +11,10 @@ export default function SigninButton() {
     <>
       {session ? (
         <Link href="/dashboard">
-          <Button variant="secondary">Dashboard</Button>
+          <Button variant="secondary" size="sm">Dashboard</Button>
         </Link>
       ) : (
-        <Button variant="secondary" onClick={() => signIn()}>Sign In</Button>
+        <Button variant="secondary" size="sm" onClick={() => signIn()}>Sign In</Button>
       )}
     </>
   );

@@ -1,19 +1,19 @@
 import { useId } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 export default function LoadingCards() {
   return (
-    <div className="flex flex-col border rounded-lg">
+    <div className="gap-4 grid md:grid-cols-2 lg:grid-cols-3">
       {Array(3)
         .fill("")
         .map((s) => (
-          <div
-            className="border-b last:border-none px-6 py-4 space-y-2"
-            key={useId()}
-          >
-            <Skeleton className="h-4 w-3/5" />
-            <Skeleton className="h-4 w-5/5" />
-          </div>
+          <Card key={useId()} className="md:min-h-[175px]">
+            <CardHeader className="space-y-2">
+              <Skeleton className="h-4 w-3/5" />
+              <Skeleton className="h-4 w-5/5" />
+            </CardHeader>
+          </Card>
         ))}
     </div>
   );

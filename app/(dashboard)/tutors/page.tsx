@@ -107,7 +107,7 @@ export default function TutorsPage() {
           tutors.length == 0 ? (
             <EmptyAlert />
           ) : (
-            <div className="flex flex-col border rounded-lg bg-background">
+            <div className="gap-4 grid md:grid-cols-2 lg:grid-cols-3">
               {tutors.filter((tutor) =>
                 tutor.title.toLowerCase().includes(search.toLowerCase())
               ).length !== 0 ? (
@@ -124,6 +124,7 @@ export default function TutorsPage() {
                       isDeleting={isDeleting}
                       link={`/tutors/${tutor.id}`}
                       itemType="Tutor"
+                      date={new Date(tutor.createdAt)}
                     />
                   ))
               ) : (

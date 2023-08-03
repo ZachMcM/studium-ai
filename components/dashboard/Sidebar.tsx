@@ -4,10 +4,13 @@ import { GraduationCap, PanelLeftOpen } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet"
 import Link from "next/link"
 import HeaderLink from "../HeaderLink"
+import { useState } from "react"
 
 export default function Sidebar() {
+  const [sidebar, setSidebar] = useState<boolean>(false)
+
   return (
-    <Sheet>
+    <Sheet open={sidebar} onOpenChange={() => setSidebar(!sidebar)}>
       <SheetTrigger asChild className="cursor-pointer md:hidden">
         <PanelLeftOpen className="h-5 w-5"/>
       </SheetTrigger>
@@ -21,10 +24,10 @@ export default function Sidebar() {
         </Link>
         </SheetHeader>
         <div className="flex flex-col mt-6 space-y-3 font-medium">
-          <HeaderLink href="/dashboard">Dashboard</HeaderLink>
-          <HeaderLink href="/flashcard-sets">Flashcards</HeaderLink>
-          <HeaderLink href="/tutors">AI Tutors</HeaderLink>
-          <HeaderLink href="/quizes">Quizes</HeaderLink>
+          <HeaderLink onClick={() => setSidebar(false)} href="/dashboard">Dashboard</HeaderLink>
+          <HeaderLink onClick={() => setSidebar(false)} href="/flashcard-sets">Flashcards</HeaderLink>
+          <HeaderLink onClick={() => setSidebar(false)} href="/tutors">AI Tutors</HeaderLink>
+          <HeaderLink onClick={() => setSidebar(false)} href="/quizes">Quizes</HeaderLink>
         </div>
       </SheetContent>
     </Sheet>

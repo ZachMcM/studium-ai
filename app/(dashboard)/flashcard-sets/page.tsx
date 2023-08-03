@@ -107,7 +107,7 @@ export default function FlashcardSets() {
           sets.length == 0 ? (
             <EmptyAlert />
           ) : (
-            <div className="flex flex-col border rounded-lg bg-background">
+            <div className="gap-4 grid md:grid-cols-2 lg:grid-cols-3">
               {sets.filter((set) =>
                 set.title.toLowerCase().includes(search.toLowerCase())
               ).length !== 0 ? (
@@ -124,6 +124,7 @@ export default function FlashcardSets() {
                       isDeleting={isDeleting}
                       link={`/flashcard-sets/${set.id}`}
                       itemType="Flashcards"
+                      date={new Date(set.createdAt)}
                     />
                   ))
               ) : (

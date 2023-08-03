@@ -1,6 +1,8 @@
 import { GraduationCap } from "lucide-react";
 import HeaderLink from "../HeaderLink";
 import SigninButton from "./SigninButton";
+import { Suspense } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 export default function Header() {
   return (
