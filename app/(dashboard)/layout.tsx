@@ -10,7 +10,7 @@ export default async function ProtectedLayout({ children }: { children: ReactNod
   return (
     <div className="flex flex-col min-h-screen">
       <Header/>
-      <div className="container py-10 lg:py-16 max-w-5xl xl:max-w-6xl flex-1 mx-auto flex">
+      <div className="px-4 py-10 max-w-5xl xl:max-w-6xl flex-1 mx-auto flex">
         {children}
       </div>
     </div>

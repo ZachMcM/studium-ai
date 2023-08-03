@@ -24,10 +24,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning suppressContentEditableWarning>
       <body className={`${calSans.variable}`}>
         <Provider>
-          <div className='min-h-screen'>
-            {children}
-          </div>
-          {/* <Footer/> */}
+          {children}
           <Toaster/>
         </Provider>
       </body>

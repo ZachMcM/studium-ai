@@ -107,7 +107,7 @@ export default function FlashcardSets() {
           sets.length == 0 ? (
             <EmptyAlert />
           ) : (
-            <div className="flex flex-col border rounded-lg">
+            <div className="flex flex-col border rounded-lg bg-background">
               {sets.filter((set) =>
                 set.title.toLowerCase().includes(search.toLowerCase())
               ).length !== 0 ? (

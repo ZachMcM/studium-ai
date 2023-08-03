@@ -107,7 +107,7 @@ export default function TutorsPage() {
           tutors.length == 0 ? (
             <EmptyAlert />
           ) : (
-            <div className="flex flex-col border rounded-lg">
+            <div className="flex flex-col border rounded-lg bg-background">
               {tutors.filter((tutor) =>
                 tutor.title.toLowerCase().includes(search.toLowerCase())
               ).length !== 0 ? (
