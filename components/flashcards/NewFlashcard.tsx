@@ -39,7 +39,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function NewFlashcard({ set }: { set: FlashcardSet }) {
+export function NewFlashcard({ set }: { set: FlashcardSet }) {
   const queryClient = useQueryClient();
 
   const { mutate: add, isLoading: isAdding } = useMutation({

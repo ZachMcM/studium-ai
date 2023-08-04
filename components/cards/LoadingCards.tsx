@@ -2,7 +2,7 @@ import { useId } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
-export default function LoadingCards() {
+export function LoadingCards() {
   return (
     <div className="gap-4 grid md:grid-cols-2 lg:grid-cols-3">
       {Array(3)

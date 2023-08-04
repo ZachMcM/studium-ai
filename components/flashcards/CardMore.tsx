@@ -24,7 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import DeleteDialog from "../cards/DeleteDialog";
+import { DeleteDialog } from "../cards/DeleteDialog";
 import {
   Form,
   FormControl,
@@ -47,8 +47,15 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 import { Flashcard } from "@prisma/client";
+import { ExtendedFlashcardSet } from "@/types/prisma";
 
-export default function CardMore({ flashcard }: { flashcard: Flashcard }) {
+export function CardMore({
+  flashcard,
+  set,
+}: {
+  flashcard: Flashcard;
+  set: ExtendedFlashcardSet;
+}) {
   const queryClient = useQueryClient();
 
   const { mutate: updateItem, isLoading: isUpdating } = useMutation({
@@ -90,8 +97,13 @@ export default function CardMore({ flashcard }: { flashcard: Flashcard }) {
         queryKey: ["sets", { id: flashcard.setId }],
       });
       toast({
-        description: <p className="flex items-center"><Check className="h-4 w-4  mr-2"/>Successfully deleted the flashcard.</p>
-      })
+        description: (
+          <p className="flex items-center">
+            <Check className="h-4 w-4  mr-2" />
+            Successfully deleted the flashcard.
+          </p>
+        ),
+      });
     },
   });
 
@@ -137,7 +149,19 @@ export default function CardMore({ flashcard }: { flashcard: Flashcard }) {
           </DropdownMenuContent>
         </DropdownMenu>
         <DeleteDialog
-          deleteFunction={() => deleteItem()}
+          deleteFunction={() => {
+            if (set.flashcards.length == 1) {
+              toast({
+                title: "Uh oh, something went wrong!",
+                description: (
+                  <p>You can't delete the only flashcard in the set, delete the set instead.</p>
+                ),
+                variant: "destructive",
+              });
+            } else {
+              deleteItem();
+            }
+          }}
           isDeleting={isItemDeleting}
         />
       </AlertDialog>

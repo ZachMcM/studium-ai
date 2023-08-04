@@ -7,7 +7,7 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 
-export default function UserDropdown() {
+export function UserDropdown() {
   const { data: session } = useSession();
 
   return (

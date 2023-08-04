@@ -41,42 +41,41 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     stream: true
   })
 
-  const stream = OpenAIStream(response
-    , 
-  //   {
-  //   onStart: async () => {
-  //     await prisma.tutor.update({
-  //       where: {
-  //         id: params.id,
-  //         userId: session.user.id
-  //       },
-  //       data: {
-  //         messages: {
-  //           create: {
-  //             role: "user",
-  //             content: messages[messages.length - 1].content!
-  //           }
-  //         }
-  //       }
-  //     })
-  //   },
-  //   onCompletion: async (completion) => {
-  //     await prisma.tutor.update({
-  //       where: {
-  //         id: params.id,
-  //         userId: session.user.id
-  //       },
-  //       data: {
-  //         messages: {
-  //           create: {
-  //             role: "assistant",
-  //             content: completion
-  //           }
-  //         }
-  //       }
-  //     })
-  //   },
-  // }
+  const stream = OpenAIStream(response, 
+    {
+    onStart: async () => {
+      await prisma.tutor.update({
+        where: {
+          id: params.id,
+          userId: session.user.id
+        },
+        data: {
+          messages: {
+            create: {
+              role: "user",
+              content: messages[messages.length - 1].content!
+            }
+          }
+        }
+      })
+    },
+    onCompletion: async (completion) => {
+      await prisma.tutor.update({
+        where: {
+          id: params.id,
+          userId: session.user.id
+        },
+        data: {
+          messages: {
+            create: {
+              role: "assistant",
+              content: completion
+            }
+          }
+        }
+      })
+    },
+  }
   )
 
   return new StreamingTextResponse(stream)

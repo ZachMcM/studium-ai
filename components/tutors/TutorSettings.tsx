@@ -1,18 +1,14 @@
 "use client";
 
-import { FlashcardSet } from "@prisma/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Tutor } from "@prisma/client";
+import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Check, Edit, Loader2, Settings, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import * as z from "zod";
+import { toast } from "../ui/use-toast";
+import { Check, Edit, Loader2, Settings, Trash2 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { ToastAction } from "../ui/toast";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +18,15 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { AlertDialog, AlertDialogTrigger } from "../ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
 import { DeleteDialog } from "../cards/DeleteDialog";
 import {
   Form,
@@ -31,12 +36,8 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { usePathname, useRouter } from "next/navigation";
-import { toast } from "../ui/use-toast";
-import { ToastAction } from "../ui/toast";
 
 const formSchema = z.object({
   title: z
@@ -51,31 +52,51 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function SetSettings({ set }: { set: FlashcardSet }) {
-  const queryClient = useQueryClient();
-  const pathname = usePathname();
-  const router = useRouter();
+export function TutorSettings({ tutor }: { tutor: Tutor }) {
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: tutor.title,
+      description: tutor.description,
+    },
+  });
 
-  const { mutate: editSet, isLoading: isSetEditing } = useMutation({
-    mutationFn: async (values: FormValues): Promise<FlashcardSet> => {
-      const res = await fetch(`/api/flashcard-sets/${set.id}`, {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const { mutate: editTutor, isLoading: isTutorEditing } = useMutation({
+    mutationFn: async ({
+      title,
+      description,
+    }: FormValues): Promise<Tutor> => {
+      const res = fetch(`/api/tutors/${tutor.id}`, {
         method: "PUT",
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          title,
+          description
+        }),
       });
-      const data = await res.json();
+
+      const data = (await res).json();
       return data;
     },
     onSuccess: (data) => {
-      console.log(data)
-      queryClient.invalidateQueries({ queryKey: ['sets', { id: set.id }]})
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["tutors", { id: tutor.id }] });
       toast({
-        description: <p className="flex items-center"><Check className="h-4 w-4 mr-2"/>Successfully edited the set.</p>
-      })
+        description: (
+          <p className="flex items-center">
+            <Check className="h-4 w-4 mr-2" />
+            Successfully edited the AI tutor.
+          </p>
+        ),
+      });
     },
     onError: () => {
       toast({
         title: "Uh oh, something went wrong!",
-        description: <p>There was an error loading the flashcard set.</p>,
+        description: <p>There was an error editing the AI tutor.</p>,
         variant: "destructive",
         action: (
           <ToastAction altText="Try again" onClick={() => router.refresh()}>
@@ -86,25 +107,26 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
     },
   });
 
-  const { mutate: deleteSet, isLoading: isSetDeleting } = useMutation({
-    mutationFn: async (): Promise<FlashcardSet> => {
-      const res = await fetch(`/api/flashcard-sets/${set.id}`, {
+  const { mutate: deleteTutor, isLoading: isTutorDeleting } = useMutation({
+    mutationFn: async (): Promise<Tutor> => {
+      const res = fetch(`/api/tutors/${tutor.id}`, {
         method: "DELETE",
       });
-      const data = await res.json();
+
+      const data = (await res).json();
       return data;
     },
     onSuccess: (data) => {
       console.log(data);
-      if (pathname != "/flashcard-sets") {
-        router.push("/flashcard-sets");
+      if (pathname != "/tutors") {
+        router.push("/tutors");
       }
-      queryClient.invalidateQueries({ queryKey: ["sets"] });
+      queryClient.invalidateQueries({ queryKey: ["tutors"] });
       toast({
         description: (
           <p className="flex items-center">
             <Check className="h-4 w-4  mr-2" />
-            Successfully deleted the flashcard set.
+            Successfully deleted the AI tutor.
           </p>
         ),
       });
@@ -112,21 +134,15 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
     onError: () => {
       toast({
         title: "Uh oh, something went wrong!",
-        description: <p>There was an error deleting the flashcard set. Please try again.</p>,
+        description: (
+          <p>There was an error deleting the AI tutor. Plese try again.</p>
+        ),
         variant: "destructive",
       });
     },
   });
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: set.title,
-      description: set.description,
-    },
-  });
-
-  const onSubmit = (values: FormValues) => editSet(values);
+  const onSubmit = (values: FormValues) => editTutor(values);
 
   return (
     <Dialog>
@@ -158,13 +174,16 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-          <DeleteDialog deleteFunction={deleteSet} isDeleting={isSetDeleting} />
+          <DeleteDialog
+            deleteFunction={deleteTutor}
+            isDeleting={isTutorDeleting}
+          />
         </AlertDialog>
         <DialogContent className="max-w-[425px] md:max-w-[525px] !rounded-lg">
           <DialogHeader>
             <DialogTitle>Edit</DialogTitle>
             <DialogDescription>
-              Edit the flashcard set title and description.
+              Edit the tutor title and description.
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -174,12 +193,9 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Question</FormLabel>
+                    <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Enter the flashcard set title..."
-                        {...field}
-                      />
+                      <Input placeholder="Enter title..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -190,23 +206,22 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Answer</FormLabel>
+                    <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Enter the flashcard set description..."
-                        {...field}
-                      />
+                      <Textarea placeholder="Enter description..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button className="w-full" type="submit">
-                Submit{" "}
-                {isSetEditing && (
-                  <Loader2 className="h-4 w-4 ml-2 animate-spin" />
-                )}
-              </Button>
+              <div className="flex items-center space-x-2">
+                <Button type="submit">
+                  Submit{" "}
+                  {isTutorEditing && (
+                    <Loader2 className="h-4 w-4 ml-2 animate-spin" />
+                  )}
+                </Button>
+              </div>
             </form>
           </Form>
         </DialogContent>

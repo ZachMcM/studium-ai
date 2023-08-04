@@ -11,7 +11,7 @@ import {
 } from "../ui/alert-dialog";
 import { Loader2 } from "lucide-react";
 
-export default function DeleteDialog({
+export function DeleteDialog({
   deleteFunction,
   isDeleting,
 }: {

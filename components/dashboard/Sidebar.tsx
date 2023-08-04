@@ -3,10 +3,10 @@
 import { GraduationCap, PanelLeftOpen } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet"
 import Link from "next/link"
-import HeaderLink from "../HeaderLink"
+import { HeaderLink } from "../HeaderLink"
 import { useState } from "react"
 
-export default function Sidebar() {
+export function Sidebar() {
   const [sidebar, setSidebar] = useState<boolean>(false)
 
   return (

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { FaGoogle } from "react-icons/fa6"
 
-export default function AuthButton() {
+export function AuthButton() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (

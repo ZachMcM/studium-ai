@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import FlashcardDisplay from "./FlashcardDisplay";
+import { FlashcardDisplay } from "./FlashcardDisplay";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ExtendedFlashcardSet } from "@/types/prisma";
@@ -28,7 +28,7 @@ const variants = {
   },
 };
 
-export default function FlashcardCarousel({
+export function FlashcardCarousel({
   set,
 }: {
   set: ExtendedFlashcardSet;
@@ -81,7 +81,7 @@ export default function FlashcardCarousel({
                     }
                   }}
                 >
-                  <FlashcardDisplay index={index} flashcard={flashcard} />
+                  <FlashcardDisplay index={index} flashcard={flashcard} set={set} />
                 </motion.div>
               </AnimatePresence>
             )}

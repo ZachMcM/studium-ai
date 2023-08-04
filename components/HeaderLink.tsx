@@ -9,7 +9,7 @@ interface HeaderLinkProps extends LinkProps {
   children?: ReactNode;
 }
 
-export default function HeaderLink({ ...props }: HeaderLinkProps) {
+export function HeaderLink({ ...props }: HeaderLinkProps) {
   const pathname = usePathname();
 
   return (

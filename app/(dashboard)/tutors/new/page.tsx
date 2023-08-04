@@ -11,15 +11,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import FormConfig from "@/components/forms/FormConfig";
-import FormSubmit, { FormSubmitVaues } from "@/components/forms/FormSubmit";
-import LoadingPage from "@/components/LoadingPage";
+import { FormConfig } from "@/components/forms/FormConfig";
 import { Check } from "lucide-react";
-import { ToastAction } from "@/components/ui/toast";
-import { AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { Tutor } from "@prisma/client";
-import SubmitTutor, { NewTutorFormValues } from "@/components/tutors/SubmitTutor";
+import { SubmitTutor, NewTutorFormValues } from "@/components/tutors/SubmitTutor";
 import { toast } from "@/components/ui/use-toast";
 
 export default function NewTutor() {
@@ -38,17 +33,14 @@ export default function NewTutor() {
     mutationFn: async ({
       title,
       description,
-      image
     }: NewTutorFormValues): Promise<Tutor> => {
-      const formData = new FormData()
-      formData.append("title", title)
-      formData.append("description", description)
-      formData.append("source", sourceText)
-      if (image) formData.append("image", image[0])
 
       const res = fetch("/api/tutors", {
         method: "POST",
-        body: formData,
+        body: JSON.stringify({
+          title,
+          description
+        }),
       });
 
       const data = (await res).json();
@@ -56,7 +48,7 @@ export default function NewTutor() {
     },
     onSuccess: (data) => {
       console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["sets"] });
+      queryClient.invalidateQueries({ queryKey: ["tutors"] });
       toast({
         description: <p className="flex items-center"><Check className="h-4 w-4 mr-2 "/>Tutor set created successfully.</p>
       });
@@ -74,7 +66,7 @@ export default function NewTutor() {
   const submitForm = (values: NewTutorFormValues) => createTutor(values);
 
   return (
-    <main className="flex-1 flex justify-center items-center relative">
+    <main className="flex-1 flex justify-center items-center relative px-4">
       <Card className="w-[500px]">
         <CardHeader>
           <CardTitle>Generate an AI tutor</CardTitle>

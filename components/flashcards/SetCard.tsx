@@ -2,14 +2,18 @@
 
 import { Flashcard } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Card } from "../ui/card";
-import CardMore from "./CardMore";
+import { CardMore } from "./CardMore";
 import { Separator } from "../ui/separator";
+import { ExtendedFlashcardSet } from "@/types/prisma";
 
-export default function SetCard({ flashcard }: { flashcard: Flashcard }) {
-  const router = useRouter();
-
+export function SetCard({
+  flashcard,
+  set,
+}: {
+  flashcard: Flashcard;
+  set: ExtendedFlashcardSet;
+}) {
   const { data: session } = useSession();
 
   return (
@@ -18,12 +22,12 @@ export default function SetCard({ flashcard }: { flashcard: Flashcard }) {
         <p className="text-muted-foreground font-medium">
           {flashcard.question}
         </p>
-        <Separator/>
+        <Separator />
         <p className="font-semibold">{flashcard.answer}</p>
       </div>
       {flashcard.userId == session?.user.id && (
         <div className="self-end md:self-center shrink-0">
-          <CardMore flashcard={flashcard}/>
+          <CardMore set={set} flashcard={flashcard} />
         </div>
       )}
     </Card>

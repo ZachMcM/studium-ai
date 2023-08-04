@@ -10,7 +10,7 @@ import {
 import { Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
 
-export default function ThemeButton() {
+export function ThemeButton() {
   const { setTheme, theme } = useTheme();
 
   return (

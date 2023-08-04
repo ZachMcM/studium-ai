@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Progress } from "./ui/progress";
 import { motion } from "framer-motion"
 
-export default function LoadingPage({ finished }: { finished: boolean }) {
+export function LoadingPage({ finished }: { finished: boolean }) {
   const [progress, setProgess] = useState<number>(0);
   const [currText, setCurrText] = useState<(typeof loadingTexts)[number]>(
     loadingTexts[0]

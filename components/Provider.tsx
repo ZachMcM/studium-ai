@@ -8,7 +8,7 @@ import { type ThemeProviderProps } from "next-themes/dist/types"
 
 const queryClient = new QueryClient()
 
-export default function Provider({ children }: { children: ReactNode}) {
+export function Provider({ children }: { children: ReactNode}) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>

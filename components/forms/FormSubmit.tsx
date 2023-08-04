@@ -33,7 +33,7 @@ const formSchema = z.object({
 
 export type FormSubmitVaues = z.infer<typeof formSchema>;
 
-export default function FormSubmit({
+export function FormSubmit({
   itemType,
   onSubmit,
   onBack,

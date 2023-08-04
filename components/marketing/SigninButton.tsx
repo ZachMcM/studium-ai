@@ -4,17 +4,17 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
-export default function SigninButton() {
+export function SigninButton() {
   const { data: session } = useSession();
 
   return (
     <>
       {session ? (
         <Link href="/dashboard">
-          <Button variant="secondary" size="sm">Dashboard</Button>
+          <Button variant="secondary">Dashboard</Button>
         </Link>
       ) : (
-        <Button variant="secondary" size="sm" onClick={() => signIn()}>Sign In</Button>
+        <Button variant="secondary" onClick={() => signIn()}>Sign In</Button>
       )}
     </>
   );

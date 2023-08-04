@@ -5,10 +5,10 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Textarea } from "../ui/textarea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "../ui/use-toast";
 
-export default function FormConfig({
+export function FormConfig({
   onContinue,
 }: {
   onContinue: (text: string) => void | Promise<void>;

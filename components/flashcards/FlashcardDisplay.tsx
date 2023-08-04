@@ -6,15 +6,18 @@ import ReactCardFlip from "react-card-flip";
 import { Volume2 } from "lucide-react";
 import { Flashcard } from "@prisma/client";
 import { Button } from "../ui/button";
-import CardMore from "./CardMore";
+import { CardMore } from "./CardMore";
 import { useSession } from "next-auth/react";
+import { ExtendedFlashcardSet } from "@/types/prisma";
 
-export default function FlashcardDisplay({
+export function FlashcardDisplay({
   flashcard,
   index,
+  set
 }: {
   flashcard: Flashcard;
   index: number;
+  set: ExtendedFlashcardSet
 }) {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const synth = window.speechSynthesis;
@@ -35,10 +38,10 @@ export default function FlashcardDisplay({
   return (
     <div className="relative">
       <ReactCardFlip isFlipped={isFlipped} flipDirection={"horizontal"}>
-        <Card className="relative flex justify-center items-center flex-1 w-full p-10 h-[450px] overflow-y-auto shadow-sm bg-card">
+        <Card className="relative flex justify-center items-center flex-1 w-full p-12 h-[450px] overflow-y-auto shadow-sm bg-card">
           <div className="flex flex-col items-center text-center space-y-1">
             <p className="font-medium text-muted-foreground">Question:</p>
-            <p className="font-bold text-2xl ">{flashcard.question}</p>
+            <p className="font-bold text-3xl ">{flashcard.question}</p>
           </div>
           <button
             className="cursor-pointer absolute inset-0"
@@ -49,14 +52,14 @@ export default function FlashcardDisplay({
               <Volume2 className="h-4 w-4" />
             </Button>
             {session?.user.id == flashcard.userId && (
-              <CardMore flashcard={flashcard} />
+              <CardMore flashcard={flashcard} set={set} />
             )}
           </div>
         </Card>
-        <Card className="relative flex justify-center items-center flex-1 w-full p-10 h-[450px] overflow-y-auto shadow-sm">
+        <Card className="relative flex justify-center items-center flex-1 w-full p-12 h-[450px] overflow-y-auto shadow-sm">
           <div className="flex flex-col items-center text-center space-y-1">
             <p className="font-medium text-muted-foreground">Answer:</p>
-            <p className="font-bold text-2xl ">{flashcard.answer}</p>
+            <p className="font-bold text-3xl ">{flashcard.answer}</p>
           </div>
           <button
             className="cursor-pointer absolute inset-0"
@@ -67,7 +70,7 @@ export default function FlashcardDisplay({
               <Volume2 className="h-4 w-4" />
             </Button>
             {session?.user.id == flashcard.userId && (
-              <CardMore flashcard={flashcard} />
+              <CardMore set={set} flashcard={flashcard} />
             )}
           </div>
         </Card>

@@ -12,9 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import FormConfig from "@/components/forms/FormConfig";
-import FormSubmit, { FormSubmitVaues } from "@/components/forms/FormSubmit";
-import LoadingPage from "@/components/LoadingPage";
+import { FormConfig } from "@/components/forms/FormConfig";
+import { FormSubmit, FormSubmitVaues } from "@/components/forms/FormSubmit";
+import { LoadingPage } from "@/components/LoadingPage";
 import { Check } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 
@@ -87,7 +87,7 @@ export default function NewFlashcardsPage() {
   };
 
   return (
-    <main className="flex-1 flex justify-center items-center relative">
+    <main className="flex-1 flex justify-center items-center relative px-4">
       <Card className="w-[500px]">
         <CardHeader>
           <CardTitle>Generate a flashcard set</CardTitle>
