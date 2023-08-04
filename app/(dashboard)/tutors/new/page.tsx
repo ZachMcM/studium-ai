@@ -39,7 +39,8 @@ export default function NewTutor() {
         method: "POST",
         body: JSON.stringify({
           title,
-          description
+          description,
+          source: sourceText
         }),
       });
 

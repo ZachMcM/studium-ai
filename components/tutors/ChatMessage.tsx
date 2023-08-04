@@ -35,11 +35,10 @@ export function ChatMessage({
           />
           <AvatarFallback className="h-6 w-6 md:h-8 md:w-8 bg-secondary" />
         </Avatar> :
-        <div className="w-8 h-8 bg-primary rounded-full flex justify-center items-center">
+        <div className="w-8 h-8 bg-primary shrink-0 rounded-full flex justify-center items-center">
           <div className="h-4 w-4 text-background"><SiOpenai/></div>
         </div>
         }
-
         <MarkdownRenderer content={message.content} />
       </div>
       {message.role == "assistant" && (

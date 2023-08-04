@@ -150,7 +150,7 @@ export function TutorSettings({ tutor }: { tutor: Tutor }) {
         <AlertDialog>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="sm">
+              <Button>
                 <Settings className="h-4 w-4 mr-2" /> Settings
               </Button>
             </DropdownMenuTrigger>

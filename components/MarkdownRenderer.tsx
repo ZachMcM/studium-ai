@@ -5,7 +5,8 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coldarkCold, coldarkDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import remarkGfm from "remark-gfm"
-
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 
 export function MarkdownRenderer({ content }: { content: string }) {
   const { theme}  = useTheme()
@@ -38,7 +39,8 @@ export function MarkdownRenderer({ content }: { content: string }) {
           );
         },
       }}
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeKatex]}
     />
   );
 }

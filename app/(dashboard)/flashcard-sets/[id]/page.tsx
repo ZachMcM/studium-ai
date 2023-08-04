@@ -53,8 +53,7 @@ export default function FlashcardSetPage({
 
   return (
     <div className="flex-1 w-full">
-      <div className="flex bg-background border-b shadow-sm w-full p-10">
-        <div className="w-full gap-4 flex flex-col justify-between md:flex-row md:items-center">
+        <div className="w-full gap-4 p-10 flex flex-col bg-background border-b justify-between md:flex-row md:items-center">
           {isSetLoading ? (
             <div className="flex flex-col w-full space-y-2">
               <Skeleton className="h-4 w-3/5" />
@@ -74,7 +73,6 @@ export default function FlashcardSetPage({
                   <Button
                     onClick={() => share(shareData)}
                     variant="outline"
-                    size="sm"
                   >
                     <Share className="h-4 w-4 mr-2" />
                     Share
@@ -84,14 +82,9 @@ export default function FlashcardSetPage({
             )
           )}
         </div>
-      </div>
       <div className="flex flex-col space-y-6 mx-auto max-w-4xl px-4 py-10 md:py-16">
         {isSetLoading ? (
-          <Card className="h-[450px] w-full flex flex-col space-y-2 justify-center items-center">
-            <Skeleton className="h-4 w-2/5"/>
-            <Skeleton className="h-4 w-3/5"/>
-            <Skeleton className="h-4 w-4/5"/>
-          </Card>
+            <Skeleton className="h-[450px] w-full"/>
         ) : set && (
           <div className="space-y-32 md:space-y-16">
             <FlashcardCarousel set={set} />
