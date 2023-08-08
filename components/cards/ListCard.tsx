@@ -3,7 +3,6 @@ import { Button } from "../ui/button";
 import { ExternalLink } from "lucide-react";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -21,11 +20,11 @@ export function ListCard({
   title: string;
   description?: string;
   link: string;
-  itemType: "Quiz" | "Flashcards" | "Chatbot" | "Tutor";
+  itemType: "Quiz" | "Flashcards" | "Tutor";
   date: Date;
 }) {
   return (
-    <Card className="relative flex flex-col justify-between group hover:border-primary duration-300">
+    <Card className="relative flex flex-col justify-between hover:opacity-70 duration-500">
       <CardHeader>
         <div className="flex flex-col">
           <CardTitle>
@@ -39,13 +38,6 @@ export function ListCard({
       <CardFooter>
         <time className="text-xs text-muted-foreground">{daysAgo(date)}</time>
       </CardFooter>
-      <div className="opacity-0 group-hover:opacity-100 duration-300 absolute -top-4 -right-4">
-        <Link href={link}>
-          <Button className="rounded-full h-9 w-9" size="icon">
-            <ExternalLink className="h-4 w-4" />
-          </Button>
-        </Link>
-      </div>
       <Link href={link} className="absolute inset-0" />
     </Card>
   );

@@ -15,6 +15,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { ArrowLeft, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z
@@ -33,10 +34,12 @@ export function SubmitTutor({
   onSubmit,
   onBack,
   isLoading,
+  className
 }: {
   onSubmit: (values: NewTutorFormValues) => any;
   onBack: () => any;
   isLoading: boolean;
+  className?: string
 }) {
   const form = useForm<NewTutorFormValues>({
     resolver: zodResolver(formSchema),
@@ -48,7 +51,7 @@ export function SubmitTutor({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-4", className)}>
         <FormField
           control={form.control}
           name="title"

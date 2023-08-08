@@ -4,14 +4,11 @@ export const schema = {
     flashcards: {
       type: "array",
       items: {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            question: { type: "string" },
-            answer: { type: "string" },
-          }
-        },
+        type: "object",
+        properties: {
+          question: { type: "string" },
+          answer: { type: "string" },
+        }
       },
     },
   },

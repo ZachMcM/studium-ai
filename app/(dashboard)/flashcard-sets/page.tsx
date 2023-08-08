@@ -10,7 +10,7 @@ import { EmptyAlert } from "@/components/alerts/EmptyAlert";
 import { FlashcardSet } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Check, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { LoadingCards } from "@/components/cards/LoadingCards";
 import { ListCard } from "@/components/cards/ListCard";
 import { toast } from "@/components/ui/use-toast";

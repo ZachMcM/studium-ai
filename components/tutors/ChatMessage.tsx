@@ -29,13 +29,13 @@ export function ChatMessage({
       <div className="flex items-start space-x-3">
         {
           message.role == "user" ? 
-          <Avatar className="h-8 w-8 ">
+          <Avatar className="h-8 w-8 rounded-lg">
           <AvatarImage
             src={session?.user.image!}
           />
-          <AvatarFallback className="h-6 w-6 md:h-8 md:w-8 bg-secondary" />
+          <AvatarFallback className="h-8 w-8 bg-secondary" />
         </Avatar> :
-        <div className="w-8 h-8 bg-primary shrink-0 rounded-full flex justify-center items-center">
+        <div className="w-8 h-8 bg-primary shrink-0 rounded-lg flex items-center justify-center">
           <div className="h-4 w-4 text-background"><SiOpenai/></div>
         </div>
         }

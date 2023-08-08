@@ -10,7 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Check, Edit, Loader2, Settings, Trash2 } from "lucide-react";
+import {
+  Check,
+  Edit,
+  Loader2,
+  MoreHorizontal,
+  Settings,
+  Trash2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import {
@@ -66,11 +73,16 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
       return data;
     },
     onSuccess: (data) => {
-      console.log(data)
-      queryClient.invalidateQueries({ queryKey: ['sets', { id: set.id }]})
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["sets", { id: set.id }] });
       toast({
-        description: <p className="flex items-center"><Check className="h-4 w-4 mr-2"/>Successfully edited the set.</p>
-      })
+        description: (
+          <p className="flex items-center">
+            <Check className="h-4 w-4 mr-2" />
+            Successfully edited the set.
+          </p>
+        ),
+      });
     },
     onError: () => {
       toast({
@@ -112,7 +124,11 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
     onError: () => {
       toast({
         title: "Uh oh, something went wrong!",
-        description: <p>There was an error deleting the flashcard set. Please try again.</p>,
+        description: (
+          <p>
+            There was an error deleting the flashcard set. Please try again.
+          </p>
+        ),
         variant: "destructive",
       });
     },
@@ -134,8 +150,8 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
         <AlertDialog>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button>
-                <Settings className="h-4 w-4 mr-2" /> Settings
+              <Button variant="ghost" size="icon">
+                <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

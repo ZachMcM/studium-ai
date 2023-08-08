@@ -10,12 +10,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import { FormConfig } from "@/components/forms/FormConfig";
 import { Check } from "lucide-react";
 import { Tutor } from "@prisma/client";
-import { SubmitTutor, NewTutorFormValues } from "@/components/tutors/SubmitTutor";
+import {
+  SubmitTutor,
+  NewTutorFormValues,
+} from "@/components/tutors/SubmitTutor";
 import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 export default function NewTutor() {
   const [page, setPage] = useState<"config" | "submit">("config");
@@ -34,13 +38,12 @@ export default function NewTutor() {
       title,
       description,
     }: NewTutorFormValues): Promise<Tutor> => {
-
       const res = fetch("/api/tutors", {
         method: "POST",
         body: JSON.stringify({
           title,
           description,
-          source: sourceText
+          source: sourceText,
         }),
       });
 
@@ -51,17 +54,26 @@ export default function NewTutor() {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["tutors"] });
       toast({
-        description: <p className="flex items-center"><Check className="h-4 w-4 mr-2 "/>Tutor set created successfully.</p>
+        description: (
+          <p className="flex items-center">
+            <Check className="h-4 w-4 mr-2 " />
+            Tutor set created successfully.
+          </p>
+        ),
       });
       router.push(`/tutors/${data.id}`);
     },
     onError: () => {
       toast({
         title: "Uh oh, something went wrong!",
-        description: <p>Oops, there was an error creating a new AI tutor. Please try again.</p>,
+        description: (
+          <p>
+            Oops, there was an error creating a new AI tutor. Please try again.
+          </p>
+        ),
         variant: "destructive",
-      })
-    }
+      });
+    },
   });
 
   const submitForm = (values: NewTutorFormValues) => createTutor(values);
@@ -70,21 +82,23 @@ export default function NewTutor() {
     <main className="flex-1 flex justify-center items-center relative px-4">
       <Card className="w-[500px]">
         <CardHeader>
-          <CardTitle>Generate an AI tutor</CardTitle>
+          <CardTitle>Generate a tutor</CardTitle>
           <CardDescription>
-            Generate your AI tutor by uploading a file, pasting text, or
-            uploading a link to a website.
+            Generate a tutor with AI by uploading a file, pasting a link, or by
+            defining your own subject.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {page == "config" && <FormConfig onContinue={toSubmitPage} />}
-          {page == "submit" && (
-            <SubmitTutor
-              onBack={() => setPage("config")}
-              onSubmit={submitForm}
-              isLoading={isLoading}
-            />
-          )}
+          <FormConfig
+            onContinue={toSubmitPage}
+            className={cn(page != "config" && "hidden")}
+          />
+          <SubmitTutor
+            onBack={() => setPage("config")}
+            onSubmit={submitForm}
+            isLoading={isLoading}
+            className={cn(page != "submit" && "hidden")}
+          />
         </CardContent>
       </Card>
     </main>

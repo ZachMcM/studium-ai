@@ -15,6 +15,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z
@@ -23,8 +24,8 @@ const formSchema = z.object({
     .max(50, { message: "Your title must be less than 50 characters." }),
   num: z.coerce
     .number()
-    .min(1, { message: "You must have a least 1 card." })
-    .max(25, { message: "You must have less than 25 cards." }),
+    .min(1, { message: "There is a minimum of 1." })
+    .max(25, { message: "There is a maximum of 25." }),
   description: z
     .string()
     .min(5, { message: "Your description must be at least 5 characters." })
@@ -37,10 +38,12 @@ export function FormSubmit({
   itemType,
   onSubmit,
   onBack,
+  className
 }: {
   itemType: "questions" | "cards";
   onSubmit: (values: FormSubmitVaues) => any;
   onBack: () => any;
+  className?: string
 }) {
   const form = useForm<FormSubmitVaues>({
     resolver: zodResolver(formSchema),
@@ -53,7 +56,7 @@ export function FormSubmit({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-4", className)}>
         <FormField
           control={form.control}
           name="title"

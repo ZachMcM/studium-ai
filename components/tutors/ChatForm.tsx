@@ -5,7 +5,6 @@ import { UseChatHelpers } from "ai/react";
 import { ArrowRightCircle, Loader2 } from "lucide-react";
 import { useRef } from "react";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
 
 export function ChatForm({
   input,
@@ -24,12 +23,11 @@ export function ChatForm({
     <div className="fixed bottom-0 inset-x-0 p-4 bg-background border-t shadow-sm">
       <form
         onSubmit={handleSubmit}
-        className="h-32 flex flex-col gap-2 max-w-xl mx-auto"
+        className="flex flex-col gap-2 max-w-xl mx-auto border rounded-lg p-4 ring-offset-background focus-within:ring-2 ring-offset-2 ring-ring"
       >
-        <Textarea
-          value={input}
+        <textarea
           ref={textAreaRef}
-          className="resize-none overflow-hidden"
+          className="resize-none overflow-hidden min-h-[32px] bg-background text-sm font-medium focus:outline-none"
           onChange={handleInputChange}
           placeholder="Send a message..."
         />

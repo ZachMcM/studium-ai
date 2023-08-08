@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as z from "zod";
 import { toast } from "../ui/use-toast";
-import { Check, Edit, Loader2, Settings, Trash2 } from "lucide-react";
+import { Check, Edit, Loader2, MoreHorizontal, Settings, Trash2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { ToastAction } from "../ui/toast";
 import {
@@ -150,9 +150,9 @@ export function TutorSettings({ tutor }: { tutor: Tutor }) {
         <AlertDialog>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button>
-                <Settings className="h-4 w-4 mr-2" /> Settings
-              </Button>
+            <Button variant="ghost" size="icon">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuGroup>

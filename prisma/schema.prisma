@@ -54,6 +54,10 @@ model User {
   flashcards    Flashcard[]
 
   tutors Tutor[]
+
+  quizzes      Quiz[]
+  questions    Question[]
+  quizAttempts Attempt[]
 }
 
 model VerificationToken {
@@ -114,4 +118,38 @@ model Message {
   tutor     Tutor    @relation(fields: [tutorId], references: [id], onDelete: Cascade)
   tutorId   String
   createdAt DateTime @default(now())
+}
+
+model Quiz {
+  id          String     @id @default(cuid())
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  title       String
+  description String
+  questions   Question[]
+  attempts    Attempt[]
+  createdAt   DateTime   @default(now())
+}
+
+model Question {
+  id              String   @id @default(cuid())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  quiz            Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId          String
+  question        String
+  possibleAnswers String[]
+  correctAnswer   String
+  createdAt       DateTime @default(now())
+}
+
+model Attempt {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId      String
+  score       Decimal
+  userAnswers String[]
+  createdAt   DateTime @default(now())
 }

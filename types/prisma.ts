@@ -11,3 +11,20 @@ export type ExtendedTutor = Prisma.TutorGetPayload<{
     messages: true
   }
 }>
+
+export type ExtendedQuiz = Prisma.QuizGetPayload<{
+  include: {
+    questions: true,
+    attempts: true
+  }
+}>
+
+export type ExtendedAttempt = Prisma.AttemptGetPayload<{
+  include: {
+    quiz: {
+      include: {
+        questions: true
+      }
+    }
+  }
+}>

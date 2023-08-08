@@ -16,7 +16,7 @@ export function HeaderLink({ ...props }: HeaderLinkProps) {
     <Link
       className={cn(
         "transition-colors hover:text-foreground/80 text-foreground/60",
-        pathname == props.href && "text-primary"
+        pathname == props.href && "text-foreground"
       )}
       {...props}
     >

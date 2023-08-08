@@ -16,6 +16,8 @@ import { useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
 
 export default function TutorPage({ params }: { params: { id: string } }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
   const router = useRouter();
   const {
     messages,
@@ -45,6 +47,11 @@ export default function TutorPage({ params }: { params: { id: string } }) {
         }));
 
         setMessages(preExistingMessages);
+
+        ref?.current?.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+        });
       }
     },
     onError: (data) => {
@@ -62,26 +69,16 @@ export default function TutorPage({ params }: { params: { id: string } }) {
     },
   });
 
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    ref?.current?.scrollIntoView({
-      behavior: "auto",
-      block: "start",
-    });
-  }, [messages.length, messages[messages.length - 1]?.content.length]);
-
   return (
-    <main className="flex flex-col flex-1">
-      <div className="w-full gap-4 p-10 flex flex-col bg-background border-b justify-between md:flex-row md:items-center">
-        {isLoading ? (
-          <div className="flex flex-col w-full space-y-2">
-            <Skeleton className="h-4 w-3/5" />
-            <Skeleton className="h-4 w-4/5" />
-          </div>
-        ) : (
-          tutor && (
-            <>
+    <main className="flex flex-col gap-10 py-10 md:py-16 flex-1 mx-auto max-w-2xl w-full px-4">
+      {isLoading ? (
+        <div className="w-full flex justify-center py-8">
+          <Loader2 className="animate-spin text-muted-foreground" />
+        </div>
+      ) : (
+        tutor && (
+          <>
+            <div className="w-full gap-4 flex flex-col bg-background justify-between md:flex-row md:items-center">
               <div className="flex flex-col">
                 <h3 className="font-bold text-2xl">{tutor?.title}</h3>
                 <p className="font-medium text-muted-foreground">
@@ -89,23 +86,15 @@ export default function TutorPage({ params }: { params: { id: string } }) {
                 </p>
               </div>
               <TutorSettings tutor={tutor} />
-            </>
-          )
-        )}
-      </div>
-      <div className="pb-[200px] w-full">
-        {!isLoading ? (
-          <>
-            <ChatList messages={messages} />
-            <ChatScrollAnchor trackVisibility={isChatLoading} />
-            <div ref={ref} className="h-px w-full" />
+            </div>
+            <div className="pb-[150px] w-full">
+              <ChatList messages={messages} />
+              <ChatScrollAnchor trackVisibility={isChatLoading} />
+              <div ref={ref} className="h-px w-full" />
+            </div>
           </>
-        ) : (
-          <div className="w-full flex justify-center py-6">
-            <Loader2 className="animate-spin text-muted" />
-          </div>
-        )}
-      </div>
+        )
+      )}
       <ChatForm
         isLoading={isChatLoading}
         input={input}

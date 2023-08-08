@@ -28,8 +28,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { sourceText, num, title, description } = (await req.json()) as {
-    sourceText?: string;
+  const { source, num, title, description } = (await req.json()) as {
+    source?: string;
     num?: number;
     title?: string;
     description?: string;
@@ -38,15 +38,15 @@ export async function POST(req: NextRequest) {
   const session = await getAuthSession();
   if (!session)
     return NextResponse.json({ error: "Unauthorized Request", status: 401 });
-  if (!sourceText || !num || !title || !description)
+  if (!source || !num || !title || !description)
     return NextResponse.json({
       error: "Invalid request, incorrect paylod",
       status: 400,
     });
 
-  const aiCardsGeneration = await createSet(sourceText, num);
+  const aiCardsGeneration = await generate(source, num);
   const generatedSet = aiCardsGeneration.flashcards.map(
-    (flashcard: Pick<Flashcard, "answer" | "question">) => {
+    (flashcard) => {
       return {
         userId: session.user.id,
         answer: flashcard.answer,
@@ -71,20 +71,20 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(newFlashcardSet);
 }
 
-async function createSet(
-  sourceText: string,
+async function generate(
+  source: string,
   numCards: number
 ): Promise<FlashcardGeneration> {
   const response = await openai.createChatCompletion({
-    model: "gpt-4",
+    model: "gpt-3.5-turbo-16k",
     messages: [
       {
         role: "system",
-        content: `You area a flashcard set generation AI. when given a data source, create a flashcard set of ${numCards} cards based on that data source. If the data source has insufficient data, use your own information and training data to create the flashcards.`,
+        content: `You area a flashcard set generation AI. when given a source, create a flashcard set of only ${numCards} cards based on that source. If the source has insufficient data, use your own information and training data to create the flashcards.`,
       },
       {
         role: "user",
-        content: sourceText,
+        content: source,
       },
     ],
     functions: [
@@ -100,7 +100,8 @@ async function createSet(
   });
 
   const data = (await response.json()) as ResponseTypes["createChatCompletion"];
-  console.log(data);
-  console.log(data.choices[0].message?.function_call?.arguments);
-  return JSON.parse(data.choices[0].message?.function_call?.arguments || "");
+  const json = JSON.parse(data.choices[0].message?.function_call?.arguments!)
+  console.log(json)
+  console.log(json.flashcards)
+  return json;
 }

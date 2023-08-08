@@ -1,9 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useRouter } from "next/navigation";
+import { FormConfig } from "@/components/forms/FormConfig";
+import { FormSubmit, FormSubmitVaues } from "@/components/forms/FormSubmit";
+import { Quiz } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
+import { Check } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -11,15 +15,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FormConfig } from "@/components/forms/FormConfig";
-import { FormSubmit, FormSubmitVaues } from "@/components/forms/FormSubmit";
-import { LoadingPage } from "@/components/LoadingPage";
-import { Check } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
-import { FlashcardSet } from "@prisma/client";
+import { LoadingPage } from "@/components/LoadingPage";
 import { cn } from "@/lib/utils";
 
-export default function NewFlashcardsPage() {
+export default function NewQuizPage() {
   const [page, setPage] = useState<"config" | "submit">("config");
   const [source, setSource] = useState<string>("");
   const [finished, setFinished] = useState<boolean>(false);
@@ -33,13 +33,13 @@ export default function NewFlashcardsPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { mutate: createSet } = useMutation({
+  const { mutate: createQuiz } = useMutation({
     mutationFn: async ({
       title,
-      num,
       description,
-    }: FormSubmitVaues): Promise<FlashcardSet> => {
-      const res = fetch("/api/flashcard-sets", {
+      num,
+    }: FormSubmitVaues): Promise<Quiz> => {
+      const res = await fetch("/api/quizzes", {
         method: "POST",
         body: JSON.stringify({
           title,
@@ -49,33 +49,30 @@ export default function NewFlashcardsPage() {
         }),
       });
 
-      const data = (await res).json();
+      const data = await res.json();
       return data;
     },
     onSuccess: (data) => {
       console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["sets"] });
+      queryClient.invalidateQueries({ queryKey: ["quizzes"] });
       setFinished(true);
       setTimeout(() => {
         toast({
           description: (
             <p className="flex items-center">
               <Check className="h-4 w-4 mr-2 " />
-              Flashcard set created successfully.
+              Quiz created successfully.
             </p>
           ),
         });
-        router.push(`/flashcard-sets/${data.id}`);
+        router.push(`/quizzes/${data.id}/attempt`);
       }, 1500);
     },
     onError: () => {
       toast({
         title: "Uh oh, something went wrong!",
         description: (
-          <p>
-            Oops, there was an error creating a new flashcard set. Please try
-            again.
-          </p>
+          <p>Oops, there was an error creating a new quiz. Please try again.</p>
         ),
         variant: "destructive",
       });
@@ -84,17 +81,17 @@ export default function NewFlashcardsPage() {
 
   const submitForm = (values: FormSubmitVaues) => {
     setIsLoading(true);
-    createSet(values);
+    createQuiz(values);
   };
 
   return (
     <main className="flex-1 flex justify-center items-center relative px-4">
       <Card className="w-[500px]">
         <CardHeader>
-          <CardTitle>Generate a flashcard set</CardTitle>
+          <CardTitle>Generate a quiz</CardTitle>
           <CardDescription>
-            Generate a flashcard set with AI by uploading a file, pasting a
-            link, or by defining your own subject.
+            Generate a quiz with AI by uploading a file, pasting a link, or by
+            defining your own subject.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -103,7 +100,7 @@ export default function NewFlashcardsPage() {
             className={cn(page != "config" && "hidden")}
           />
           <FormSubmit
-            itemType="cards"
+            itemType="questions"
             onSubmit={submitForm}
             onBack={() => setPage("config")}
             className={cn(page != "submit" && "hidden")}
