@@ -1,14 +1,13 @@
 import { Message } from "ai/react";
 import { ChatMessage } from "./ChatMessage";
-import { useEffect, useRef } from "react";
+import { Card } from "../ui/card";
 
 export function ChatList({ messages }: { messages: Message[] }) {
-
-
   return (
     <div className="flex flex-1 flex-col">
       {messages.map((message) => {
-        if (message.role == "assistant" || "user") {
+        console.log(message.role)
+        if (message.role != "system") {
           return <ChatMessage message={message} key={message.id} />;
         }
       })}

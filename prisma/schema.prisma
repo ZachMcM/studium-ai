@@ -107,17 +107,7 @@ model Tutor {
   source      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  messages    Message[]
   createdAt   DateTime  @default(now())
-}
-
-model Message {
-  id        String   @id @default(cuid())
-  role      String
-  content   String
-  tutor     Tutor    @relation(fields: [tutorId], references: [id], onDelete: Cascade)
-  tutorId   String
-  createdAt DateTime @default(now())
 }
 
 model Quiz {

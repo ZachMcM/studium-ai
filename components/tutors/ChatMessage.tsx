@@ -25,8 +25,8 @@ export function ChatMessage({
   const { copied, copyToClipboard } = useCopy(message.content)
 
   return (
-    <div className="py-10 border-b flex items-start relative">
-      <div className="flex items-start space-x-3">
+    <div className="py-10 border-b last:border-none flex-1 flex w-full relative">
+      <div className="flex w-full gap-4 mx-auto mr-4 items-start">
         {
           message.role == "user" ? 
           <Avatar className="h-8 w-8 rounded-lg">

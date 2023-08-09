@@ -1,6 +1,6 @@
 "use client"
 
-import { GraduationCap, PanelLeftOpen } from "lucide-react"
+import { GraduationCap, Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet"
 import Link from "next/link"
 import { HeaderLink } from "../HeaderLink"
@@ -12,7 +12,7 @@ export function Sidebar() {
   return (
     <Sheet open={sidebar} onOpenChange={() => setSidebar(!sidebar)}>
       <SheetTrigger asChild className="cursor-pointer md:hidden">
-        <PanelLeftOpen className="h-5 w-5"/>
+        <Menu className="h-5 w-5"/>
       </SheetTrigger>
       <SheetContent side="left" className="w-[275px]">
         <SheetHeader>

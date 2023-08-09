@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { EmptyAlert } from "@/components/alerts/EmptyAlert";
 import { ErrorAlert } from "@/components/alerts/ErrorAlert";
@@ -12,7 +12,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Quiz } from "@prisma/client";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "react-query";
 
@@ -44,10 +44,12 @@ export default function Quizzes() {
 
   return (
     <div className="flex-1 px-4 py-10 md:py-16 max-w-5xl xl:max-w-6xl mx-auto w-full flex flex-col">
-      <h1 className="text-4xl font-bold">Quizzes</h1>
-      <p className="text-muted-foreground font-medium">
-        Create and manage your AI generated quizzes.
-      </p>
+      <div className="flex flex-col space-y-1">
+        <h1 className="text-3xl font-bold">Quizzes</h1>
+        <p className="text-muted-foreground font-medium">
+          Create and manage your AI generated quizzes.
+        </p>
+      </div>
       <div className="flex items-center space-x-2 mt-4">
         <Input
           onChange={(e) => setSearch(e.target.value)}

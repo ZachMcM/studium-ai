@@ -45,7 +45,7 @@ export default function FlashcardSetPage({
 
   return (
     <div className="flex-1 w-full flex flex-col gap-10 py-10 md:py-16 mx-auto max-w-4xl px-4">
-      <div className="w-full gap-4 flex flex-col bg-background justify-between md:flex-row md:items-center">
+      <div className="w-full gap-4 flex justify-between items-center">
         {isSetLoading ? (
           <div className="flex flex-col w-full space-y-2">
             <Skeleton className="h-4 w-3/5" />

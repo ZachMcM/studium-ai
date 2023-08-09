@@ -12,13 +12,6 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       userId: session.user.id,
       id: params.id
     },
-    include: {
-      messages: {
-        orderBy: {
-          createdAt: "asc"
-        }
-      }
-    }
   })
 
   return NextResponse.json(tutor)

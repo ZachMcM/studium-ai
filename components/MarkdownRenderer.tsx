@@ -13,7 +13,7 @@ export function MarkdownRenderer({ content }: { content: string }) {
 
   return (
     <ReactMarkdown
-      className="prose prose-zinc dark:prose-invert grid sm:grid-cols-1 prose-pre:bg-background prose-pre:border prose-pre:shadow-sm"
+      className="w-full prose prose-zinc dark:prose-invert grid sm:grid-cols-1 prose-pre:bg-background prose-pre:border prose-pre:shadow-sm prose-p:text-primary"
       children={content}
       components={{
         code({ node, inline, className, children, ...props }) {

@@ -44,10 +44,18 @@ export function LoadingPage({ finished }: { finished: boolean }) {
     >
       <div className="flex flex-col items-center space-y-10 w-full">
         <Image
-          src={theme == "light" ? "/images/loading-light.gif" : "/images/loading-dark.gif"}
+          src={"/images/loading-light.gif"}
           height={500}
           width={500}
           alt="loading"
+          className="dark:hidden"
+        />
+        <Image
+          src={"/images/loading-dark.gif"}
+          height={500}
+          width={500}
+          alt="loading"
+          className="hidden dark:block"
         />
         <div className="space-y-3 w-3/4">
           <Progress value={progress} className="h-3 w-full" />

@@ -3,36 +3,57 @@
 import { useTextareaAutosize } from "@/lib/hooks/text-area-autosize";
 import { UseChatHelpers } from "ai/react";
 import { ArrowRightCircle, Loader2 } from "lucide-react";
-import { useRef } from "react";
+import { FormEvent, KeyboardEvent, useRef } from "react";
 import { Button } from "../ui/button";
+import { useEnterSubmit } from "@/lib/hooks/user-enter-submit";
 
 export function ChatForm({
   input,
   handleInputChange,
-  handleSubmit,
   isLoading,
+  append,
+  setInput,
 }: Pick<
   UseChatHelpers,
-  "input" | "handleInputChange" | "handleSubmit" | "isLoading"
+  "input" | "handleInputChange" | "isLoading" | "append" | "setInput"
 >) {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
+  const { formRef, onKeyDown } = useEnterSubmit();
   useTextareaAutosize(textAreaRef.current, input);
 
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!input?.trim()) {
+      return;
+    }
+    const value = input;
+    setInput("");
+    await append({
+      content: value,
+      role: "user",
+    });
+  }
+
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
   return (
-    <div className="fixed bottom-0 inset-x-0 p-4 bg-background border-t shadow-sm">
+    <div className="fixed inset-x-0 bottom-0 p-4 bg-background border-t shadow-sm">
       <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-2 max-w-xl mx-auto border rounded-lg p-4 ring-offset-background focus-within:ring-2 ring-offset-2 ring-ring"
+        onSubmit={onSubmit}
+        ref={formRef}
+        className="h-24 flex flex-col gap-2 max-w-xl mx-auto border rounded-lg p-4 ring-offset-background focus-within:ring-2 ring-offset-2 ring-ring"
       >
         <textarea
           ref={textAreaRef}
-          className="resize-none overflow-hidden min-h-[32px] bg-background text-sm font-medium focus:outline-none"
+          className="resize-none overflow-hidden bg-background text-sm font-medium focus:outline-none"
           onChange={handleInputChange}
+          onKeyDown={onKeyDown}
+          value={input}
           placeholder="Send a message..."
         />
         <div className="self-end">
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading} ref={buttonRef}>
             Send{" "}
             {isLoading ? (
               <Loader2 className="h-4 w-4 ml-2 animate-spin" />

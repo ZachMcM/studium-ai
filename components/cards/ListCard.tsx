@@ -26,14 +26,10 @@ export function ListCard({
   return (
     <Card className="relative flex flex-col justify-between hover:opacity-70 duration-500">
       <CardHeader>
-        <div className="flex flex-col">
-          <CardTitle>
-            <Link href={link} className="text-xl hover:underline font-semibold">
-              {title || "Untitled" + itemType}
-            </Link>
-          </CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </div>
+        <Link href={link}>
+          <CardTitle>{title || "Untitled" + itemType}</CardTitle>
+        </Link>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardFooter>
         <time className="text-xs text-muted-foreground">{daysAgo(date)}</time>

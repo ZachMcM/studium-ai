@@ -1,6 +1,5 @@
 "use client";
 
-import { ExtendedTutor } from "@/types/prisma";
 import { useQuery } from "react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
@@ -8,23 +7,21 @@ import { ToastAction } from "@/components/ui/toast";
 import { useChat } from "ai/react";
 import { ChatList } from "@/components/tutors/ChatList";
 import { ChatForm } from "@/components/tutors/ChatForm";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Message } from "ai";
 import { TutorSettings } from "@/components/tutors/TutorSettings";
 import { ChatScrollAnchor } from "@/components/tutors/ChatScrollAnchor";
-import { useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
+import { Tutor } from "@prisma/client";
 
 export default function TutorPage({ params }: { params: { id: string } }) {
-  const ref = useRef<HTMLDivElement | null>(null);
-
   const router = useRouter();
   const {
     messages,
     input,
     handleInputChange,
-    handleSubmit,
     setMessages,
+    append,
+    setInput,
     isLoading: isChatLoading,
   } = useChat({
     api: `/api/tutors/${params.id}/chat`,
@@ -32,27 +29,11 @@ export default function TutorPage({ params }: { params: { id: string } }) {
 
   const { data: tutor, isLoading } = useQuery({
     queryKey: ["tutors", { id: params.id }],
-    queryFn: async (): Promise<ExtendedTutor> => {
+    queryFn: async (): Promise<Tutor> => {
       const res = await fetch(`/api/tutors/${params.id}`);
       const data = await res.json();
       console.log(data);
       return data;
-    },
-    onSuccess: (data) => {
-      if (data.messages) {
-        const preExistingMessages: Message[] = data.messages.map((message) => ({
-          id: message.id,
-          role: message.role as "assistant" | "system" | "user" | "function",
-          content: message.content,
-        }));
-
-        setMessages(preExistingMessages);
-
-        ref?.current?.scrollIntoView({
-          behavior: "auto",
-          block: "start",
-        });
-      }
     },
     onError: (data) => {
       console.log(data);
@@ -69,17 +50,28 @@ export default function TutorPage({ params }: { params: { id: string } }) {
     },
   });
 
+  async function introduce() {
+    await append({
+      role: "system",
+      content:
+        "Introduce yourself to the user and ask how you can help them with the topic.",
+    });
+  }
+  useEffect(() => {
+    introduce()
+  }, [])
+
   return (
-    <main className="flex flex-col gap-10 py-10 md:py-16 flex-1 mx-auto max-w-2xl w-full px-4">
+    <div className="flex flex-col flex-1 max-w-4xl mx-auto w-full pt-10 md:pt-16 px-4 gap-10">
       {isLoading ? (
-        <div className="w-full flex justify-center py-8">
-          <Loader2 className="animate-spin text-muted-foreground" />
+        <div className="flex w-full justify-center">
+          <Loader2 className="text-muted-foreground animate-spin" />
         </div>
       ) : (
         tutor && (
           <>
-            <div className="w-full gap-4 flex flex-col bg-background justify-between md:flex-row md:items-center">
-              <div className="flex flex-col">
+            <div className="w-full gap-4 flex justify-between items-center ">
+              <div className="flex flex-col w-full">
                 <h3 className="font-bold text-2xl">{tutor?.title}</h3>
                 <p className="font-medium text-muted-foreground">
                   {tutor?.description}
@@ -87,10 +79,12 @@ export default function TutorPage({ params }: { params: { id: string } }) {
               </div>
               <TutorSettings tutor={tutor} />
             </div>
-            <div className="pb-[150px] w-full">
+            <div className="pb-[200px]">
               <ChatList messages={messages} />
-              <ChatScrollAnchor trackVisibility={isChatLoading} />
-              <div ref={ref} className="h-px w-full" />
+              <ChatScrollAnchor
+                trackVisibility={isChatLoading}
+                messages={messages}
+              />
             </div>
           </>
         )
@@ -99,8 +93,9 @@ export default function TutorPage({ params }: { params: { id: string } }) {
         isLoading={isChatLoading}
         input={input}
         handleInputChange={handleInputChange}
-        handleSubmit={handleSubmit}
+        append={append}
+        setInput={setInput}
       />
-    </main>
+    </div>
   );
 }

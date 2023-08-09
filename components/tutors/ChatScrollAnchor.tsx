@@ -1,18 +1,11 @@
-'use client'
+import { useInView } from "react-intersection-observer"
+import { useAtBottom } from "@/lib/hooks/use-at-bottom"
+import { useEffect } from "react"
+import { Message } from "ai"
 
-import { useInView } from 'react-intersection-observer'
-import { useCallback, useEffect, useRef } from 'react'
-import { useAtBottom } from '@/lib/hooks/use-at-bottom'
-
-interface ChatScrollAnchorProps {
-  trackVisibility?: boolean
-}
-
-export function ChatScrollAnchor({ trackVisibility }: ChatScrollAnchorProps) {
-  const ref = useRef<HTMLDivElement | null>(null)
-
+export function ChatScrollAnchor({ trackVisibility, messages }: { trackVisibility: boolean, messages: Message[] }) {
   const isAtBottom = useAtBottom()
-  const { ref: inViewRef, entry, inView } = useInView({
+  const { ref, entry, inView } = useInView({
     trackVisibility,
     delay: 100,
     rootMargin: '0px 0px -150px 0px'
@@ -26,20 +19,13 @@ export function ChatScrollAnchor({ trackVisibility }: ChatScrollAnchorProps) {
     }
   }, [inView, entry, isAtBottom, trackVisibility])
 
-  const setRefs = useCallback(
-    (node: any) => {
-      ref.current = node;
-      inViewRef(node);
-    },
-    [inViewRef],
-  );
 
   useEffect(() => {
-    ref.current?.scrollIntoView({
-      block: 'start',
-      behavior: 'auto'
-    })
-  }, [])
+    entry?.target?.scrollIntoView({
+      behavior: "auto",
+      block: "start",
+    });
+  }, [messages.length, messages[messages.length - 1]?.content.length]);
 
-  return <div ref={setRefs} className="h-px w-full" />
+  return <div ref={ref} className="h-px w-full" />
 }

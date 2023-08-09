@@ -13,7 +13,11 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     },
     include: {
       questions: true,
-      attempts: true
+      attempts: {
+        orderBy: {
+          createdAt: "asc"
+        }
+      }
     }
   })
 

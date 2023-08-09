@@ -88,7 +88,7 @@ export default function NewFlashcardsPage() {
   };
 
   return (
-    <main className="flex-1 flex justify-center items-center relative px-4">
+    <main className="flex-1 flex justify-center items-center w-full relative px-4">
       <Card className="w-[500px]">
         <CardHeader>
           <CardTitle>Generate a flashcard set</CardTitle>

@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { cn } from "@/lib/utils";
 
-export function QuestionResult({
+export function AttemptQuestion({
   question,
   userAnswer,
   index,

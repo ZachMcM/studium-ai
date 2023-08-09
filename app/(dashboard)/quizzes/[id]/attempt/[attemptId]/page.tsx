@@ -1,8 +1,7 @@
 "use client";
 
-import { QuestionResult } from "@/components/quizzes/QuestionResult";
+import { AttemptQuestion } from "@/components/quizzes/AttemptQuestion";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { ExtendedAttempt } from "@/types/prisma";
@@ -66,7 +65,6 @@ export default function AttemptResults({
                 <div className="flex items-center space-x-4 font-medium text-lg text-muted-foreground">
                   <p className="text-foreground">Results:</p>
                   <p>{Number(attempt.score) * 100}%</p>
-                  <Separator orientation="vertical" className="h-6" />
                   <p>
                     {Number(attempt.score) * attempt.quiz.questions.length}/
                     {attempt.quiz.questions.length}
@@ -76,7 +74,7 @@ export default function AttemptResults({
             </div>
             <div className="flex flex-col w-full space-y-24">
               {attempt.quiz.questions.map((question, i) => (
-                <QuestionResult
+                <AttemptQuestion
                   question={question}
                   userAnswer={attempt.userAnswers[i]}
                   index={i}

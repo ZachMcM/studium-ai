@@ -44,10 +44,13 @@ export default function FlashcardSets() {
 
   return (
     <div className="flex-1 px-4 py-10 md:py-16 max-w-5xl xl:max-w-6xl mx-auto w-full flex flex-col">
-      <h1 className="text-4xl font-bold">Flashcards</h1>
-      <p className="text-muted-foreground font-medium">
-        Create and manage your AI generated flashcard sets.
-      </p>
+      <div className="flex flex-col space-y-1">
+        <h1 className="text-3xl font-bold">Flashcards</h1>
+        <p className="text-muted-foreground font-medium">
+          Create and manage your AI generated flashcard sets.
+        </p>
+      </div>
+
       <div className="flex items-center space-x-2 mt-4">
         <Input
           onChange={(e) => setSearch(e.target.value)}
