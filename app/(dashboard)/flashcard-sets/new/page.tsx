@@ -55,6 +55,7 @@ export default function NewFlashcardsPage() {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["sets"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       setFinished(true);
       setTimeout(() => {
         toast({

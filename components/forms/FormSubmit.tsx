@@ -25,7 +25,7 @@ const formSchema = z.object({
   num: z.coerce
     .number()
     .min(1, { message: "There is a minimum of 1." })
-    .max(25, { message: "There is a maximum of 25." }),
+    .max(50, { message: "There is a maximum of 25." }),
   description: z
     .string()
     .min(5, { message: "Your description must be at least 5 characters." })

@@ -12,6 +12,7 @@ import { ChatScrollAnchor } from "@/components/tutors/ChatScrollAnchor";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { Tutor } from "@prisma/client";
+import { Separator } from "@/components/ui/separator";
 
 export default function TutorPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -58,8 +59,8 @@ export default function TutorPage({ params }: { params: { id: string } }) {
     });
   }
   useEffect(() => {
-    introduce()
-  }, [])
+    introduce();
+  }, []);
 
   return (
     <div className="flex flex-col flex-1 max-w-4xl mx-auto w-full pt-10 md:pt-16 px-4 gap-10">
@@ -70,14 +71,17 @@ export default function TutorPage({ params }: { params: { id: string } }) {
       ) : (
         tutor && (
           <>
-            <div className="w-full gap-4 flex justify-between items-center ">
-              <div className="flex flex-col w-full">
-                <h3 className="font-bold text-2xl">{tutor?.title}</h3>
-                <p className="font-medium text-muted-foreground">
-                  {tutor?.description}
-                </p>
+            <div className="flex flex-col gap-6">
+              <div className="w-full gap-4 flex justify-between items-center ">
+                <div className="flex flex-col w-full">
+                  <h3 className="font-bold text-2xl">{tutor?.title}</h3>
+                  <p className="font-medium text-muted-foreground">
+                    {tutor?.description}
+                  </p>
+                </div>
+                <TutorSettings tutor={tutor} />
               </div>
-              <TutorSettings tutor={tutor} />
+              <Separator />
             </div>
             <div className="pb-[200px]">
               <ChatList messages={messages} />

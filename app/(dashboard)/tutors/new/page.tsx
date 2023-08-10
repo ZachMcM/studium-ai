@@ -53,6 +53,7 @@ export default function NewTutor() {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["tutors"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       toast({
         description: (
           <p className="flex items-center">

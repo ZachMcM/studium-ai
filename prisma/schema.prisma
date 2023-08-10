@@ -54,6 +54,7 @@ model User {
   flashcards    Flashcard[]
 
   tutors Tutor[]
+  messages  Message[]
 
   quizzes      Quiz[]
   questions    Question[]
@@ -108,6 +109,19 @@ model Tutor {
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   createdAt   DateTime  @default(now())
+  messages    Message[]
+}
+
+model Message {
+  id          String    @id @default(cuid())
+  role        String
+  content     String
+
+  tutor       Tutor     @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  tutorId     String
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
 }
 
 model Quiz {

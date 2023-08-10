@@ -2,6 +2,7 @@
 
 import { AttemptQuestion } from "@/components/quizzes/AttemptQuestion";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { ExtendedAttempt } from "@/types/prisma";
@@ -48,28 +49,27 @@ export default function AttemptResults({
       ) : (
         attempt && (
           <>
-            <div className="w-full gap-4 flex flex-col">
+            <div className="w-full gap-6 flex flex-col">
               <Link href={`/quizzes/${attempt.quizId}`}>
                 <Button variant="ghost">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back
                 </Button>
               </Link>
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col">
-                  <h3 className="font-bold text-2xl">{attempt.quiz.title}</h3>
-                  <p className="font-medium text-muted-foreground">
-                    {attempt.quiz.description}
-                  </p>
-                </div>
-                <div className="flex items-center space-x-4 font-medium text-lg text-muted-foreground">
-                  <p className="text-foreground">Results:</p>
-                  <p>{Number(attempt.score) * 100}%</p>
-                  <p>
-                    {Number(attempt.score) * attempt.quiz.questions.length}/
-                    {attempt.quiz.questions.length}
-                  </p>
-                </div>
+              <div className="flex flex-col">
+                <h3 className="font-bold text-2xl">{attempt.quiz.title}</h3>
+                <p className="font-medium text-muted-foreground">
+                  {attempt.quiz.description}
+                </p>
+              </div>
+              <Separator />
+              <div className="flex items-center space-x-4 font-medium text-lg text-muted-foreground">
+                <p className="text-foreground">Result:</p>
+                <p>{Number(attempt.score) * 100}%</p>
+                <p>
+                  {Number(attempt.score) * attempt.quiz.questions.length}/
+                  {attempt.quiz.questions.length}
+                </p>
               </div>
             </div>
             <div className="flex flex-col w-full space-y-24">

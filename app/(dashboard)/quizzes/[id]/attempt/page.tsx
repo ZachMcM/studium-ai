@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Separator } from "@/components/ui/separator";
 
 export default function QuizAttempt({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -70,6 +71,7 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["sets", { id: params.id }] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       router.push(`/quizzes/${params.id}/attempt/${data.id}`);
     },
     onError: (data) => {
@@ -113,12 +115,12 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
     <div className="flex-1 w-full flex flex-col gap-16 py-10 md:py-16 mx-auto max-w-4xl px-4">
       {isQuizLoading ? (
         <div className="w-full flex justify-center py-8">
-          <Loader2 className="animate-spin text-muted" />
+          <Loader2 className="animate-spin text-muted-foreground" />
         </div>
       ) : (
         quiz && (
           <>
-            <div className="w-full gap-4 flex flex-col">
+            <div className="w-full gap-6 flex flex-col">
               <Link href={`/quizzes/${quiz.id}`}>
                 <Button variant="ghost">
                   <ArrowLeft className="h-4 w-4 mr-2" />
@@ -131,6 +133,7 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
                   {quiz.description}
                 </p>
               </div>
+              <Separator/>
             </div>
             <div className="flex flex-col w-full space-y-24">
               {quiz.questions.map((question, i) => (

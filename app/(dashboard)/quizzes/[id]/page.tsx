@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export default function QuizPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex-1 w-full flex flex-col gap-10 py-10 md:py-16 mx-auto max-w-4xl px-4">
-      <div className="w-full gap-4 flex justify-between items-center">
+      <div className="w-full gap-6 flex flex-col">
         {isQuizLoading ? (
           <div className="flex flex-col w-full space-y-2">
             <Skeleton className="h-4 w-3/5" />
@@ -54,13 +55,16 @@ export default function QuizPage({ params }: { params: { id: string } }) {
         ) : (
           quiz && (
             <>
-              <div className="flex flex-col">
-                <h3 className="font-bold text-2xl">{quiz.title}</h3>
-                <p className="font-medium text-muted-foreground">
-                  {quiz.description}
-                </p>
-              </div>
-              <QuizSettings quiz={quiz} />
+              <div className="flex justify-between items-center w-full gap-4">
+                <div className="flex flex-col">
+                  <h3 className="font-bold text-2xl">{quiz.title}</h3>
+                  <p className="font-medium text-muted-foreground">
+                    {quiz.description}
+                  </p>
+                </div>
+                <QuizSettings quiz={quiz} />
+              </div>    
+              <Separator />
             </>
           )
         )}
@@ -69,25 +73,25 @@ export default function QuizPage({ params }: { params: { id: string } }) {
         <Skeleton className="w-full h-[400px]" />
       ) : (
         quiz && (
-          <div className="flex flex-col w-full space-y-4">
-            <Link href={`/quizzes/${params.id}/attempt`}>
-              <Button className="w-full" variant="outline">
-                Attempt Quiz
-              </Button>
-            </Link>
-            <Card>
-              <CardHeader>
-                <CardTitle>Quiz Attempts</CardTitle>
-                <CardDescription>
-                  All of you attempts for your {quiz.title} quiz.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <AttemptsGraph quiz={quiz} />
-                <AttemptsTable quiz={quiz} />
-              </CardContent>
-            </Card>
-          </div>
+          <>
+            <div className="flex flex-col w-full space-y-4">
+              <Link href={`/quizzes/${params.id}/attempt`}>
+                <Button className="w-full">Attempt Quiz</Button>
+              </Link>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quiz Attempts</CardTitle>
+                  <CardDescription>
+                    All of you attempts for your {quiz.title} quiz.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <AttemptsGraph quiz={quiz} />
+                  <AttemptsTable quiz={quiz} />
+                </CardContent>
+              </Card>
+            </div>
+          </>
         )
       )}
     </div>

@@ -110,7 +110,7 @@ export default function DashboardPage() {
                   {Array(3)
                     .fill("")
                     .map((s) => (
-                      <div className="flex flex-col space-y-2">
+                      <div className="flex flex-col space-y-2" key={uuidv4()}>
                         <Skeleton className="h-4 w-5/5" />
                         <Skeleton className="h-4 w-4/5" />
                       </div>
@@ -120,7 +120,7 @@ export default function DashboardPage() {
                 user && (
                   <>
                     {user.quizAttempts.map((attempt) => (
-                      <div className="flex flex-col space-y-1">
+                      <div className="flex flex-col space-y-1" key={uuidv4()}>
                         <div className="flex items-center gap-3.5">
                           <Link
                             href={`/quizzes/${attempt.quizId}/attempt/${attempt.id}`}
@@ -178,7 +178,7 @@ export default function DashboardPage() {
                   user && (
                     <>
                       {user.tutors.map((tutor) => (
-                        <div className="flex items-center gap-3.5">
+                        <div className="flex items-center gap-3.5" key={uuidv4()}>
                           <Link
                             href={`/tutor/${tutor.id}`}
                             className="font-semibold underline"
@@ -230,7 +230,7 @@ export default function DashboardPage() {
                   user && (
                     <>
                       {user.flashcardSets.map((flashcardSet) => (
-                        <div className="flex items-center gap-3.5">
+                        <div className="flex items-center gap-3.5" key={uuidv4()}>
                           <Link
                             href={`/flashcard-set/${flashcardSet.id}`}
                             className="font-semibold underline"
