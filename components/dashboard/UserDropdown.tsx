@@ -1,14 +1,16 @@
 "use client";
 
-import { CreditCard, LogOut, Settings, User } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
+import { useRouter } from "next/navigation";
 
 export function UserDropdown() {
   const { data: session } = useSession();
+  const router = useRouter()
 
   return (
     <DropdownMenu>

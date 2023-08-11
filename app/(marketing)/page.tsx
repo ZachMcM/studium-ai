@@ -62,7 +62,7 @@ const faq = [
   {
     question: "What are the limits?",
     answer:
-      "We currently allow up to 5 quiz, 5 AI tutor, and 5 flashcard set generations per month on our hobby plan.",
+      "We currently allow up 25 generations per month on our hobby plan. A pro plan will be coming soon.",
   },
   {
     question: "Who are we?",

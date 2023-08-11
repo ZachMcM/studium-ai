@@ -25,7 +25,7 @@ export function ChatMessage({
   const { copied, copyToClipboard } = useCopy(message.content)
 
   return (
-    <div className="py-10 border-b last:border-none flex-1 flex w-full relative">
+    <div className=" first:pt-0 py-10 border-b last:border-none flex-1 flex w-full relative">
       <div className="flex w-full gap-4 mx-auto mr-4 items-start">
         {
           message.role == "user" ? 

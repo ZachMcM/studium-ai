@@ -10,9 +10,8 @@ import { ChatForm } from "@/components/tutors/ChatForm";
 import { TutorSettings } from "@/components/tutors/TutorSettings";
 import { ChatScrollAnchor } from "@/components/tutors/ChatScrollAnchor";
 import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
-import { Tutor } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
+import { ExtendedTutor } from "@/types/prisma";
 
 export default function TutorPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -26,15 +25,33 @@ export default function TutorPage({ params }: { params: { id: string } }) {
     isLoading: isChatLoading,
   } = useChat({
     api: `/api/tutors/${params.id}/chat`,
+    onError: (error) => {
+      toast({
+        title: "Uh oh something went wrong!",
+        description: error.message,
+        variant: "destructive"
+      })
+    }
   });
 
   const { data: tutor, isLoading } = useQuery({
     queryKey: ["tutors", { id: params.id }],
-    queryFn: async (): Promise<Tutor> => {
+    queryFn: async (): Promise<ExtendedTutor> => {
       const res = await fetch(`/api/tutors/${params.id}`);
       const data = await res.json();
       console.log(data);
       return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      if (data.messages.length) {
+        const initMessages = data.messages.map((message) => ({
+          id: message.id,
+          role: message.role as "assistant" | "system" | "user" | "function",
+          content: message.content,
+        }));
+        setMessages(initMessages);
+      }
     },
     onError: (data) => {
       console.log(data);
@@ -51,22 +68,11 @@ export default function TutorPage({ params }: { params: { id: string } }) {
     },
   });
 
-  async function introduce() {
-    await append({
-      role: "system",
-      content:
-        "Introduce yourself to the user and ask how you can help them with the topic.",
-    });
-  }
-  useEffect(() => {
-    introduce();
-  }, []);
-
   return (
     <div className="flex flex-col flex-1 max-w-4xl mx-auto w-full pt-10 md:pt-16 px-4 gap-10">
       {isLoading ? (
-        <div className="flex w-full justify-center">
-          <Loader2 className="text-muted-foreground animate-spin" />
+        <div className="flex w-full justify-center py-8">
+          <Loader2 className="animate-spin" />
         </div>
       ) : (
         tutor && (

@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
       tutors: {
         take: 3
       },
+      limit: true
     }
   })
 

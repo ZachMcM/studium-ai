@@ -127,7 +127,7 @@ export default function Settings() {
       </div>
       {isLoading ? (
         <div className="w-full flex justify-center">
-          <Loader2 className="animate-spin text-muted-foreground" />
+          <Loader2 className="animate-spin" />
         </div>
       ) : (
         <>

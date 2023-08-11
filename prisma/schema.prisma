@@ -42,7 +42,6 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String?
-  bio           String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
@@ -52,6 +51,8 @@ model User {
 
   flashcardSets FlashcardSet[]
   flashcards    Flashcard[]
+
+  limit         Limit?
 
   tutors Tutor[]
   messages  Message[]
@@ -156,4 +157,11 @@ model Attempt {
   score       Decimal
   userAnswers String[]
   createdAt   DateTime @default(now())
+}
+
+model Limit {
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String    @unique
+  count     Int
+  unlimited Boolean
 }

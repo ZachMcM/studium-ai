@@ -41,7 +41,28 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     stream: true
   })
 
-  const stream = OpenAIStream(response)
+  const stream = OpenAIStream(response, {
+    onStart: async () => {
+      await prisma.message.create({
+        data: {
+          userId: session.user.id,
+          tutorId: params.id,
+          content: messages[messages.length - 1].content!,
+          role: "user"
+        }
+      })
+    },
+    onCompletion: async (completion) => {
+      await prisma.message.create({
+        data: {
+          userId: session.user.id,
+          tutorId: params.id,
+          content: completion,
+          role: "assistant"
+        }
+      })
+    }
+  })
 
   return new StreamingTextResponse(stream)
 }

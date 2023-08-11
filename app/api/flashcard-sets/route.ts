@@ -1,8 +1,9 @@
 import { FlashcardGeneration, schema } from "@/config/schemas/flashcard-set";
 import { getAuthSession } from "@/lib/auth";
+import { limitExceeded } from "@/lib/limit-exceeded";
 import { openai } from "@/lib/openai";
 import prisma from "@/prisma/client";
-import { Flashcard } from "@prisma/client";
+import { Limit } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { ResponseTypes } from "openai-edge";
 
@@ -28,6 +29,14 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await getAuthSession();
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized Request", status: 401 });
+
+  const isLimitExceeded = await limitExceeded(session);
+  if (isLimitExceeded)
+    return NextResponse.json({ error: "Limit exceeded", status: 401 });
+
   const { source, num, title, description } = (await req.json()) as {
     source?: string;
     num?: number;
@@ -35,9 +44,6 @@ export async function POST(req: NextRequest) {
     description?: string;
   };
 
-  const session = await getAuthSession();
-  if (!session)
-    return NextResponse.json({ error: "Unauthorized Request", status: 401 });
   if (!source || !num || !title || !description)
     return NextResponse.json({
       error: "Invalid request, incorrect paylod",
@@ -45,15 +51,13 @@ export async function POST(req: NextRequest) {
     });
 
   const aiCardsGeneration = await generate(source, num);
-  const generatedSet = aiCardsGeneration.flashcards.map(
-    (flashcard) => {
-      return {
-        userId: session.user.id,
-        answer: flashcard.answer,
-        question: flashcard.question,
-      };
-    }
-  );
+  const generatedSet = aiCardsGeneration.flashcards.map((flashcard) => {
+    return {
+      userId: session.user.id,
+      answer: flashcard.answer,
+      question: flashcard.question,
+    };
+  });
 
   const newFlashcardSet = await prisma.flashcardSet.create({
     data: {
@@ -100,8 +104,8 @@ async function generate(
   });
 
   const data = (await response.json()) as ResponseTypes["createChatCompletion"];
-  const json = JSON.parse(data.choices[0].message?.function_call?.arguments!)
-  console.log(json)
-  console.log(json.flashcards)
+  const json = JSON.parse(data.choices[0].message?.function_call?.arguments!);
+  console.log(json);
+  console.log(json.flashcards);
   return json;
 }

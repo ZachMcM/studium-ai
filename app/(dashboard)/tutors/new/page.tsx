@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mutation, useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
 
 import {
@@ -12,8 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FormConfig } from "@/components/forms/FormConfig";
-import { Check } from "lucide-react";
-import { Tutor } from "@prisma/client";
+import { AlertCircle, Check } from "lucide-react";
+import { Limit, Tutor } from "@prisma/client";
 import {
   SubmitTutor,
   NewTutorFormValues,
@@ -32,6 +32,15 @@ export default function NewTutor() {
 
   const queryClient = useQueryClient();
   const router = useRouter();
+
+  const { data: exceedsLimit } = useQuery({
+    queryKey: ['limit'],
+    queryFn: async (): Promise<boolean> => {
+      const res = await fetch("/api/limit")
+      const data = await res.json()
+      return data
+    },
+  });
 
   const { mutate: createTutor, isLoading } = useMutation({
     mutationFn: async ({
@@ -54,6 +63,7 @@ export default function NewTutor() {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["tutors"] });
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ['limit']})
       toast({
         description: (
           <p className="flex items-center">
@@ -67,17 +77,23 @@ export default function NewTutor() {
     onError: () => {
       toast({
         title: "Uh oh, something went wrong!",
-        description: (
-          <p>
-            Oops, there was an error creating a new AI tutor. Please try again.
-          </p>
-        ),
+        description: <p className="flex items-center"><AlertCircle className="h-4 w-4 mr-2"/>Oops, there was an error creating a new flashcard set. Please try again.</p>,
         variant: "destructive",
       });
     },
   });
 
-  const submitForm = (values: NewTutorFormValues) => createTutor(values);
+  const submitForm = (values: NewTutorFormValues) => {
+    if (exceedsLimit || exceedsLimit == undefined) {
+      toast({
+        title: "Uh oh something went wrong!",
+        description: "Oops, you have exceeded your limit.",
+        variant: "destructive"
+      })
+      return
+    }
+    createTutor(values)
+  };
 
   return (
     <main className="flex-1 flex justify-center items-center relative px-4">

@@ -1,25 +1,34 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { Mutation, useMutation, useQuery, useQueryClient } from "react-query";
+import { useRouter } from "next/navigation";
+import { useQuery } from "react-query";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { SearchAlert } from "@/components/alerts/SearchAlert";
 import { ErrorAlert } from "@/components/alerts/ErrorAlert";
 import { EmptyAlert } from "@/components/alerts/EmptyAlert";
-import { Tutor } from "@prisma/client";
+import { Limit, Tutor } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Check, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { LoadingCards } from "@/components/cards/LoadingCards";
 import { ListCard } from "@/components/cards/ListCard";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export default function TutorsPage() {
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const pathname = usePathname();
+
+  const { data: disabled, isLoading: disabledLoading } = useQuery({
+    queryKey: ['limit'],
+    queryFn: async (): Promise<boolean> => {
+      const res = await fetch("/api/limit")
+      const data = await res.json()
+      return data
+    },
+  });
 
   const { data: tutors, isLoading: tutorsLoading } = useQuery({
     queryKey: ["tutors"],
@@ -58,12 +67,20 @@ export default function TutorsPage() {
           value={search}
           placeholder="Search AI tutors..."
         />
-        <Link href="/tutors/new" className="shrink-0">
-          <Button>
-            Add New...
-            <Plus className="h-4 w-4 ml-2" />
-          </Button>
-        </Link>
+        {disabledLoading ? (
+          <Skeleton className="w-[125px] h-9 shrink-0" />
+        ) : (
+          <Link
+            href={disabled ? "#" : "/tutors/new"}
+            aria-disabled={disabled}
+            className={cn("shrink-0", disabled && "cursor-auto")}
+          >
+            <Button disabled={disabled}>
+              Add New...
+              <Plus className="h-4 w-4 ml-2" />
+            </Button>
+          </Link>
+        )}
       </div>
       <div className="mt-6">
         {tutorsLoading ? (

@@ -42,7 +42,7 @@ export function ChatForm({
       <form
         onSubmit={onSubmit}
         ref={formRef}
-        className="h-24 flex flex-col gap-2 max-w-xl mx-auto border rounded-lg p-4 ring-offset-background focus-within:ring-2 ring-offset-2 ring-ring"
+        className="flex flex-col gap-2 max-w-xl mx-auto border rounded-lg p-4 ring-offset-background focus-within:ring-2 ring-offset-2 ring-ring"
       >
         <textarea
           ref={textAreaRef}
@@ -50,6 +50,7 @@ export function ChatForm({
           onChange={handleInputChange}
           onKeyDown={onKeyDown}
           value={input}
+          spellCheck
           placeholder="Send a message..."
         />
         <div className="self-end">

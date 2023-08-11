@@ -7,7 +7,7 @@ import { useState } from "react";
 import { SearchAlert } from "@/components/alerts/SearchAlert";
 import { ErrorAlert } from "@/components/alerts/ErrorAlert";
 import { EmptyAlert } from "@/components/alerts/EmptyAlert";
-import { FlashcardSet } from "@prisma/client";
+import { FlashcardSet, Limit } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -15,9 +15,20 @@ import { LoadingCards } from "@/components/cards/LoadingCards";
 import { ListCard } from "@/components/cards/ListCard";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export default function FlashcardSets() {
   const router = useRouter();
+
+  const { data: disabled, isLoading: disabledLoading } = useQuery({
+    queryKey: ['limit'],
+    queryFn: async (): Promise<boolean> => {
+      const res = await fetch("/api/limit")
+      const data = await res.json()
+      return data
+    },
+  });
 
   const { data: sets, isLoading: setsLoading } = useQuery({
     queryKey: ["sets"],
@@ -57,12 +68,20 @@ export default function FlashcardSets() {
           value={search}
           placeholder="Search flashcard sets..."
         />
-        <Link href="/flashcard-sets/new" className="shrink-0">
-          <Button>
-            Add New...
-            <Plus className="h-4 w-4 ml-2" />
-          </Button>
-        </Link>
+        {disabledLoading ? (
+          <Skeleton className="w-[125px] h-9 shrink-0" />
+        ) : (
+          <Link
+            href={disabled ? "#" : "/flashcard-sets/new"}
+            aria-disabled={disabled}
+            className={cn("shrink-0", disabled && "cursor-auto")}
+          >
+            <Button disabled={disabled}>
+              Add New...
+              <Plus className="h-4 w-4 ml-2" />
+            </Button>
+          </Link>
+        )}
       </div>
       <div className="mt-6">
         {setsLoading ? (

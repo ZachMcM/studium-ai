@@ -1,7 +1,9 @@
 import { QuizGeneration, schema } from "@/config/schemas/quiz";
 import { getAuthSession } from "@/lib/auth";
+import { limitExceeded } from "@/lib/limit-exceeded";
 import { openai } from "@/lib/openai";
 import prisma from "@/prisma/client";
+import { Limit } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { ResponseTypes } from "openai-edge";
 
@@ -21,16 +23,22 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await getAuthSession();
+
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized Request", status: 401 });
+
+    const isLimitExceeded = await limitExceeded(session);
+    if (isLimitExceeded)
+      return NextResponse.json({ error: "Limit exceeded", status: 401 });
+
   const { title, description, num, source } = (await req.json()) as {
     title?: string;
     description?: string;
     num?: number;
     source?: string;
   };
-  const session = await getAuthSession();
 
-  if (!session)
-    return NextResponse.json({ error: "Unauthorized Request", status: 401 });
   if (!title || !description || !num || !source)
     return NextResponse.json({
       error: "Invalid request, incorrect payload",
@@ -40,8 +48,6 @@ export async function POST(req: NextRequest) {
   const aiQuestonGeneration = await generate(source, num);
   const generatedQuizQuestions = aiQuestonGeneration.questions.map(
     (question) => {
-
-
       return {
         userId: session.user.id,
         question: question.question,
@@ -52,7 +58,7 @@ export async function POST(req: NextRequest) {
   );
 
   for (let i = 0; i < generatedQuizQuestions.length; i++) {
-    const curr = generatedQuizQuestions[i]
+    const curr = generatedQuizQuestions[i];
     for (let i = curr.possibleAnswers.length - 1; i > 0; i--) {
       let randomIndex = Math.floor(Math.random() * (i + 1));
       let temp = curr.possibleAnswers[randomIndex];

@@ -24,7 +24,7 @@ export function ListCard({
   date: Date;
 }) {
   return (
-    <Card className="relative flex flex-col justify-between hover:opacity-70 duration-500">
+    <Card className="relative flex flex-col justify-between hover:opacity-70 duration-500 md:min-h-[175px]">
       <CardHeader>
         <Link href={link}>
           <CardTitle>{title || "Untitled" + itemType}</CardTitle>

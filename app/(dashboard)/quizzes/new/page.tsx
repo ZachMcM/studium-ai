@@ -2,12 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { FormConfig } from "@/components/forms/FormConfig";
 import { FormSubmit, FormSubmitVaues } from "@/components/forms/FormSubmit";
-import { Quiz } from "@prisma/client";
+import { Limit, Quiz } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
-import { Check } from "lucide-react";
+import { AlertCircle, Check } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -33,6 +33,15 @@ export default function NewQuizPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
+  const { data: exceedsLimit } = useQuery({
+    queryKey: ['limit'],
+    queryFn: async (): Promise<boolean> => {
+      const res = await fetch("/api/limit")
+      const data = await res.json()
+      return data
+    },
+  });
+
   const { mutate: createQuiz } = useMutation({
     mutationFn: async ({
       title,
@@ -55,6 +64,8 @@ export default function NewQuizPage() {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["quizzes"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ['limit']})
       setFinished(true);
       setTimeout(() => {
         toast({
@@ -71,15 +82,21 @@ export default function NewQuizPage() {
     onError: () => {
       toast({
         title: "Uh oh, something went wrong!",
-        description: (
-          <p>Oops, there was an error creating a new quiz. Please try again.</p>
-        ),
+        description: <p className="flex items-center"><AlertCircle className="h-4 w-4 mr-2"/>Oops, there was an error creating a new flashcard set. Please try again.</p>,
         variant: "destructive",
       });
     },
   });
 
   const submitForm = (values: FormSubmitVaues) => {
+    if (exceedsLimit || exceedsLimit == undefined) {
+      toast({
+        title: "Uh oh something went wrong!",
+        description: "Oops, you have exceeded your limit.",
+        variant: "destructive"
+      })
+      return
+    }
     setIsLoading(true);
     createQuiz(values);
   };

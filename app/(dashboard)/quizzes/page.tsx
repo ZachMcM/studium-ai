@@ -7,9 +7,11 @@ import { ListCard } from "@/components/cards/ListCard";
 import { LoadingCards } from "@/components/cards/LoadingCards";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
-import { Quiz } from "@prisma/client";
+import { cn } from "@/lib/utils";
+import { Limit, Quiz } from "@prisma/client";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,6 +20,15 @@ import { useQuery } from "react-query";
 
 export default function Quizzes() {
   const router = useRouter();
+
+  const { data: disabled, isLoading: disabledLoading } = useQuery({
+    queryKey: ['limit'],
+    queryFn: async (): Promise<boolean> => {
+      const res = await fetch("/api/limit")
+      const data = await res.json()
+      return data
+    },
+  });
 
   const { data: quizzes, isLoading: quizzesLoading } = useQuery({
     queryKey: ["sets"],
@@ -56,12 +67,20 @@ export default function Quizzes() {
           value={search}
           placeholder="Search quizzes..."
         />
-        <Link href="/quizzes/new" className="shrink-0">
-          <Button>
-            Add New...
-            <Plus className="h-4 w-4 ml-2" />
-          </Button>
-        </Link>
+        {disabledLoading ? (
+          <Skeleton className="w-[125px] h-9 shrink-0" />
+        ) : (
+          <Link
+            href={disabled ? "#" : "/quizzes/new"}
+            aria-disabled={disabled}
+            className={cn("shrink-0", disabled && "cursor-auto")}
+          >
+            <Button disabled={disabled}>
+              Add New...
+              <Plus className="h-4 w-4 ml-2" />
+            </Button>
+          </Link>
+        )}
       </div>
       <div className="mt-6">
         {quizzesLoading ? (

@@ -13,6 +13,12 @@ export type ExtendedQuiz = Prisma.QuizGetPayload<{
   }
 }>
 
+export type ExtendedTutor = Prisma.TutorGetPayload<{
+  include: {
+    messages: true
+  }
+}>
+
 export type ExtendedAttempt = Prisma.AttemptGetPayload<{
   include: {
     quiz: {
@@ -31,6 +37,7 @@ export type ExtendedUser = Prisma.UserGetPayload<{
       }
     }
     flashcardSets: true
-    tutors: true
+    tutors: true,
+    limit: true
   }
 }>

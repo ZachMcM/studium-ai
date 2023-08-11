@@ -13,7 +13,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { ExtendedUser } from "@/types/prisma";
-import { ArrowRight, Copy, FileText, MessagesSquare } from "lucide-react";
+import {
+  Activity,
+  ArrowRight,
+  Copy,
+  FileText,
+  MessagesSquare,
+  MoreHorizontal,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useId } from "react";
@@ -70,95 +77,54 @@ export default function DashboardPage() {
       <div className="flex flex-col space-y-1">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground font-medium">
-          Welcome back {user?.name}!
+          Welcome back {isLoading ? <span className="animate-pulse">...</span> : user?.name + "!"}
         </p>
       </div>
-      <div className="grid md:grid-cols-3 gap-4">
-        {cards.map((card) => (
-          <Link
-            href={card.href}
-            key={useId()}
-            className="hover:opacity-70 duration-500"
-          >
-            <Card className="flex justify-between items-center h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  {card.icon}
-                  {card.title}
-                </CardTitle>
-                <CardDescription>{card.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ArrowRight className="h-5 w-5 text-muted-foreground" />
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
-      <div className="flex-1 grid md:grid-cols-2 gap-4">
-        <Card className="relative pb-14">
+      <div className="grid gap-4">
+        <Card>
           <CardHeader>
-            <CardTitle>Recent Quiz Attempts</CardTitle>
-            <CardDescription>
-              Some of your recent quiz attempts.
-            </CardDescription>
+            <CardTitle className="flex items-center">
+              <Activity className="h-4 w-4 mr-2" />
+              Generations This Month
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col space-y-6">
-              {isLoading ? (
-                <>
-                  {Array(3)
-                    .fill("")
-                    .map((s) => (
-                      <div className="flex flex-col space-y-2" key={uuidv4()}>
-                        <Skeleton className="h-4 w-5/5" />
-                        <Skeleton className="h-4 w-4/5" />
-                      </div>
-                    ))}
-                </>
-              ) : (
-                user && (
-                  <>
-                    {user.quizAttempts.map((attempt) => (
-                      <div className="flex flex-col space-y-1" key={uuidv4()}>
-                        <div className="flex items-center gap-3.5">
-                          <Link
-                            href={`/quizzes/${attempt.quizId}/attempt/${attempt.id}`}
-                            className="font-semibold underline"
-                          >
-                            {attempt.quiz.title}
-                          </Link>
-                          <CreatedAt
-                            createdAt={new Date(
-                              attempt.createdAt
-                            ).toLocaleDateString()}
-                          />
-                        </div>
-                        <p className="font-bold">
-                          {Number(attempt.score) * 100}%
-                        </p>
-                      </div>
-                    ))}
-                  </>
-                )
-              )}
-            </div>
+            <p className="text-3xl font-bold">
+              {isLoading ? <span className="animate-pulse">...</span> : user?.limit?.count } / {user?.limit?.unlimited || 25}
+            </p>
           </CardContent>
-          <CardFooter className="absolute bottom-0">
-            <Link href="/flashcard=sets">
-              <Button variant="ghost">
-                {" "}
-                View all <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
+          <CardFooter>
+            <p className="text-sm text-muted-foreground">Pro plan coming soon...</p>
           </CardFooter>
         </Card>
-        <div className="flex-1 grid gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
+          {cards.map((card) => (
+            <Link
+              href={card.href}
+              key={useId()}
+              className="hover:opacity-70 duration-500"
+            >
+              <Card className="flex justify-between items-center h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    {card.icon}
+                    {card.title}
+                  </CardTitle>
+                  <CardDescription>{card.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ArrowRight className="h-5 w-5 text-muted-foreground" />
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+        <div className="flex-1 grid md:grid-cols-2 gap-4">
           <Card className="relative pb-14">
             <CardHeader>
-              <CardTitle>Recent AI Tutor</CardTitle>
+              <CardTitle>Recent Quiz Attempts</CardTitle>
               <CardDescription>
-                Some of the AI tutors you created recently.
+                Some of your recent quiz attempts.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -177,19 +143,24 @@ export default function DashboardPage() {
                 ) : (
                   user && (
                     <>
-                      {user.tutors.map((tutor) => (
-                        <div className="flex items-center gap-3.5" key={uuidv4()}>
-                          <Link
-                            href={`/tutor/${tutor.id}`}
-                            className="font-semibold underline"
-                          >
-                            {tutor.title}
-                          </Link>
-                          <CreatedAt
-                            createdAt={new Date(
-                              tutor.createdAt
-                            ).toLocaleDateString()}
-                          />
+                      {user.quizAttempts.map((attempt) => (
+                        <div className="flex flex-col space-y-1" key={uuidv4()}>
+                          <div className="flex items-center gap-3.5">
+                            <Link
+                              href={`/quizzes/${attempt.quizId}/attempt/${attempt.id}`}
+                              className="font-semibold underline"
+                            >
+                              {attempt.quiz.title}
+                            </Link>
+                            <CreatedAt
+                              createdAt={new Date(
+                                attempt.createdAt
+                              ).toLocaleDateString()}
+                            />
+                          </div>
+                          <p className="font-bold">
+                            {Number(attempt.score) * 100}%
+                          </p>
                         </div>
                       ))}
                     </>
@@ -198,7 +169,7 @@ export default function DashboardPage() {
               </div>
             </CardContent>
             <CardFooter className="absolute bottom-0">
-              <Link href="/tutors">
+              <Link href="/flashcard=sets">
                 <Button variant="ghost">
                   {" "}
                   View all <ArrowRight className="h-4 w-4 ml-2" />
@@ -206,58 +177,124 @@ export default function DashboardPage() {
               </Link>
             </CardFooter>
           </Card>
-          <Card className="relative pb-14">
-            <CardHeader>
-              <CardTitle>Recent Flashcards</CardTitle>
-              <CardDescription>
-                Some of the flashcard sets you created recently.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col space-y-6">
-                {isLoading ? (
-                  <>
-                    {Array(3)
-                      .fill("")
-                      .map((s) => (
-                        <div className="flex flex-col space-y-2" key={uuidv4()}>
-                          <Skeleton className="h-4 w-5/5" />
-                          <Skeleton className="h-4 w-4/5" />
-                        </div>
-                      ))}
-                  </>
-                ) : (
-                  user && (
+          <div className="flex-1 grid gap-4">
+            <Card className="relative pb-14">
+              <CardHeader>
+                <CardTitle>Recent AI Tutor</CardTitle>
+                <CardDescription>
+                  Some of the AI tutors you created recently.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col space-y-6">
+                  {isLoading ? (
                     <>
-                      {user.flashcardSets.map((flashcardSet) => (
-                        <div className="flex items-center gap-3.5" key={uuidv4()}>
-                          <Link
-                            href={`/flashcard-set/${flashcardSet.id}`}
-                            className="font-semibold underline"
+                      {Array(3)
+                        .fill("")
+                        .map((s) => (
+                          <div
+                            className="flex flex-col space-y-2"
+                            key={uuidv4()}
                           >
-                            {flashcardSet.title}
-                          </Link>
-                          <CreatedAt
-                            createdAt={new Date(
-                              flashcardSet.createdAt
-                            ).toLocaleDateString()}
-                          />
-                        </div>
-                      ))}
+                            <Skeleton className="h-4 w-5/5" />
+                            <Skeleton className="h-4 w-4/5" />
+                          </div>
+                        ))}
                     </>
-                  )
-                )}
-              </div>
-            </CardContent>
-            <CardFooter className="absolute bottom-0">
-              <Link href="/quizzes">
-                <Button variant="ghost">
-                  {" "}
-                  View all <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </Link>
-            </CardFooter>
-          </Card>
+                  ) : (
+                    user && (
+                      <>
+                        {user.tutors.map((tutor) => (
+                          <div
+                            className="flex items-center gap-3.5"
+                            key={uuidv4()}
+                          >
+                            <Link
+                              href={`/tutor/${tutor.id}`}
+                              className="font-semibold underline"
+                            >
+                              {tutor.title}
+                            </Link>
+                            <CreatedAt
+                              createdAt={new Date(
+                                tutor.createdAt
+                              ).toLocaleDateString()}
+                            />
+                          </div>
+                        ))}
+                      </>
+                    )
+                  )}
+                </div>
+              </CardContent>
+              <CardFooter className="absolute bottom-0">
+                <Link href="/tutors">
+                  <Button variant="ghost">
+                    {" "}
+                    View all <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
+            <Card className="relative pb-14">
+              <CardHeader>
+                <CardTitle>Recent Flashcards</CardTitle>
+                <CardDescription>
+                  Some of the flashcard sets you created recently.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col space-y-6">
+                  {isLoading ? (
+                    <>
+                      {Array(3)
+                        .fill("")
+                        .map((s) => (
+                          <div
+                            className="flex flex-col space-y-2"
+                            key={uuidv4()}
+                          >
+                            <Skeleton className="h-4 w-5/5" />
+                            <Skeleton className="h-4 w-4/5" />
+                          </div>
+                        ))}
+                    </>
+                  ) : (
+                    user && (
+                      <>
+                        {user.flashcardSets.map((flashcardSet) => (
+                          <div
+                            className="flex items-center gap-3.5"
+                            key={uuidv4()}
+                          >
+                            <Link
+                              href={`/flashcard-set/${flashcardSet.id}`}
+                              className="font-semibold underline"
+                            >
+                              {flashcardSet.title}
+                            </Link>
+                            <CreatedAt
+                              createdAt={new Date(
+                                flashcardSet.createdAt
+                              ).toLocaleDateString()}
+                            />
+                          </div>
+                        ))}
+                      </>
+                    )
+                  )}
+                </div>
+              </CardContent>
+              <CardFooter className="absolute bottom-0">
+                <Link href="/quizzes">
+                  <Button variant="ghost">
+                    {" "}
+                    View all <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
+          </div>
         </div>
       </div>
     </main>
