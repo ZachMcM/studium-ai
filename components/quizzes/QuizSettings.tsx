@@ -70,6 +70,7 @@ export function QuizSettings({ quiz }: { quiz: Quiz }) {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["quizzes", { id: quiz.id }] });
+      queryClient.invalidateQueries({ queryKey: ['user' ]})
       setOpen(false)
       toast({
         description: (
@@ -108,6 +109,7 @@ export function QuizSettings({ quiz }: { quiz: Quiz }) {
         router.push("/quizzes");
       }
       queryClient.invalidateQueries({ queryKey: ["quizzes"] });
+      queryClient.invalidateQueries({ queryKey: ['user' ]})
       toast({
         description: (
           <p className="flex items-center">

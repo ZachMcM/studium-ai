@@ -28,11 +28,11 @@ export function Header() {
 
       <div className="flex items-center">
         <ThemeButton />
-        <Link href="/" className="mr-3">
+        <a href="https://discord.gg/rCGEZwWUPt" className="mr-3">
           <Button variant="ghost" size="icon">
             <FaDiscord className="h-5 w-5" />
           </Button>
-        </Link>
+        </a>
         <UserDropdown />
       </div>
     </header>

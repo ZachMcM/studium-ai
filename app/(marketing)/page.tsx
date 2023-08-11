@@ -9,10 +9,20 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Copy, File, FileText, Globe, MessagesSquare } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import {
+  Check,
+  Copy,
+  File,
+  FileText,
+  Globe,
+  MessagesSquare,
+} from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { SiOpenai } from "react-icons/si";
@@ -89,13 +99,32 @@ const faq = [
     answer: (
       <>
         We have a{" "}
-        <a href="" className="text-primary underline">
-          discord
+        <a href="https://discord.gg/rCGEZwWUPt" className="text-primary underline">
+          Discord
         </a>{" "}
         where users can interact with each other, provide feedback and
         suggestions, and get the latest news.
       </>
     ),
+  },
+];
+
+const plans = [
+  {
+    title: "Hobby",
+    description: "Get started now and upgrade once you've reached the limits.",
+    generations: 25,
+    price: 0,
+    comingSoon: false,
+    link: "/dashboard",
+  },
+  {
+    title: "Pro",
+    description: "Unlimited generations to meet your study needs.",
+    generations: "Unlimited",
+    price: "TBH",
+    comingSoon: true,
+    link: "#",
   },
 ];
 
@@ -148,8 +177,66 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <div className="space-y-4">
-          <h3 className="font-semibold text-center text-xl md:text-3xl">FAQ</h3>
+        <div className="flex flex-col space-y-8 items-center">
+          <h1 className="font-extrabold text-4xl lg:text-5xl xl:text-6xl tracking-tight">
+            Plans
+          </h1>
+          <div className="grid md:grid-cols-2 gap-4">
+            {plans.map(
+              ({
+                title,
+                description,
+                price,
+                generations,
+                comingSoon,
+                link,
+              }) => (
+                <Card
+                  className={cn(
+                    "flex flex-col justify-between",
+                    comingSoon && "opacity-70"
+                  )}
+                >
+                  <CardHeader className="flex flex-row items-center justify-between gap-4">
+                    <div className="flex flex-col space-y-1.5">
+                      <CardTitle>{title}</CardTitle>
+                      <CardDescription>{description}</CardDescription>
+                    </div>
+                    <p className="shrink-0">
+                      <span className="font-bold text-xl">{price} </span>
+                      <span className="text-muted-foreground font-normal text-lg">
+                        {" / "}
+                        month
+                      </span>
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col space-y-6">
+                      <p className="text-muted-foreground text-sm font-medium items-center flex">
+                        <Check className="h-4 w-4 mr-2 text-green-500" />
+                        {generations} generations per month
+                      </p>
+                      <Separator/>
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    {comingSoon ? (
+                      <Button disabled>Coming Soon</Button>
+                    ) : (
+                      <Link href={link}>
+                        <Button>Get Started</Button>
+                      </Link>
+                    )}
+                  </CardFooter>
+                </Card>
+              )
+            )}
+          </div>
+        </div>
+        <div className="space-y-8">
+          <h1 className="font-extrabold text-4xl lg:text-5xl xl:text-6xl tracking-tight text-center">
+            FAQ
+          </h1>{" "}
           <div className="flex flex-col space-y-8 items-center">
             <Accordion type="single" collapsible className="w-full">
               {faq.map(({ question, answer }, i) => (

@@ -12,7 +12,7 @@ export default async function ProtectedLayout({
   if (!session) redirect("/signin");
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen pb-16">
       <Header />
       {children}
     </div>

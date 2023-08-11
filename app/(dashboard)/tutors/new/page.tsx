@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 export default function NewTutor() {
   const [page, setPage] = useState<"config" | "submit">("config");
   const [sourceText, setSourceText] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false)
 
   function toSubmitPage(text: string) {
     setSourceText(text);
@@ -42,11 +43,12 @@ export default function NewTutor() {
     },
   });
 
-  const { mutate: createTutor, isLoading } = useMutation({
+  const { mutate: createTutor } = useMutation({
     mutationFn: async ({
       title,
       description,
     }: NewTutorFormValues): Promise<Tutor> => {
+      setLoading(true)
       const res = fetch("/api/tutors", {
         method: "POST",
         body: JSON.stringify({
@@ -113,7 +115,7 @@ export default function NewTutor() {
           <SubmitTutor
             onBack={() => setPage("config")}
             onSubmit={submitForm}
-            isLoading={isLoading}
+            isLoading={loading}
             className={cn(page != "submit" && "hidden")}
           />
         </CardContent>

@@ -19,7 +19,6 @@ import {
   Copy,
   FileText,
   MessagesSquare,
-  MoreHorizontal,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -90,7 +89,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">
-              {isLoading ? <span className="animate-pulse">...</span> : user?.limit?.count } / {user?.limit?.unlimited || 25}
+              {isLoading ? <span className="animate-pulse">...</span> : user?.limit?.count } / {user?.limit?.unlimited ? "Unlimited" : 25}
             </p>
           </CardContent>
           <CardFooter>

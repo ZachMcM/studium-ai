@@ -22,11 +22,11 @@ export default function FlashcardSets() {
   const router = useRouter();
 
   const { data: disabled, isLoading: disabledLoading } = useQuery({
-    queryKey: ['limit'],
+    queryKey: ["limit"],
     queryFn: async (): Promise<boolean> => {
-      const res = await fetch("/api/limit")
-      const data = await res.json()
-      return data
+      const res = await fetch("/api/limit");
+      const data = await res.json();
+      return data;
     },
   });
 
@@ -70,13 +70,13 @@ export default function FlashcardSets() {
         />
         {disabledLoading ? (
           <Skeleton className="w-[125px] h-9 shrink-0" />
+        ) : disabled ? (
+          <Button disabled className="shrink-0">
+            Add New... <Plus className="h-4 w-4 ml-2" />
+          </Button>
         ) : (
-          <Link
-            href={disabled ? "#" : "/flashcard-sets/new"}
-            aria-disabled={disabled}
-            className={cn("shrink-0", disabled && "cursor-auto")}
-          >
-            <Button disabled={disabled}>
+          <Link href="/tutors/new" className="shrink-0">
+            <Button>
               Add New...
               <Plus className="h-4 w-4 ml-2" />
             </Button>

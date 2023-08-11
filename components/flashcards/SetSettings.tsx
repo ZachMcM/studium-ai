@@ -44,6 +44,7 @@ import { Textarea } from "../ui/textarea";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
+import { useState } from "react";
 
 const formSchema = z.object({
   title: z
@@ -75,6 +76,8 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["sets", { id: set.id }] });
+      queryClient.invalidateQueries({ queryKey: ['user' ]})
+      setOpen(false)
       toast({
         description: (
           <p className="flex items-center">
@@ -112,6 +115,7 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
         router.push("/flashcard-sets");
       }
       queryClient.invalidateQueries({ queryKey: ["sets"] });
+      queryClient.invalidateQueries({ queryKey: ['user' ]})
       toast({
         description: (
           <p className="flex items-center">
@@ -144,9 +148,10 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
 
   const onSubmit = (values: FormValues) => editSet(values);
 
+  const [open, setOpen] = useState<boolean>(false)
+
   return (
-    <Dialog>
-      <Dialog>
+      <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <AlertDialog>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -227,6 +232,5 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
           </Form>
         </DialogContent>
       </Dialog>
-    </Dialog>
   );
 }

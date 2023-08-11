@@ -6,7 +6,14 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as z from "zod";
 import { toast } from "../ui/use-toast";
-import { Check, Edit, Loader2, MoreHorizontal, Settings, Trash2 } from "lucide-react";
+import {
+  Check,
+  Edit,
+  Loader2,
+  MoreHorizontal,
+  Settings,
+  Trash2,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { ToastAction } from "../ui/toast";
 import {
@@ -38,6 +45,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { useState } from "react";
 
 const formSchema = z.object({
   title: z
@@ -66,15 +74,12 @@ export function TutorSettings({ tutor }: { tutor: Tutor }) {
   const pathname = usePathname();
 
   const { mutate: editTutor, isLoading: isTutorEditing } = useMutation({
-    mutationFn: async ({
-      title,
-      description,
-    }: FormValues): Promise<Tutor> => {
+    mutationFn: async ({ title, description }: FormValues): Promise<Tutor> => {
       const res = fetch(`/api/tutors/${tutor.id}`, {
         method: "PUT",
         body: JSON.stringify({
           title,
-          description
+          description,
         }),
       });
 
@@ -84,6 +89,8 @@ export function TutorSettings({ tutor }: { tutor: Tutor }) {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["tutors", { id: tutor.id }] });
+      queryClient.invalidateQueries({ queryKey: ['user' ]})
+      setOpen(false)
       toast({
         description: (
           <p className="flex items-center">
@@ -122,6 +129,7 @@ export function TutorSettings({ tutor }: { tutor: Tutor }) {
         router.push("/tutors");
       }
       queryClient.invalidateQueries({ queryKey: ["tutors"] });
+      queryClient.invalidateQueries({ queryKey: ['user' ]})
       toast({
         description: (
           <p className="flex items-center">
@@ -144,88 +152,88 @@ export function TutorSettings({ tutor }: { tutor: Tutor }) {
 
   const onSubmit = (values: FormValues) => editTutor(values);
 
+  const [open, setOpen] = useState<boolean>(false)
+
   return (
-    <Dialog>
-      <Dialog>
-        <AlertDialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+      <AlertDialog>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuGroup>
-                <DialogTrigger asChild>
-                  <DropdownMenuItem>
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit
-                  </DropdownMenuItem>
-                </DialogTrigger>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <AlertDialogTrigger asChild>
-                  <DropdownMenuItem className="!text-destructive">
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete
-                  </DropdownMenuItem>
-                </AlertDialogTrigger>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DeleteDialog
-            deleteFunction={deleteTutor}
-            isDeleting={isTutorDeleting}
-          />
-        </AlertDialog>
-        <DialogContent className="max-w-[425px] md:max-w-[525px] !rounded-lg">
-          <DialogHeader>
-            <DialogTitle>Edit</DialogTitle>
-            <DialogDescription>
-              Edit the tutor title and description.
-            </DialogDescription>
-          </DialogHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter title..." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DialogTrigger asChild>
+                <DropdownMenuItem>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit
+                </DropdownMenuItem>
+              </DialogTrigger>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem className="!text-destructive">
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DeleteDialog
+          deleteFunction={deleteTutor}
+          isDeleting={isTutorDeleting}
+        />
+      </AlertDialog>
+      <DialogContent className="max-w-[425px] md:max-w-[525px] !rounded-lg">
+        <DialogHeader>
+          <DialogTitle>Edit</DialogTitle>
+          <DialogDescription>
+            Edit the tutor title and description.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter title..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Enter description..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex items-center space-x-2">
+              <Button type="submit">
+                Submit{" "}
+                {isTutorEditing && (
+                  <Loader2 className="h-4 w-4 ml-2 animate-spin" />
                 )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="Enter description..." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex items-center space-x-2">
-                <Button type="submit">
-                  Submit{" "}
-                  {isTutorEditing && (
-                    <Loader2 className="h-4 w-4 ml-2 animate-spin" />
-                  )}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
     </Dialog>
   );
 }

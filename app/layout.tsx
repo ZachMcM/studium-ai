@@ -3,6 +3,7 @@ import "./globals.css";
 import { Provider } from "@/components/Provider";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
+import { Footer } from "@/components/marketing/Footer";
 
 export const metadata: Metadata = {
   title: "Study AI",

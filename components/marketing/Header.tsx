@@ -1,5 +1,6 @@
 import { GraduationCap } from "lucide-react";
 import { SigninButton } from "./SigninButton";
+import { Button } from "../ui/button";
 
 export function Header() {
   return (
@@ -12,7 +13,12 @@ export function Header() {
         <div className="flex items-center space-x-6 font-medium text-sm">
         </div>
       </div>
-      <SigninButton />
+      <div className="flex items-center gap-2">
+        <a href="https://discord.gg/rCGEZwWUPt">
+          <Button variant="ghost" className="hover:opacity-70 duration-500 hover:bg-inherit">Discord</Button>
+        </a>
+        <SigninButton />
+      </div>
     </nav>
   );
 }
