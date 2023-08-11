@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
 
   if (limit.unlimited) return NextResponse.json(false);
 
-  if (limit.count >= 25) return NextResponse.json(true);
+  if (limit.count >= 50) return NextResponse.json(true);
 
   return NextResponse.json(false);
 }

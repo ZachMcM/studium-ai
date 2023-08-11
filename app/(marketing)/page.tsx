@@ -72,7 +72,7 @@ const faq = [
   {
     question: "What are the limits?",
     answer:
-      "We currently allow up 25 generations per month on our hobby plan. A pro plan will be coming soon.",
+      "We currently allow up 50 generations on our hobby plan. A pro plan will be coming soon.",
   },
   {
     question: "Who are we?",
@@ -113,7 +113,7 @@ const plans = [
   {
     title: "Hobby",
     description: "Get started now and upgrade once you've reached the limits.",
-    generations: 25,
+    generations: 50,
     price: 0,
     comingSoon: false,
     link: "/dashboard",
@@ -214,7 +214,7 @@ export default function Home() {
                     <div className="flex flex-col space-y-6">
                       <p className="text-muted-foreground text-sm font-medium items-center flex">
                         <Check className="h-4 w-4 mr-2 text-green-500" />
-                        {generations} generations per month
+                        {generations} generations
                       </p>
                       <Separator/>
                     </div>

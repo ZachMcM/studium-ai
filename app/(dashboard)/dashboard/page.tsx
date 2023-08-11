@@ -84,12 +84,12 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Activity className="h-4 w-4 mr-2" />
-              Generations This Month
+              Total Generations
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">
-              {isLoading ? <span className="animate-pulse">...</span> : user?.limit?.count } / {user?.limit?.unlimited ? "Unlimited" : 25}
+              {isLoading ? <span className="animate-pulse">...</span> : user?.limit?.count } / {user?.limit?.unlimited ? "Unlimited" : 50}
             </p>
           </CardContent>
           <CardFooter>

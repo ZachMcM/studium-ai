@@ -25,7 +25,7 @@ export async function limitExceeded(session: Session) {
     return false;
   }
 
-  if (limit.count >= 25) {
+  if (limit.count >= 50) {
     return true;
   }
 
