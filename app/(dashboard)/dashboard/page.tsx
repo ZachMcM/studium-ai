@@ -9,9 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 import { ExtendedUser } from "@/types/prisma";
 import {
   Activity,
@@ -54,6 +56,9 @@ export default function DashboardPage() {
     queryKey: ["user"],
     queryFn: async (): Promise<ExtendedUser> => {
       const res = await fetch("/api/user");
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },
@@ -76,26 +81,94 @@ export default function DashboardPage() {
       <div className="flex flex-col space-y-1">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground font-medium">
-          Welcome back {isLoading ? <span className="animate-pulse">...</span> : user?.name + "!"}
+          Welcome back{" "}
+          {isLoading ? (
+            <span className="animate-pulse">...</span>
+          ) : (
+            user?.name + "!"
+          )}
         </p>
       </div>
       <div className="grid gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Activity className="h-4 w-4 mr-2" />
-              Total Generations
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">
-              {isLoading ? <span className="animate-pulse">...</span> : user?.limit?.count } / {user?.limit?.unlimited ? "Unlimited" : 50}
-            </p>
-          </CardContent>
-          <CardFooter>
-            <p className="text-sm text-muted-foreground">Pro plan coming soon...</p>
-          </CardFooter>
-        </Card>
+        <div className="grid md:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Activity className="h-4 w-4 mr-2" />
+                Monthly Generations
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">
+                {isLoading ? (
+                  <span className="animate-pulse">...</span>
+                ) : (
+                  user?.generations.length
+                )}{" "}
+                /{" "}
+                {user?.unlimited
+                  ? "Unlimited"
+                  : process.env.NEXT_PUBLIC_GENERATION_LIMIT}
+              </p>
+            </CardContent>
+            <CardFooter>
+              <p className="text-sm text-muted-foreground">
+                Pro plan coming soon...
+              </p>
+            </CardFooter>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Monthly Generations Breakdown</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {!user ? (
+                <div className="flex flex-col space-y-4">
+                  {Array(3)
+                    .fill("")
+                    .map((s, i) => (
+                      <Skeleton className={cn("h-4", i == 0 ? "w-4/5" : i == 1 ? "w-3/5" : "w-2/5")} key={uuidv4()} />
+                    ))}
+                </div>
+              ) : (
+                <ul className="flex flex-col space-y-2 text-muted-foreground">
+                  <li>
+                    <Link href="/flashcard-sets">
+                      {
+                        user.generations.filter(
+                          (generation) => generation.type == "flashcard-set"
+                        ).length
+                      }{" "}
+                      Flashcard Sets
+                    </Link>
+                  </li>
+                  <Separator />
+                  <li>
+                    <Link href="/quizzes">
+                      {
+                        user.generations.filter(
+                          (generation) => generation.type == "quiz"
+                        ).length
+                      }{" "}
+                      Quizzes
+                    </Link>
+                  </li>
+                  <Separator />
+                  <li>
+                    <Link href="/tutors">
+                      {
+                        user.generations.filter(
+                          (generation) => generation.type == "tutor"
+                        ).length
+                      }{" "}
+                      Tutors
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+        </div>
         <div className="grid md:grid-cols-3 gap-4">
           {cards.map((card) => (
             <Link

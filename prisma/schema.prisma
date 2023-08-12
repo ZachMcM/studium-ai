@@ -52,14 +52,23 @@ model User {
   flashcardSets FlashcardSet[]
   flashcards    Flashcard[]
 
-  limit         Limit?
+  generations Generation[]
+  unlimited   Boolean @default(false)
 
-  tutors Tutor[]
-  messages  Message[]
+  tutors   Tutor[]
+  messages Message[]
 
   quizzes      Quiz[]
   questions    Question[]
   quizAttempts Attempt[]
+}
+
+model Generation {
+  id     String   @id @default(cuid())
+  type   String
+  date   DateTime @default(now())
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
 
 model VerificationToken {
@@ -114,15 +123,15 @@ model Tutor {
 }
 
 model Message {
-  id          String    @id @default(cuid())
-  role        String
-  content     String
+  id      String @id @default(cuid())
+  role    String
+  content String
 
-  tutor       Tutor     @relation(fields: [tutorId], references: [id], onDelete: Cascade)
-  tutorId     String
+  tutor   Tutor  @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  tutorId String
 
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
 
 model Quiz {
@@ -157,11 +166,4 @@ model Attempt {
   score       Decimal
   userAnswers String[]
   createdAt   DateTime @default(now())
-}
-
-model Limit {
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String    @unique
-  count     Int
-  unlimited Boolean
 }

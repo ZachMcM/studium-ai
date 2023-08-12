@@ -28,6 +28,9 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     queryKey: ["quizzes", { id: params.id }],
     queryFn: async (): Promise<ExtendedQuiz> => {
       const res = await fetch(`/api/quizzes/${params.id}`);
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },

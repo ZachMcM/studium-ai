@@ -7,7 +7,7 @@ import { useState } from "react";
 import { SearchAlert } from "@/components/alerts/SearchAlert";
 import { ErrorAlert } from "@/components/alerts/ErrorAlert";
 import { EmptyAlert } from "@/components/alerts/EmptyAlert";
-import { Limit, Tutor } from "@prisma/client";
+import { Tutor } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -34,6 +34,9 @@ export default function TutorsPage() {
     queryKey: ["tutors"],
     queryFn: async (): Promise<Tutor[]> => {
       const res = await fetch("/api/tutors");
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },

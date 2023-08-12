@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -35,11 +35,13 @@ const formSchema = z.object({
 export type FormSubmitVaues = z.infer<typeof formSchema>;
 
 export function FormSubmit({
+  isLoading,
   itemType,
   onSubmit,
   onBack,
   className
 }: {
+  isLoading: boolean
   itemType: "questions" | "cards";
   onSubmit: (values: FormSubmitVaues) => any;
   onBack: () => any;
@@ -104,7 +106,7 @@ export function FormSubmit({
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
-          <Button type="submit">Submit </Button>
+          <Button type="submit">Submit { isLoading && <Loader2 className="h-4 w-4 ml-2"/>}</Button>
         </div>
       </form>
     </Form>

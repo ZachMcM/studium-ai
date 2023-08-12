@@ -23,6 +23,9 @@ export default function AttemptResults({
       const res = await fetch(
         `/api/quizzes/${params.id}/attempts?attemptId=${params.attemptId}`
       );
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },

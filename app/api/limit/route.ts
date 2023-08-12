@@ -1,6 +1,5 @@
 import { getAuthSession } from "@/lib/auth";
 import prisma from "@/prisma/client";
-import { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -9,27 +8,36 @@ export async function GET(req: NextRequest) {
   if (!session)
     return NextResponse.json({ error: "Unauthorized Request", status: 401 });
 
-  const limit = await prisma.limit.findUnique({
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id
+    }
+  })
+
+  if (user?.unlimited) return NextResponse.json(false)
+
+  const now = new Date()
+  const beg = new Date(now.getFullYear(), now.getMonth(), 1)
+
+  let nextmonth
+  if (now.getMonth() == 12) {
+    nextmonth = 1
+  } else {
+    nextmonth = now.getMonth() + 1
+  }
+  const end = new Date(now.getFullYear(), nextmonth, 1)
+
+  const generationCount = await prisma.generation.count({
     where: {
       userId: session.user.id,
+      date: {
+        gte: beg,
+        lt: end
+      }
     },
   });
 
-  if (!limit) {
-    await prisma.limit.create({
-      data: {
-        userId: session.user.id,
-        count: 0,
-        unlimited: false,
-      },
-    });
+  if (generationCount >= Number(process.env.GENERATION_LIMIT)) return NextResponse.json(true)
 
-    return NextResponse.json(false);
-  }
-
-  if (limit.unlimited) return NextResponse.json(false);
-
-  if (limit.count >= 50) return NextResponse.json(true);
-
-  return NextResponse.json(false);
+  return NextResponse.json(false)
 }

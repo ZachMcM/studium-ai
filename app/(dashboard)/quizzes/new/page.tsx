@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { FormConfig } from "@/components/forms/FormConfig";
 import { FormSubmit, FormSubmitVaues } from "@/components/forms/FormSubmit";
-import { Limit, Quiz } from "@prisma/client";
+import { Quiz } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
 import { AlertCircle, Check } from "lucide-react";
 import {
@@ -57,7 +57,9 @@ export default function NewQuizPage() {
           source,
         }),
       });
-
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },
@@ -117,6 +119,7 @@ export default function NewQuizPage() {
             className={cn(page != "config" && "hidden")}
           />
           <FormSubmit
+            isLoading={isLoading}
             itemType="questions"
             onSubmit={submitForm}
             onBack={() => setPage("config")}

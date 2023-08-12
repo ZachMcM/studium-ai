@@ -26,6 +26,9 @@ export default function FlashcardSetPage({
     queryKey: ["sets", { id: params.id }],
     queryFn: async (): Promise<ExtendedFlashcardSet> => {
       const res = await fetch(`/api/flashcard-sets/${params.id}`);
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },

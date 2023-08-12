@@ -3,7 +3,6 @@ import { getAuthSession } from "@/lib/auth";
 import { limitExceeded } from "@/lib/limit-exceeded";
 import { openai } from "@/lib/openai";
 import prisma from "@/prisma/client";
-import { Limit } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { ResponseTypes } from "openai-edge";
 
@@ -71,6 +70,13 @@ export async function POST(req: NextRequest) {
       },
     },
   });
+
+  await prisma.generation.create({
+    data: {
+      userId: session.user.id,
+      type: "flashcard-set"
+    }
+  })
 
   return NextResponse.json(newFlashcardSet);
 }

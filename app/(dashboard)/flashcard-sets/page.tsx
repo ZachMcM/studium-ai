@@ -7,7 +7,7 @@ import { useState } from "react";
 import { SearchAlert } from "@/components/alerts/SearchAlert";
 import { ErrorAlert } from "@/components/alerts/ErrorAlert";
 import { EmptyAlert } from "@/components/alerts/EmptyAlert";
-import { FlashcardSet, Limit } from "@prisma/client";
+import { FlashcardSet } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -34,6 +34,9 @@ export default function FlashcardSets() {
     queryKey: ["sets"],
     queryFn: async (): Promise<FlashcardSet[]> => {
       const res = await fetch("/api/flashcard-sets");
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },
@@ -75,7 +78,7 @@ export default function FlashcardSets() {
             Add New... <Plus className="h-4 w-4 ml-2" />
           </Button>
         ) : (
-          <Link href="/tutors/new" className="shrink-0">
+          <Link href="/flashcard-sets/new" className="shrink-0">
             <Button>
               Add New...
               <Plus className="h-4 w-4 ml-2" />

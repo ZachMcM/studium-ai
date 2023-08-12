@@ -50,6 +50,9 @@ export default function Settings() {
     queryKey: ["user"],
     queryFn: async (): Promise<ExtendedUser> => {
       const res = await fetch("/api/user");
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },
@@ -78,6 +81,9 @@ export default function Settings() {
         method: "PUT",
         body: JSON.stringify(values),
       });
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },

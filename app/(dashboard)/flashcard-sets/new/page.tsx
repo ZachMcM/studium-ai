@@ -16,7 +16,7 @@ import { FormSubmit, FormSubmitVaues } from "@/components/forms/FormSubmit";
 import { LoadingPage } from "@/components/LoadingPage";
 import { AlertCircle, Check } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
-import { FlashcardSet, Limit } from "@prisma/client";
+import { FlashcardSet } from "@prisma/client";
 import { cn } from "@/lib/utils";
 
 export default function NewFlashcardsPage() {
@@ -48,7 +48,7 @@ export default function NewFlashcardsPage() {
       num,
       description,
     }: FormSubmitVaues): Promise<FlashcardSet> => {
-      const res = fetch("/api/flashcard-sets", {
+      const res = await fetch("/api/flashcard-sets", {
         method: "POST",
         body: JSON.stringify({
           title,
@@ -57,8 +57,10 @@ export default function NewFlashcardsPage() {
           source,
         }),
       });
-
-      const data = (await res).json();
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
+      const data = await res.json();
       return data;
     },
     onSuccess: (data) => {
@@ -117,6 +119,7 @@ export default function NewFlashcardsPage() {
             className={cn(page != "config" && "hidden")}
           />
           <FormSubmit
+            isLoading={isLoading}
             itemType="cards"
             onSubmit={submitForm}
             onBack={() => setPage("config")}

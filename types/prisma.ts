@@ -38,6 +38,6 @@ export type ExtendedUser = Prisma.UserGetPayload<{
     }
     flashcardSets: true
     tutors: true,
-    limit: true
+    generations: true
   }
 }>

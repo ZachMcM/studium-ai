@@ -34,6 +34,13 @@ export async function POST(req: NextRequest) {
     },
   });
 
+  await prisma.generation.create({
+    data: {
+      userId: session.user.id,
+      type: "tutor"
+    }
+  })
+
   return NextResponse.json(newTutor);
 }
 

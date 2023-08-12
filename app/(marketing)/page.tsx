@@ -72,7 +72,7 @@ const faq = [
   {
     question: "What are the limits?",
     answer:
-      "We currently allow up 50 generations on our hobby plan. A pro plan will be coming soon.",
+      `We currently allow up to ${process.env.GENERATION_LIMIT} generations for per on our hobby plan. A pro plan will be coming soon.`,
   },
   {
     question: "Who are we?",
@@ -113,7 +113,7 @@ const plans = [
   {
     title: "Hobby",
     description: "Get started now and upgrade once you've reached the limits.",
-    generations: 50,
+    generations: process.env.GENERATION_LIMIT,
     price: 0,
     comingSoon: false,
     link: "/dashboard",

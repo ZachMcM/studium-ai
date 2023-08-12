@@ -10,8 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
-import { Limit, Quiz } from "@prisma/client";
+import { Quiz } from "@prisma/client";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -34,6 +33,9 @@ export default function Quizzes() {
     queryKey: ["sets"],
     queryFn: async (): Promise<Quiz[]> => {
       const res = await fetch("/api/quizzes");
+      if (!res.ok) {
+        throw new Error('Network response was not ok')
+      }
       const data = await res.json();
       return data;
     },
@@ -74,7 +76,7 @@ export default function Quizzes() {
             Add New... <Plus className="h-4 w-4 ml-2" />
           </Button>
         ) : (
-          <Link href="/tutors/new" className="shrink-0">
+          <Link href="/quizzes/new" className="shrink-0">
             <Button>
               Add New...
               <Plus className="h-4 w-4 ml-2" />

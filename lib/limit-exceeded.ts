@@ -2,44 +2,36 @@ import prisma from "@/prisma/client";
 import { Session } from "next-auth";
 
 export async function limitExceeded(session: Session) {
-  const limit = await prisma.limit.findUnique({
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id
+    }
+  })
+
+  if (user?.unlimited) return (false)
+
+  const now = new Date()
+  const beg = new Date(now.getFullYear(), now.getMonth(), 1)
+
+  let nextmonth
+  if (now.getMonth() == 12) {
+    nextmonth = 1
+  } else {
+    nextmonth = now.getMonth() + 1
+  }
+  const end = new Date(now.getFullYear(), nextmonth, 1)
+
+  const generationCount = await prisma.generation.count({
     where: {
       userId: session.user.id,
+      date: {
+        gte: beg,
+        lt: end
+      }
     },
   });
 
-  if (!limit) {
-    await prisma.limit.create({
-      data: {
-        userId: session.user.id,
-        count: 1,
-        unlimited: false,
-      },
-    });
+  if (generationCount >= Number(process.env.GENERATION_LIMIT)) return true
 
-    return false;
-  }
-
-  if (limit.unlimited) {
-    await incrementLimit(session, limit.count);
-    return false;
-  }
-
-  if (limit.count >= 50) {
-    return true;
-  }
-
-  await incrementLimit(session, limit.count);
-  return false;
-}
-
-async function incrementLimit(session: Session, prev: number) {
-  await prisma.limit.update({
-    where: {
-      userId: session.user.id,
-    },
-    data: {
-      count: prev + 1,
-    },
-  });
+  return false
 }
