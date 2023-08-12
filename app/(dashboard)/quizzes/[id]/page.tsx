@@ -77,7 +77,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
                 <CardHeader>
                   <CardTitle>Quiz Attempts</CardTitle>
                   <CardDescription>
-                    All of you attempts for your {quiz.title} quiz.
+                    All of your attempts for your {quiz.title} quiz.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

@@ -72,7 +72,7 @@ const faq = [
   {
     question: "What are the limits?",
     answer:
-      `We currently allow up to ${process.env.GENERATION_LIMIT} generations for per on our hobby plan. A pro plan will be coming soon.`,
+      `We currently allow up to ${process.env.GENERATION_LIMIT} generations per month on our hobby plan. A pro plan will be coming soon.`,
   },
   {
     question: "Who are we?",
@@ -85,7 +85,7 @@ const faq = [
         >
           Zach McMullen
         </a>
-        . An entrepreneur and current freshmen studying CS at Purdue University.
+        . An entrepreneur and current freshman studying CS at Purdue University.
       </>
     ),
   },
@@ -122,7 +122,7 @@ const plans = [
     title: "Pro",
     description: "Unlimited generations to meet your study needs.",
     generations: "Unlimited",
-    price: "TBH",
+    price: "TBA",
     comingSoon: true,
     link: "#",
   },
@@ -192,6 +192,7 @@ export default function Home() {
                 link,
               }) => (
                 <Card
+                  key={uuidv4()}
                   className={cn(
                     "flex flex-col justify-between",
                     comingSoon && "opacity-70"
@@ -240,7 +241,7 @@ export default function Home() {
           <div className="flex flex-col space-y-8 items-center">
             <Accordion type="single" collapsible className="w-full">
               {faq.map(({ question, answer }, i) => (
-                <AccordionItem value={`item=${i}`}>
+                <AccordionItem key={uuidv4()} value={`item=${i}`}>
                   <AccordionTrigger>{question}</AccordionTrigger>
                   <AccordionContent>{answer}</AccordionContent>
                 </AccordionItem>

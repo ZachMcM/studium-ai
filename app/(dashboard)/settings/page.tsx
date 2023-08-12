@@ -189,7 +189,7 @@ export default function Settings() {
                 </Avatar>
                 <Button type="submit" className="md:w-fit">
                   Update Profile
-                  {updating && <Loader2 className="h-4 w-4 ml-2"/>}
+                  {updating && <Loader2 className="h-4 w-4 ml-2 animate-spin"/>}
                 </Button>
               </form>
             </Form>
