@@ -11,10 +11,10 @@ import { cn } from "@/lib/utils";
 
 export function FormConfig({
   onContinue,
-  className
+  className,
 }: {
   onContinue: (text: string) => void | Promise<void>;
-  className?: string
+  className?: string;
 }) {
   const [input, setInput] = useState<string>("");
   const [fileInput, setFileInput] = useState<FileList | null>(null);
@@ -117,12 +117,16 @@ export function FormConfig({
       </TabsList>
       <TabsContent value="upload">
         <div className="flex flex-col space-y-4 mt-2">
-          <Input
-            type="file"
-            // accept="text/plain, application/pdf, video/*, audio/*"
-            accept="text/plain, application/pdf"
-            onChange={(e) => setFileInput(e.target.files)}
-          />
+          <div className="space-y-1.5">
+            <Input
+              type="file"
+              accept="text/plain, application/pdf, video/mp4, video/x-m4v, video/*, audio/*"
+              onChange={(e) => setFileInput(e.target.files)}
+            />
+            <p className="text-[0.8rem] text-muted-foreground">
+              Upload a plain text, pdf, video, or audio file.
+            </p>
+          </div>
           <Button className="w-fit" variant="ghost" onClick={handleContinue}>
             Continue{" "}
             {isLoading ? (
@@ -155,8 +159,6 @@ export function FormConfig({
         <div className="flex flex-col space-y-2 mt-2">
           <Input
             type="url"
-            // accept="text/plain, application/pdf, video/*, audio/*"
-            accept="text/plain, application/pdf"
             onChange={(e) => setLink(e.target.value)}
             value={link}
             placeholder="Enter source link here..."

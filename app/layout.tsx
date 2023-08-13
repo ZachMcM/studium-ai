@@ -3,10 +3,9 @@ import "./globals.css";
 import { Provider } from "@/components/Provider";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
-import { Footer } from "@/components/marketing/Footer";
 
 export const metadata: Metadata = {
-  title: "Study AI",
+  title: "Studium AI",
   description: "Helping students with AI",
 };
 
@@ -17,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning suppressContentEditableWarning>
-      <body>
+      <body className="scroll-smooth">
         <Provider>
           {children}
           <Toaster />

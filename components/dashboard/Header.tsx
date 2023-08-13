@@ -15,7 +15,7 @@ export function Header() {
         <Link href="/dashboard" className="flex items-center">
           <GraduationCap className="h-6 w-6 mr-2.5" />
           <h1 className="font-semibold">
-            study ai
+            studium ai
           </h1>
         </Link>
         <div className="flex items-center space-x-6 text-sm font-medium">

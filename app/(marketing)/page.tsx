@@ -14,119 +14,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { cards, faq, mission, plans } from "@/config/marketing";
 import { cn } from "@/lib/utils";
-import {
-  Check,
-  Copy,
-  File,
-  FileText,
-  Globe,
-  MessagesSquare,
-} from "lucide-react";
-import { Metadata } from "next";
+import { Check } from "lucide-react";
 import Link from "next/link";
-import { SiOpenai } from "react-icons/si";
 import { v4 as uuidv4 } from "uuid";
-
-export const metadata: Metadata = {
-  title: "Home | Study AI",
-};
-
-const cards = [
-  {
-    icon: <SiOpenai className="h-8 w-8" />,
-    title: "OpenAI",
-    description:
-      "We use OpenAI's latest LLMs to provide the most accurate and performant generations.",
-  },
-  {
-    icon: <MessagesSquare className="h-8 w-8" />,
-    title: "AI Tutor Chatbots",
-    description: "AI tutors that you can talk to about any subject.",
-  },
-  {
-    icon: <Copy className="h-8 w-8" />,
-    title: "Flashcards",
-    description: "AI flashcard set generation. Full UI to study on the go.",
-  },
-  {
-    icon: <FileText className="h-8 w-8" />,
-    title: "Quizzes",
-    description: "AI multiple quiz quiz generation.",
-  },
-  {
-    icon: <File className="h-8 w-8" />,
-    title: "Upload Files",
-    description:
-      "File handling. Give the AI a txt of pdf to generate an item of choice.",
-  },
-  {
-    icon: <Globe className="h-8 w-8" />,
-    title: "Paste Links",
-    description:
-      "Link handling. Give the AI a link to generate an item of choice.",
-  },
-];
-
-const faq = [
-  {
-    question: "What are the limits?",
-    answer:
-      `We currently allow up to ${process.env.GENERATION_LIMIT} generations per month on our hobby plan. A pro plan will be coming soon.`,
-  },
-  {
-    question: "Who are we?",
-    answer: (
-      <>
-        I am{" "}
-        <a
-          href="https://twitter.com/dzachmcm"
-          className="text-primary underline"
-        >
-          Zach McMullen
-        </a>
-        . An entrepreneur and current freshman studying CS at Purdue University.
-      </>
-    ),
-  },
-  {
-    question: "How does it work?",
-    answer:
-      "Behind the scenes we use OpenAI's API. This ensures that your generations are accurate and fast.",
-  },
-  {
-    question: "How can I get in touch",
-    answer: (
-      <>
-        We have a{" "}
-        <a href="https://discord.gg/rCGEZwWUPt" className="text-primary underline">
-          Discord
-        </a>{" "}
-        where users can interact with each other, provide feedback and
-        suggestions, and get the latest news.
-      </>
-    ),
-  },
-];
-
-const plans = [
-  {
-    title: "Hobby",
-    description: "Get started now and upgrade once you've reached the limits.",
-    generations: process.env.GENERATION_LIMIT,
-    price: 0,
-    comingSoon: false,
-    link: "/dashboard",
-  },
-  {
-    title: "Pro",
-    description: "Unlimited generations to meet your study needs.",
-    generations: "Unlimited",
-    price: "TBA",
-    comingSoon: true,
-    link: "#",
-  },
-];
 
 export default function Home() {
   return (
@@ -140,8 +32,9 @@ export default function Home() {
             Helping Students Study Better Using AI
           </h1>
           <p className="leading-normal text-muted-foreground sm:text-xl sm:leading-8 font-medium max-w-[42rem]">
-            We harnesses the power of artificial intelligence to revolutionize
-            the way students study and excel in their academic pursuits.
+            We harnesses the power of artificial intelligence to help improve
+            students' critical thinking skills with AI, rather than replace
+            those skills.
           </p>
           <div className="flex items-center gap-3">
             <Link href="/dashboard">
@@ -160,9 +53,8 @@ export default function Home() {
               Features
             </h1>
             <p className="leading-normal text-muted-foreground sm:text-xl sm:leading-8 font-medium max-w-[42rem]">
-              Study AI includes many different features like file uploading, and
-              link pasting, and flashcard set generation to help students study
-              efficiently.
+              Study AI includes many different features like file uploading and
+              link parsing to help students study efficiently.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -217,7 +109,7 @@ export default function Home() {
                         <Check className="h-4 w-4 mr-2 text-green-500" />
                         {generations} generations
                       </p>
-                      <Separator/>
+                      <Separator />
                     </div>
                   </CardContent>
                   <CardFooter>
@@ -233,6 +125,14 @@ export default function Home() {
               )
             )}
           </div>
+        </div>
+        <div className="flex flex-col space-y-8 items-center text-center">
+          <h1 className="font-extrabold text-4xl lg:text-5xl xl:text-6xl tracking-tight">
+            Our Mission
+          </h1>
+          <p className="leading-normal text-muted-foreground sm:text-xl sm:leading-8 font-medium max-w-[64rem]">
+            {mission}
+          </p>
         </div>
         <div className="space-y-8">
           <h1 className="font-extrabold text-4xl lg:text-5xl xl:text-6xl tracking-tight text-center">

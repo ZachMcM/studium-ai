@@ -1,8 +1,9 @@
 import { getAuthSession } from "@/lib/auth";
-import { openai } from "@/lib/openai";
+// import { openai } from "@/lib/openai";
 import { NextRequest, NextResponse } from "next/server";
 import { ResponseTypes } from "openai-edge";
 import pdf from 'pdf-parse'
+import { openai } from "@/lib/openai";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
@@ -36,10 +37,20 @@ export async function POST(req: NextRequest) {
   }
 
   if (file.type.includes("audio/") || file.type.includes("video/")) {
+    const data = new FormData()
+    data.append("file", file)
+    data.append("model", "whisper-1");
+    data.append("language", "en");
     console.log("is video")
-    const response = await openai.createTranscription(file, "whisper-1");
-    const data = (await response.json()) as ResponseTypes["createTranscription"]
-    console.log(data)
-    return NextResponse.json(data);
+    const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      method: "POST",
+      body: data,
+    });  
+    const transcription = await res.json()
+    console.log(transcription)
+    return NextResponse.json(transcription.text)
   }
 }
