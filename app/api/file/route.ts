@@ -1,17 +1,14 @@
 import { getAuthSession } from "@/lib/auth";
-// import { openai } from "@/lib/openai";
 import { NextRequest, NextResponse } from "next/server";
-import { ResponseTypes } from "openai-edge";
-import pdf from 'pdf-parse'
-import { openai } from "@/lib/openai";
+import pdf from "pdf-parse";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const file = formData.get("file") as File | null | undefined;
   const session = await getAuthSession();
 
-  console.log(file)
-  console.log(file?.type)
+  console.log(file);
+  console.log(file?.type);
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized request", status: 401 });
@@ -30,27 +27,27 @@ export async function POST(req: NextRequest) {
   }
 
   if (file.type == "application/pdf") {
-    const arrayBuffer = await file.arrayBuffer()
-    const fileBuffer = Buffer.from(arrayBuffer)
-    const fileData = await pdf(fileBuffer)
-    return NextResponse.json(fileData.text)
+    const arrayBuffer = await file.arrayBuffer();
+    const fileBuffer = Buffer.from(arrayBuffer);
+    const fileData = await pdf(fileBuffer);
+    return NextResponse.json(fileData.text);
   }
 
   if (file.type.includes("audio/") || file.type.includes("video/")) {
-    const data = new FormData()
-    data.append("file", file)
+    const data = new FormData();
+    data.append("file", file);
     data.append("model", "whisper-1");
     data.append("language", "en");
-    console.log("is video")
+    console.log("is video");
     const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
       headers: {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       method: "POST",
       body: data,
-    });  
-    const transcription = await res.json()
-    console.log(transcription)
-    return NextResponse.json(transcription.text)
+    });
+    const transcription = await res.json();
+    console.log(transcription);
+    return NextResponse.json(transcription.text);
   }
 }

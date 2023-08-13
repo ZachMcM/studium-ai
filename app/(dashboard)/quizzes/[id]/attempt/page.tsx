@@ -3,7 +3,7 @@
 import { ExtendedQuiz } from "@/types/prisma";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
-import { AlertCircle, ArrowLeft, ArrowRight, CopyPlus, Loader2, Share } from "lucide-react";
+import { AlertCircle, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
@@ -30,12 +30,12 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const [userAnswers, setUserAnswers] = useState<string[]>([])
+  const [userAnswers, setUserAnswers] = useState<string[]>([]);
 
   function setAnswer(index: number, choice: string) {
-    const copy = userAnswers
+    const copy = userAnswers;
     copy[index] = choice;
-    setUserAnswers(copy)
+    setUserAnswers(copy);
   }
 
   const { data: quiz, isLoading: isQuizLoading } = useQuery({
@@ -43,7 +43,7 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
     queryFn: async (): Promise<ExtendedQuiz> => {
       const res = await fetch(`/api/quizzes/${params.id}`);
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;
@@ -69,7 +69,7 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
         body: JSON.stringify(userAnswers),
       });
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;
@@ -93,28 +93,38 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
   });
 
   function handleSubmit() {
-    console.log(userAnswers.length, quiz?.questions.length)
-    console.log(userAnswers)
+    console.log(userAnswers.length, quiz?.questions.length);
+    console.log(userAnswers);
     if (userAnswers.length != quiz?.questions.length) {
-      setOpen(false)
+      setOpen(false);
       toast({
-        description: <p className="flex items-center"><AlertCircle className="h-4 w-4 mr-2"/>Oops, you still have unanswered questions.</p>,
-        variant: "destructive"
+        description: (
+          <p className="flex items-center">
+            <AlertCircle className="h-4 w-4 mr-2" />
+            Oops, you still have unanswered questions.
+          </p>
+        ),
+        variant: "destructive",
       });
-      return
+      return;
     }
     userAnswers.forEach((answer) => {
       if (answer == "") {
-        setOpen(false)
+        setOpen(false);
         toast({
-          description: <p className="flex items-center"><AlertCircle className="h-4 w-4 mr-2"/>Oops, you still have unanswered questions.</p>,
-          variant: "destructive"
+          description: (
+            <p className="flex items-center">
+              <AlertCircle className="h-4 w-4 mr-2" />
+              Oops, you still have unanswered questions.
+            </p>
+          ),
+          variant: "destructive",
         });
-        console.log(answer)
-        return
+        console.log(answer);
+        return;
       }
     });
-    submitAttempt()
+    submitAttempt();
   }
 
   return (
@@ -139,7 +149,7 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
                   {quiz.description}
                 </p>
               </div>
-              <Separator/>
+              <Separator />
             </div>
             <div className="flex flex-col w-full space-y-24">
               {quiz.questions.map((question, i) => (
@@ -148,7 +158,12 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
               <AlertDialog open={open} onOpenChange={() => setOpen(!open)}>
                 <AlertDialogTrigger asChild>
                   <Button className="w-full">
-                    Submit { isSubmitting ? <Loader2 className="h-4 w-4 ml-2 animate-spin"/> : <ArrowRight className="h-4 w-4 ml-2" />}
+                    Submit{" "}
+                    {isSubmitting ? (
+                      <Loader2 className="h-4 w-4 ml-2 animate-spin" />
+                    ) : (
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    )}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -162,7 +177,9 @@ export default function QuizAttempt({ params }: { params: { id: string } }) {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleSubmit}>Submit</AlertDialogAction>
+                    <AlertDialogAction onClick={handleSubmit}>
+                      Submit
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

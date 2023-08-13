@@ -1,18 +1,13 @@
 "use client";
 
 import { ExtendedQuiz } from "@/types/prisma";
-import {
-  LineChart,
-  Line,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { LineChart, Line, Tooltip, ResponsiveContainer } from "recharts";
 
 export function AttemptsGraph({ quiz }: { quiz: ExtendedQuiz }) {
   const data = quiz.attempts
     .sort(
       (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     )
     .map((attempt) => ({
       date: new Date(attempt.createdAt).toLocaleDateString(),

@@ -4,9 +4,9 @@ const nextConfig = {
     domains: [
       "lh3.googleusercontent.com",
       "https://zgnqetqkxxsiswtrgcgd.supabase.co",
-      "images.unsplash.com"
-    ]
-  }
-}
+      "images.unsplash.com",
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

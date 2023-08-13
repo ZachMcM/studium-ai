@@ -7,14 +7,14 @@ export const schema = {
         type: "object",
         properties: {
           question: { type: "string" },
-          possibleAnswers: { 
+          possibleAnswers: {
             type: "array",
             items: { type: "string" },
             minItems: 5,
-            maxItems: 5
+            maxItems: 5,
           },
-          correctAnswer: { type: "string" }
-        }
+          correctAnswer: { type: "string" },
+        },
       },
     },
   },
@@ -24,6 +24,6 @@ export type QuizGeneration = {
   questions: {
     question: string;
     possibleAnswers: string[];
-    correctAnswer: string
+    correctAnswer: string;
   }[];
 };

@@ -1,6 +1,6 @@
 import { useId } from "react";
 import { Skeleton } from "../ui/skeleton";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardHeader } from "../ui/card";
 
 export function LoadingCards() {
   return (

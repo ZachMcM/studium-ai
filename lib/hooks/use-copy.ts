@@ -10,6 +10,6 @@ export function useCopy(text: string) {
 
   return {
     copied,
-    copyToClipboard
-  }
+    copyToClipboard,
+  };
 }

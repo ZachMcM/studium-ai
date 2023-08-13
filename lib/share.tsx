@@ -20,7 +20,7 @@ export async function share(shareData: {
   } catch (err) {
     try {
       await navigator.clipboard.writeText(
-        `Check out these flashcards on Study AI: ${shareData.url}`
+        `Check out these flashcards on Study AI: ${shareData.url}`,
       );
       toast({
         description: (

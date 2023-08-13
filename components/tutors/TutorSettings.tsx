@@ -6,14 +6,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as z from "zod";
 import { toast } from "../ui/use-toast";
-import {
-  Check,
-  Edit,
-  Loader2,
-  MoreHorizontal,
-  Settings,
-  Trash2,
-} from "lucide-react";
+import { Check, Edit, Loader2, MoreHorizontal, Trash2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { ToastAction } from "../ui/toast";
 import {
@@ -89,8 +82,8 @@ export function TutorSettings({ tutor }: { tutor: Tutor }) {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["tutors", { id: tutor.id }] });
-      queryClient.invalidateQueries({ queryKey: ['user' ]})
-      setOpen(false)
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      setOpen(false);
       toast({
         description: (
           <p className="flex items-center">
@@ -129,7 +122,7 @@ export function TutorSettings({ tutor }: { tutor: Tutor }) {
         router.push("/tutors");
       }
       queryClient.invalidateQueries({ queryKey: ["tutors"] });
-      queryClient.invalidateQueries({ queryKey: ['user' ]})
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       toast({
         description: (
           <p className="flex items-center">
@@ -152,7 +145,7 @@ export function TutorSettings({ tutor }: { tutor: Tutor }) {
 
   const onSubmit = (values: FormValues) => editTutor(values);
 
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>

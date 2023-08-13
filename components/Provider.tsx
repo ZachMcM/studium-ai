@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
 import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { SessionProvider } from "next-auth/react"
-import { ThemeProvider as NextThemesProvider } from "next-themes"
-import { type ThemeProviderProps } from "next-themes/dist/types"
+import { SessionProvider } from "next-auth/react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { type ThemeProviderProps } from "next-themes/dist/types";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
-export function Provider({ children }: { children: ReactNode}) {
+export function Provider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
@@ -17,9 +17,9 @@ export function Provider({ children }: { children: ReactNode}) {
         </ThemeProvider>
       </SessionProvider>
     </QueryClientProvider>
-  )
+  );
 }
 
 function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }

@@ -1,26 +1,31 @@
 import { getAuthSession } from "@/lib/auth";
-import * as cheerio from "cheerio"
+import * as cheerio from "cheerio";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const session = await getAuthSession()
-  const { searchParams } = new URL(req.url)
-  const link = searchParams.get("link")
+  const session = await getAuthSession();
+  const { searchParams } = new URL(req.url);
+  const link = searchParams.get("link");
 
-  if (!session) return NextResponse.json({ error: "Unauthorized request", status: 401 })
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized request", status: 401 });
 
-  if (!link) return NextResponse.json({ error: "Invalid request, no link provide", status: 400 })
+  if (!link)
+    return NextResponse.json({
+      error: "Invalid request, no link provide",
+      status: 400,
+    });
 
-  const res = await fetch(link)
-  const body = await res.text()
+  const res = await fetch(link);
+  const body = await res.text();
 
-  const $ = cheerio.load(body)
+  const $ = cheerio.load(body);
 
-  let siteText = ""
+  let siteText = "";
 
-  $('p').each((i, el) => {
-    siteText += " " + $(el).text()
-  })
+  $("p").each((i, el) => {
+    siteText += " " + $(el).text();
+  });
 
-  return NextResponse.json(siteText)
-} 
+  return NextResponse.json(siteText);
+}

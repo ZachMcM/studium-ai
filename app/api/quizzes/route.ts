@@ -27,9 +27,9 @@ export async function POST(req: NextRequest) {
   if (!session)
     return NextResponse.json({ error: "Unauthorized Request", status: 401 });
 
-    const isLimitExceeded = await limitExceeded(session);
-    if (isLimitExceeded)
-      return NextResponse.json({ error: "Limit exceeded", status: 401 });
+  const isLimitExceeded = await limitExceeded(session);
+  if (isLimitExceeded)
+    return NextResponse.json({ error: "Limit exceeded", status: 401 });
 
   const { title, description, num, source } = (await req.json()) as {
     title?: string;
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
         possibleAnswers: question.possibleAnswers,
         correctAnswer: question.correctAnswer,
       };
-    }
+    },
   );
 
   for (let i = 0; i < generatedQuizQuestions.length; i++) {
@@ -83,16 +83,16 @@ export async function POST(req: NextRequest) {
   await prisma.generation.create({
     data: {
       userId: session.user.id,
-      type: "quiz"
-    }
-  })
+      type: "quiz",
+    },
+  });
 
   return NextResponse.json(newQuiz);
 }
 
 async function generate(
   source: string,
-  numQuestions: number
+  numQuestions: number,
 ): Promise<QuizGeneration> {
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo-16k",

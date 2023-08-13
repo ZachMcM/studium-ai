@@ -73,10 +73,10 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
-            maxWidth: '100ch', // add required value here
-          }
-        }
-      }
+            maxWidth: "100ch", // add required value here
+          },
+        },
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],

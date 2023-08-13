@@ -16,7 +16,6 @@ import { ListCard } from "@/components/cards/ListCard";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
 
 export default function TutorsPage() {
   const router = useRouter();
@@ -35,7 +34,7 @@ export default function TutorsPage() {
     queryFn: async (): Promise<Tutor[]> => {
       const res = await fetch("/api/tutors");
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;
@@ -94,11 +93,11 @@ export default function TutorsPage() {
           ) : (
             <div className="gap-4 grid md:grid-cols-2 lg:grid-cols-3">
               {tutors.filter((tutor) =>
-                tutor.title.toLowerCase().includes(search.toLowerCase())
+                tutor.title.toLowerCase().includes(search.toLowerCase()),
               ).length !== 0 ? (
                 tutors
                   .filter((tutor) =>
-                    tutor.title.toLowerCase().includes(search.toLowerCase())
+                    tutor.title.toLowerCase().includes(search.toLowerCase()),
                   )
                   .map((tutor) => (
                     <ListCard

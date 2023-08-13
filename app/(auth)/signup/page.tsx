@@ -13,12 +13,17 @@ export default function SignIn() {
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">Create an account</h1>
         <p className="text-sm text-muted-foreground">
-          By continuing, you are setting up a Studium AI account and agree to our
-          User Agreement and Privacy Policy.
+          By continuing, you are setting up a Studium AI account and agree to
+          our User Agreement and Privacy Policy.
         </p>
       </div>
-      <AuthButton/>
-      <p className="text-sm text-muted-foreground">Already with Studium AI? <Link className="underline" href="/signin">Sign In</Link></p>
+      <AuthButton />
+      <p className="text-sm text-muted-foreground">
+        Already with Studium AI?{" "}
+        <Link className="underline" href="/signin">
+          Sign In
+        </Link>
+      </p>
     </main>
   );
 }

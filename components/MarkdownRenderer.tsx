@@ -1,15 +1,18 @@
-"use client"
+"use client";
 
 import { useTheme } from "next-themes";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { coldarkCold, coldarkDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import remarkGfm from "remark-gfm"
-import remarkMath from 'remark-math'
-import rehypeKatex from 'rehype-katex'
+import {
+  coldarkCold,
+  coldarkDark,
+} from "react-syntax-highlighter/dist/cjs/styles/prism";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 export function MarkdownRenderer({ content }: { content: string }) {
-  const { theme}  = useTheme()
+  const { theme } = useTheme();
 
   return (
     <ReactMarkdown
@@ -31,11 +34,7 @@ export function MarkdownRenderer({ content }: { content: string }) {
               showLineNumbers
             />
           ) : (
-            <code
-              {...props}
-            >
-              {children}
-            </code>
+            <code {...props}>{children}</code>
           );
         },
       }}

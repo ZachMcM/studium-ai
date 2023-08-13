@@ -18,10 +18,7 @@ import { ExtendedUser } from "@/types/prisma";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { ToastAction } from "@radix-ui/react-toast";
-import {
-  Check,
-  Loader2,
-} from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -51,7 +48,7 @@ export default function Settings() {
     queryFn: async (): Promise<ExtendedUser> => {
       const res = await fetch("/api/user");
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;
@@ -82,7 +79,7 @@ export default function Settings() {
         body: JSON.stringify(values),
       });
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;
@@ -189,7 +186,9 @@ export default function Settings() {
                 </Avatar>
                 <Button type="submit" className="md:w-fit">
                   Update Profile
-                  {updating && <Loader2 className="h-4 w-4 ml-2 animate-spin"/>}
+                  {updating && (
+                    <Loader2 className="h-4 w-4 ml-2 animate-spin" />
+                  )}
                 </Button>
               </form>
             </Form>
@@ -197,7 +196,7 @@ export default function Settings() {
           <div className="flex flex-col gap-10">
             <Separator />
             <h3 className="font-semibold text-xl">Danger Zone</h3>
-            <DeleteAccount/>
+            <DeleteAccount />
           </div>
         </>
       )}

@@ -3,7 +3,7 @@
 import { useTextareaAutosize } from "@/lib/hooks/text-area-autosize";
 import { UseChatHelpers } from "ai/react";
 import { ArrowRightCircle, Loader2 } from "lucide-react";
-import { FormEvent, KeyboardEvent, useRef } from "react";
+import { FormEvent, useRef } from "react";
 import { Button } from "../ui/button";
 import { useEnterSubmit } from "@/lib/hooks/user-enter-submit";
 

@@ -14,7 +14,9 @@ export function SigninButton() {
           <Button variant="secondary">Dashboard</Button>
         </Link>
       ) : (
-        <Button variant="secondary" onClick={() => signIn()}>Sign In</Button>
+        <Button variant="secondary" onClick={() => signIn()}>
+          Sign In
+        </Button>
       )}
     </>
   );

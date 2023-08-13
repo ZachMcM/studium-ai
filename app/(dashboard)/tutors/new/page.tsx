@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 export default function NewTutor() {
   const [page, setPage] = useState<"config" | "submit">("config");
   const [sourceText, setSourceText] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
   function toSubmitPage(text: string) {
     setSourceText(text);
@@ -35,11 +35,11 @@ export default function NewTutor() {
   const router = useRouter();
 
   const { data: exceedsLimit } = useQuery({
-    queryKey: ['limit'],
+    queryKey: ["limit"],
     queryFn: async (): Promise<boolean> => {
-      const res = await fetch("/api/limit")
-      const data = await res.json()
-      return data
+      const res = await fetch("/api/limit");
+      const data = await res.json();
+      return data;
     },
   });
 
@@ -48,7 +48,7 @@ export default function NewTutor() {
       title,
       description,
     }: NewTutorFormValues): Promise<Tutor> => {
-      setLoading(true)
+      setLoading(true);
       const res = await fetch("/api/tutors", {
         method: "POST",
         body: JSON.stringify({
@@ -59,7 +59,7 @@ export default function NewTutor() {
       });
 
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
 
       const data = await res.json();
@@ -69,7 +69,7 @@ export default function NewTutor() {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["tutors"] });
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      queryClient.invalidateQueries({ queryKey: ['limit']})
+      queryClient.invalidateQueries({ queryKey: ["limit"] });
       toast({
         description: (
           <p className="flex items-center">
@@ -83,7 +83,13 @@ export default function NewTutor() {
     onError: () => {
       toast({
         title: "Uh oh, something went wrong!",
-        description: <p className="flex items-center"><AlertCircle className="h-4 w-4 mr-2"/>Oops, there was an error creating a new flashcard set. Please try again.</p>,
+        description: (
+          <p className="flex items-center">
+            <AlertCircle className="h-4 w-4 mr-2" />
+            Oops, there was an error creating a new flashcard set. Please try
+            again.
+          </p>
+        ),
         variant: "destructive",
       });
     },
@@ -94,11 +100,11 @@ export default function NewTutor() {
       toast({
         title: "Uh oh something went wrong!",
         description: "Oops, you have exceeded your limit.",
-        variant: "destructive"
-      })
-      return
+        variant: "destructive",
+      });
+      return;
     }
-    createTutor(values)
+    createTutor(values);
   };
 
   return (

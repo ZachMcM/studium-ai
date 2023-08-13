@@ -31,7 +31,7 @@ export function ThemeButton() {
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
           <span>System</span>
-          </DropdownMenuItem>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

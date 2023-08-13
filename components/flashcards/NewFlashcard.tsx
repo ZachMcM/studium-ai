@@ -4,15 +4,13 @@ import { useMutation, useQueryClient } from "react-query";
 import * as z from "zod";
 import { toast } from "../ui/use-toast";
 import {
-  Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { Check, CopyPlus, Loader2 } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -26,7 +24,6 @@ import {
 import { Input } from "../ui/input";
 import { FlashcardSet } from "@prisma/client";
 import { ExtendedFlashcardSet } from "@/types/prisma";
-import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   question: z

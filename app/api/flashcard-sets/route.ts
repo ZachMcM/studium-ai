@@ -74,16 +74,16 @@ export async function POST(req: NextRequest) {
   await prisma.generation.create({
     data: {
       userId: session.user.id,
-      type: "flashcard-set"
-    }
-  })
+      type: "flashcard-set",
+    },
+  });
 
   return NextResponse.json(newFlashcardSet);
 }
 
 async function generate(
   source: string,
-  numCards: number
+  numCards: number,
 ): Promise<FlashcardGeneration> {
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo-16k",

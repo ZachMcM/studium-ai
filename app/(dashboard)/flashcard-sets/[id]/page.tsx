@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import { FlashcardCarousel } from "@/components/flashcards/FlashcardCarousel";
 import { SetCard } from "@/components/flashcards/SetCard";
 import { useRouter } from "next/navigation";
-import { CopyPlus, Share } from "lucide-react";
+import { CopyPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
@@ -27,7 +27,7 @@ export default function FlashcardSetPage({
     queryFn: async (): Promise<ExtendedFlashcardSet> => {
       const res = await fetch(`/api/flashcard-sets/${params.id}`);
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;

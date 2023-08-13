@@ -29,9 +29,9 @@ export default function TutorPage({ params }: { params: { id: string } }) {
       toast({
         title: "Uh oh something went wrong!",
         description: error.message,
-        variant: "destructive"
-      })
-    }
+        variant: "destructive",
+      });
+    },
   });
 
   const { data: tutor, isLoading } = useQuery({
@@ -39,7 +39,7 @@ export default function TutorPage({ params }: { params: { id: string } }) {
     queryFn: async (): Promise<ExtendedTutor> => {
       const res = await fetch(`/api/tutors/${params.id}`);
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       console.log(data);

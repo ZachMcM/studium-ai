@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 
-export function useTextareaAutosize(ref: HTMLTextAreaElement | null, value: string) {
+export function useTextareaAutosize(
+  ref: HTMLTextAreaElement | null,
+  value: string,
+) {
   useEffect(() => {
     if (ref) {
       ref.style.height = "0px";

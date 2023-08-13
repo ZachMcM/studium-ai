@@ -2,73 +2,92 @@ import { getAuthSession } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string }}) {
-  const session = await getAuthSession()
-  if (!session) return NextResponse.json({ error: "Unauthorized request", staus: 401 })
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const session = await getAuthSession();
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized request", staus: 401 });
 
-  const { searchParams } = new URL(req.nextUrl)
-  const attemptId = searchParams.get("attemptId")
+  const { searchParams } = new URL(req.nextUrl);
+  const attemptId = searchParams.get("attemptId");
 
-  if (!attemptId) return NextResponse.json({ error: "Invalid request, no attempt id", staus: 400 })
+  if (!attemptId)
+    return NextResponse.json({
+      error: "Invalid request, no attempt id",
+      staus: 400,
+    });
 
   const attempt = await prisma.attempt.findUnique({
     where: {
       userId: session.user.id,
       id: attemptId,
-      quizId: params.id
+      quizId: params.id,
     },
     include: {
       quiz: {
         include: {
-          questions: true
-        }
-      }
-    }
-  })
+          questions: true,
+        },
+      },
+    },
+  });
 
-  return NextResponse.json(attempt)
+  return NextResponse.json(attempt);
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string }}) {
-  const session = await getAuthSession()
-  if (!session) return NextResponse.json({ error: "Unauthorized request", status: 401 })
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const session = await getAuthSession();
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized request", status: 401 });
 
-
-  const userAnswers = await req.json() as string[] | null | undefined
-  if (!userAnswers) return NextResponse.json({ error: "Invalid request, incorrect payload", status: 400 })
+  const userAnswers = (await req.json()) as string[] | null | undefined;
+  if (!userAnswers)
+    return NextResponse.json({
+      error: "Invalid request, incorrect payload",
+      status: 400,
+    });
 
   const targetQuiz = await prisma.quiz.findUnique({
     where: {
       userId: session.user.id,
-      id: params.id
+      id: params.id,
     },
     include: {
-      questions: true
-    }
-  })
+      questions: true,
+    },
+  });
 
-  if (!targetQuiz) return NextResponse.json({ error: "Invalid request, incorrect payload", status: 400 })
+  if (!targetQuiz)
+    return NextResponse.json({
+      error: "Invalid request, incorrect payload",
+      status: 400,
+    });
 
-  const quizQuestions = targetQuiz.questions
+  const quizQuestions = targetQuiz.questions;
 
-  let correct = quizQuestions.length
+  let correct = quizQuestions.length;
 
   quizQuestions.forEach((question, i) => {
     if (question.correctAnswer != userAnswers[i]) {
-      correct--
+      correct--;
     }
-  })
+  });
 
-  const score = correct / quizQuestions.length
+  const score = correct / quizQuestions.length;
 
   const newAttempt = await prisma.attempt.create({
     data: {
       userId: session.user.id,
       quizId: targetQuiz.id,
       score,
-      userAnswers
-    }
-  })
+      userAnswers,
+    },
+  });
 
-  return NextResponse.json(newAttempt)
+  return NextResponse.json(newAttempt);
 }

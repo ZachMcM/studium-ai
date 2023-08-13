@@ -4,5 +4,5 @@ export const loadingTexts = [
   "Brainstorming the best questions...",
   "Writing the best questions...",
   "Calculating the correct answers...",
-  "Confirming the questions and the answers..."
-] as const
+  "Confirming the questions and the answers...",
+] as const;

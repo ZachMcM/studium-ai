@@ -21,10 +21,10 @@ export default function AttemptResults({
   const { data: attempt, isLoading } = useQuery({
     queryFn: async (): Promise<ExtendedAttempt> => {
       const res = await fetch(
-        `/api/quizzes/${params.id}/attempts?attemptId=${params.attemptId}`
+        `/api/quizzes/${params.id}/attempts?attemptId=${params.attemptId}`,
       );
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;

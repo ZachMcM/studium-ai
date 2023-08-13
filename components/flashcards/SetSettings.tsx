@@ -10,14 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import {
-  Check,
-  Edit,
-  Loader2,
-  MoreHorizontal,
-  Settings,
-  Trash2,
-} from "lucide-react";
+import { Check, Edit, Loader2, MoreHorizontal, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import {
@@ -76,8 +69,8 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["sets", { id: set.id }] });
-      queryClient.invalidateQueries({ queryKey: ['user' ]})
-      setOpen(false)
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      setOpen(false);
       toast({
         description: (
           <p className="flex items-center">
@@ -115,7 +108,7 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
         router.push("/flashcard-sets");
       }
       queryClient.invalidateQueries({ queryKey: ["sets"] });
-      queryClient.invalidateQueries({ queryKey: ['user' ]})
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       toast({
         description: (
           <p className="flex items-center">
@@ -148,89 +141,89 @@ export function SetSettings({ set }: { set: FlashcardSet }) {
 
   const onSubmit = (values: FormValues) => editSet(values);
 
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
-      <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-        <AlertDialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuGroup>
-                <DialogTrigger asChild>
-                  <DropdownMenuItem>
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit
-                  </DropdownMenuItem>
-                </DialogTrigger>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <AlertDialogTrigger asChild>
-                  <DropdownMenuItem className="!text-destructive">
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete
-                  </DropdownMenuItem>
-                </AlertDialogTrigger>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DeleteDialog deleteFunction={deleteSet} isDeleting={isSetDeleting} />
-        </AlertDialog>
-        <DialogContent className="max-w-[425px] md:max-w-[525px] !rounded-lg">
-          <DialogHeader>
-            <DialogTitle>Edit</DialogTitle>
-            <DialogDescription>
-              Edit the flashcard set title and description.
-            </DialogDescription>
-          </DialogHeader>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Question</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Enter the flashcard set title..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Answer</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Enter the flashcard set description..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button className="w-full" type="submit">
-                Submit{" "}
-                {isSetEditing && (
-                  <Loader2 className="h-4 w-4 ml-2 animate-spin" />
-                )}
-              </Button>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+      <AlertDialog>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DialogTrigger asChild>
+                <DropdownMenuItem>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit
+                </DropdownMenuItem>
+              </DialogTrigger>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem className="!text-destructive">
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DeleteDialog deleteFunction={deleteSet} isDeleting={isSetDeleting} />
+      </AlertDialog>
+      <DialogContent className="max-w-[425px] md:max-w-[525px] !rounded-lg">
+        <DialogHeader>
+          <DialogTitle>Edit</DialogTitle>
+          <DialogDescription>
+            Edit the flashcard set title and description.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Question</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Enter the flashcard set title..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Answer</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Enter the flashcard set description..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button className="w-full" type="submit">
+              Submit{" "}
+              {isSetEditing && (
+                <Loader2 className="h-4 w-4 ml-2 animate-spin" />
+              )}
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -37,9 +37,9 @@ export async function POST(req: NextRequest) {
   await prisma.generation.create({
     data: {
       userId: session.user.id,
-      type: "tutor"
-    }
-  })
+      type: "tutor",
+    },
+  });
 
   return NextResponse.json(newTutor);
 }

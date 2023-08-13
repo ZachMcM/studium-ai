@@ -28,11 +28,7 @@ const variants = {
   },
 };
 
-export function FlashcardCarousel({
-  set,
-}: {
-  set: ExtendedFlashcardSet;
-}) {
+export function FlashcardCarousel({ set }: { set: ExtendedFlashcardSet }) {
   const [index, setIndex] = useState<number>(0);
   const [direction, setDirection] = useState<-1 | 1>(1);
   const [noPagination, setNoPagination] = useState<boolean>(true);
@@ -81,7 +77,11 @@ export function FlashcardCarousel({
                     }
                   }}
                 >
-                  <FlashcardDisplay index={index} flashcard={flashcard} set={set} />
+                  <FlashcardDisplay
+                    index={index}
+                    flashcard={flashcard}
+                    set={set}
+                  />
                 </motion.div>
               </AnimatePresence>
             )}

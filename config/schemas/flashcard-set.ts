@@ -8,7 +8,7 @@ export const schema = {
         properties: {
           question: { type: "string" },
           answer: { type: "string" },
-        }
+        },
       },
     },
   },

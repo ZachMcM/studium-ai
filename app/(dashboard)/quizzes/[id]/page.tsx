@@ -4,7 +4,6 @@ import { AttemptsGraph } from "@/components/quizzes/AttemptsGraph";
 import { AttemptsTable } from "@/components/quizzes/AttemptsTable";
 import { QuizSettings } from "@/components/quizzes/QuizSettings";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { ExtendedQuiz } from "@/types/prisma";
@@ -29,7 +28,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     queryFn: async (): Promise<ExtendedQuiz> => {
       const res = await fetch(`/api/quizzes/${params.id}`);
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;
@@ -52,7 +51,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     <div className="flex-1 w-full flex flex-col gap-10 py-10 md:py-16 mx-auto max-w-4xl px-4">
       {isQuizLoading ? (
         <div className="w-full flex justify-center py-8">
-          <Loader2 className="animate-spin"/>
+          <Loader2 className="animate-spin" />
         </div>
       ) : (
         quiz && (

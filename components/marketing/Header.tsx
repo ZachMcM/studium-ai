@@ -1,7 +1,6 @@
 import { GraduationCap } from "lucide-react";
 import { SigninButton } from "./SigninButton";
 import { Button } from "../ui/button";
-import { HeaderLink } from "../HeaderLink";
 
 export function Header() {
   return (

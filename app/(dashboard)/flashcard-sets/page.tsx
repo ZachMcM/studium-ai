@@ -16,7 +16,6 @@ import { ListCard } from "@/components/cards/ListCard";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
 
 export default function FlashcardSets() {
   const router = useRouter();
@@ -35,7 +34,7 @@ export default function FlashcardSets() {
     queryFn: async (): Promise<FlashcardSet[]> => {
       const res = await fetch("/api/flashcard-sets");
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;
@@ -95,11 +94,11 @@ export default function FlashcardSets() {
           ) : (
             <div className="gap-4 grid md:grid-cols-2 lg:grid-cols-3">
               {sets.filter((set) =>
-                set.title.toLowerCase().includes(search.toLowerCase())
+                set.title.toLowerCase().includes(search.toLowerCase()),
               ).length !== 0 ? (
                 sets
                   .filter((set) =>
-                    set.title.toLowerCase().includes(search.toLowerCase())
+                    set.title.toLowerCase().includes(search.toLowerCase()),
                   )
                   .map((set) => (
                     <ListCard

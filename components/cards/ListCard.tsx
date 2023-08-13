@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Button } from "../ui/button";
-import { ExternalLink } from "lucide-react";
 import {
   Card,
   CardDescription,

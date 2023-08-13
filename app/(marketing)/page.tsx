@@ -87,7 +87,7 @@ export default function Home() {
                   key={uuidv4()}
                   className={cn(
                     "flex flex-col justify-between",
-                    comingSoon && "opacity-70"
+                    comingSoon && "opacity-70",
                   )}
                 >
                   <CardHeader className="flex flex-row items-center justify-between gap-4">
@@ -122,7 +122,7 @@ export default function Home() {
                     )}
                   </CardFooter>
                 </Card>
-              )
+              ),
             )}
           </div>
         </div>

@@ -5,12 +5,12 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Progress } from "./ui/progress";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 
 export function LoadingPage({ finished }: { finished: boolean }) {
   const [progress, setProgess] = useState<number>(0);
   const [currText, setCurrText] = useState<(typeof loadingTexts)[number]>(
-    loadingTexts[0]
+    loadingTexts[0],
   );
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export function LoadingPage({ finished }: { finished: boolean }) {
       setProgess((prev) => {
         if (Math.random() < 0.1) return prev + 4;
         if (prev >= 100) return 0;
-        if (finished) return 100
+        if (finished) return 100;
         return prev + 2;
       });
     }, 2000);
@@ -36,7 +36,7 @@ export function LoadingPage({ finished }: { finished: boolean }) {
   const { theme } = useTheme();
 
   return (
-    <motion.div 
+    <motion.div
       className="absolute inset-0 bg-background flex justify-center w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

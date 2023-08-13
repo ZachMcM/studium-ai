@@ -34,12 +34,12 @@ export function SubmitTutor({
   onSubmit,
   onBack,
   isLoading,
-  className
+  className,
 }: {
   onSubmit: (values: NewTutorFormValues) => any;
   onBack: () => any;
   isLoading: boolean;
-  className?: string
+  className?: string;
 }) {
   const form = useForm<NewTutorFormValues>({
     resolver: zodResolver(formSchema),
@@ -51,7 +51,10 @@ export function SubmitTutor({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-4", className)}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={cn("space-y-4", className)}
+      >
         <FormField
           control={form.control}
           name="title"

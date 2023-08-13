@@ -39,13 +39,13 @@ export function FormSubmit({
   itemType,
   onSubmit,
   onBack,
-  className
+  className,
 }: {
-  isLoading: boolean
+  isLoading: boolean;
   itemType: "questions" | "cards";
   onSubmit: (values: FormSubmitVaues) => any;
   onBack: () => any;
-  className?: string
+  className?: string;
 }) {
   const form = useForm<FormSubmitVaues>({
     resolver: zodResolver(formSchema),
@@ -58,7 +58,10 @@ export function FormSubmit({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-4", className)}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={cn("space-y-4", className)}
+      >
         <FormField
           control={form.control}
           name="title"
@@ -79,10 +82,7 @@ export function FormSubmit({
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Enter description..."
-                  {...field}
-                />
+                <Textarea placeholder="Enter description..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -106,7 +106,9 @@ export function FormSubmit({
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
-          <Button type="submit">Submit { isLoading && <Loader2 className="h-4 w-4 ml-2"/>}</Button>
+          <Button type="submit">
+            Submit {isLoading && <Loader2 className="h-4 w-4 ml-2" />}
+          </Button>
         </div>
       </form>
     </Form>

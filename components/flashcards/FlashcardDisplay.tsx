@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import { Card } from "../ui/card";
 import { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
 import { Volume2 } from "lucide-react";
@@ -13,11 +13,11 @@ import { ExtendedFlashcardSet } from "@/types/prisma";
 export function FlashcardDisplay({
   flashcard,
   index,
-  set
+  set,
 }: {
   flashcard: Flashcard;
   index: number;
-  set: ExtendedFlashcardSet
+  set: ExtendedFlashcardSet;
 }) {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const synth = window.speechSynthesis;
@@ -28,7 +28,7 @@ export function FlashcardDisplay({
 
   function readContent() {
     const utterThis = new SpeechSynthesisUtterance(
-      isFlipped ? flashcard.answer : flashcard.question
+      isFlipped ? flashcard.answer : flashcard.question,
     );
     synth.speak(utterThis);
   }

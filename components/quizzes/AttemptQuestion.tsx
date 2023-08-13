@@ -31,7 +31,7 @@ export function AttemptQuestion({
                 "bg-green-500 hover:bg-green-500 !text-white",
               choice == userAnswer &&
                 choice != question.correctAnswer &&
-                "bg-red-500 hover:bg-red-500 !text-white"
+                "bg-red-500 hover:bg-red-500 !text-white",
             )}
           >
             <p>{getLetter(i)}.</p>

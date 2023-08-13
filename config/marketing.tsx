@@ -68,7 +68,7 @@ export const faq = [
   },
   {
     question: `What does "Studium" mean?`,
-    answwer: "Studium is latin for study."
+    answwer: "Studium is latin for study.",
   },
   {
     question: "How can I get in touch",

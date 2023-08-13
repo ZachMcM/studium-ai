@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { cn } from "@/lib/utils";
 import Link, { LinkProps } from "next/link";
@@ -16,7 +16,7 @@ export function HeaderLink({ ...props }: HeaderLinkProps) {
     <Link
       className={cn(
         "transition-colors hover:text-foreground/80 text-foreground/60",
-        pathname == props.href && "text-foreground"
+        pathname == props.href && "text-foreground",
       )}
       {...props}
     >

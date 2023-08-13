@@ -57,7 +57,7 @@ export default function DashboardPage() {
     queryFn: async (): Promise<ExtendedUser> => {
       const res = await fetch("/api/user");
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;
@@ -127,7 +127,13 @@ export default function DashboardPage() {
                   {Array(3)
                     .fill("")
                     .map((s, i) => (
-                      <Skeleton className={cn("h-4", i == 0 ? "w-4/5" : i == 1 ? "w-3/5" : "w-2/5")} key={uuidv4()} />
+                      <Skeleton
+                        className={cn(
+                          "h-4",
+                          i == 0 ? "w-4/5" : i == 1 ? "w-3/5" : "w-2/5",
+                        )}
+                        key={uuidv4()}
+                      />
                     ))}
                 </div>
               ) : (
@@ -136,7 +142,7 @@ export default function DashboardPage() {
                     <Link href="/flashcard-sets">
                       {
                         user.generations.filter(
-                          (generation) => generation.type == "flashcard-set"
+                          (generation) => generation.type == "flashcard-set",
                         ).length
                       }{" "}
                       Flashcard Sets
@@ -147,7 +153,7 @@ export default function DashboardPage() {
                     <Link href="/quizzes">
                       {
                         user.generations.filter(
-                          (generation) => generation.type == "quiz"
+                          (generation) => generation.type == "quiz",
                         ).length
                       }{" "}
                       Quizzes
@@ -158,7 +164,7 @@ export default function DashboardPage() {
                     <Link href="/tutors">
                       {
                         user.generations.filter(
-                          (generation) => generation.type == "tutor"
+                          (generation) => generation.type == "tutor",
                         ).length
                       }{" "}
                       Tutors
@@ -226,7 +232,7 @@ export default function DashboardPage() {
                             </Link>
                             <CreatedAt
                               createdAt={new Date(
-                                attempt.createdAt
+                                attempt.createdAt,
                               ).toLocaleDateString()}
                             />
                           </div>
@@ -289,7 +295,7 @@ export default function DashboardPage() {
                             </Link>
                             <CreatedAt
                               createdAt={new Date(
-                                tutor.createdAt
+                                tutor.createdAt,
                               ).toLocaleDateString()}
                             />
                           </div>
@@ -347,7 +353,7 @@ export default function DashboardPage() {
                             </Link>
                             <CreatedAt
                               createdAt={new Date(
-                                flashcardSet.createdAt
+                                flashcardSet.createdAt,
                               ).toLocaleDateString()}
                             />
                           </div>

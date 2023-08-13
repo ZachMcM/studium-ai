@@ -1,5 +1,5 @@
 import { Question } from "@prisma/client";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card } from "../ui/card";
 import { getLetter } from "@/lib/get-letter";
 import { Button } from "../ui/button";
 import { useState } from "react";
@@ -14,9 +14,8 @@ export function Question({
   setAnswer(index: number, choice: string, i: number): void;
   index: number;
 }) {
-  
   function handleAnswer(choice: string, i: number) {
-    setAnswer(index, choice, i)
+    setAnswer(index, choice, i);
     setCurrChoice(i);
   }
 
@@ -37,7 +36,7 @@ export function Question({
             variant="outline"
             className={cn(
               "justify-start space-x-4 h-16",
-              currChoice == i && "bg-accent"
+              currChoice == i && "bg-accent",
             )}
           >
             <p>{getLetter(i)}.</p>

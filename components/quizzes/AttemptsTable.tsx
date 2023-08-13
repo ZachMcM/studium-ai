@@ -24,7 +24,7 @@ export function AttemptsTable({ quiz }: { quiz: ExtendedQuiz }) {
         {quiz.attempts
           .sort(
             (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           )
           .map((attempt) => (
             <TableRow key={attempt.id} className="relative">
@@ -32,7 +32,10 @@ export function AttemptsTable({ quiz }: { quiz: ExtendedQuiz }) {
                 {new Date(attempt.createdAt).toLocaleDateString()}
               </TableCell>
               <TableCell>{Number(attempt.score) * 100}%</TableCell>{" "}
-              <Link href={`/quizzes/${quiz.id}/attempt/${attempt.id}`} className="absolute inset-0" />
+              <Link
+                href={`/quizzes/${quiz.id}/attempt/${attempt.id}`}
+                className="absolute inset-0"
+              />
             </TableRow>
           ))}
       </TableBody>

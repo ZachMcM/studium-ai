@@ -34,7 +34,7 @@ export default function Quizzes() {
     queryFn: async (): Promise<Quiz[]> => {
       const res = await fetch("/api/quizzes");
       if (!res.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok");
       }
       const data = await res.json();
       return data;
@@ -93,11 +93,11 @@ export default function Quizzes() {
           ) : (
             <div className="gap-4 grid md:grid-cols-2 lg:grid-cols-3">
               {quizzes.filter((quiz) =>
-                quiz.title.toLowerCase().includes(search.toLowerCase())
+                quiz.title.toLowerCase().includes(search.toLowerCase()),
               ).length !== 0 ? (
                 quizzes
                   .filter((quiz) =>
-                    quiz.title.toLowerCase().includes(search.toLowerCase())
+                    quiz.title.toLowerCase().includes(search.toLowerCase()),
                   )
                   .map((quiz) => (
                     <ListCard

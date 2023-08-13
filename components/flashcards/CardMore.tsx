@@ -154,7 +154,10 @@ export function CardMore({
               toast({
                 title: "Uh oh, something went wrong!",
                 description: (
-                  <p>You can't delete the only flashcard in the set, delete the set instead.</p>
+                  <p>
+                    You can't delete the only flashcard in the set, delete the
+                    set instead.
+                  </p>
                 ),
                 variant: "destructive",
               });
