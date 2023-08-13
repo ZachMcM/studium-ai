@@ -7,6 +7,9 @@ const nextConfig = {
       "images.unsplash.com",
     ],
   },
+  experimental: {
+    serverComponentsExternalPackages: ["pdf-parse"],
+  }
 };
 
 module.exports = nextConfig;
