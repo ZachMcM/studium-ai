@@ -113,7 +113,7 @@ async function generate(
 
   const data = (await response.json()) as ResponseTypes["createChatCompletion"];
   const json = JSON.parse(data.choices[0].message?.function_call?.arguments!);
-  console.log(json);
+  console.log(data);
   console.log(json.flashcards);
   return json;
 }
