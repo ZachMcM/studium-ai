@@ -67,6 +67,10 @@ export const faq = [
     answer: `By simply pasting a link, uploading a text, pdf, video, or audio file, or just defining a subject using the latest AI models we can generate you AI tutors, flashcard sets, and quizzes.`,
   },
   {
+    question: `What does "Studium" mean?`,
+    answwer: "Studium is latin for study."
+  },
+  {
     question: "How can I get in touch",
     answer: (
       <>
