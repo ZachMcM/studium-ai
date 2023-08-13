@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
-import pdf from "pdf-parse";
+// import pdf from "pdf-parse";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
@@ -26,12 +26,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(fileText);
   }
 
-  if (file.type == "application/pdf") {
-    const arrayBuffer = await file.arrayBuffer();
-    const fileBuffer = Buffer.from(arrayBuffer);
-    const fileData = await pdf(fileBuffer);
-    return NextResponse.json(fileData.text);
-  }
+  // if (file.type == "application/pdf") {
+  //   const arrayBuffer = await file.arrayBuffer();
+  //   const fileBuffer = Buffer.from(arrayBuffer);
+  //   const fileData = await pdf(fileBuffer);
+  //   return NextResponse.json(fileData.text);
+  // }
 
   if (file.type.includes("audio/") || file.type.includes("video/")) {
     const data = new FormData();
