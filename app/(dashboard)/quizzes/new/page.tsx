@@ -47,6 +47,7 @@ export default function NewQuizPage() {
       title,
       description,
       num,
+      difficulty
     }: FormSubmitVaues): Promise<Quiz> => {
       const res = await fetch("/api/quizzes", {
         method: "POST",
@@ -55,6 +56,7 @@ export default function NewQuizPage() {
           num,
           description,
           source,
+          difficulty
         }),
       });
       if (!res.ok) {

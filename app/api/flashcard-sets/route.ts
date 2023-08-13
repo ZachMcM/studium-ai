@@ -36,20 +36,21 @@ export async function POST(req: NextRequest) {
   if (isLimitExceeded)
     return NextResponse.json({ error: "Limit exceeded", status: 401 });
 
-  const { source, num, title, description } = (await req.json()) as {
+  const { source, num, title, description, difficulty } = (await req.json()) as {
     source?: string;
     num?: number;
     title?: string;
     description?: string;
+    difficulty?: "easy" | "medium" | "hard"
   };
 
-  if (!source || !num || !title || !description)
+  if (!source || !num || !title || !description || !difficulty)
     return NextResponse.json({
       error: "Invalid request, incorrect paylod",
       status: 400,
     });
 
-  const aiCardsGeneration = await generate(source, num);
+  const aiCardsGeneration = await generate(source, num, difficulty);
   const generatedSet = aiCardsGeneration.flashcards.map((flashcard) => {
     return {
       userId: session.user.id,
@@ -84,13 +85,14 @@ export async function POST(req: NextRequest) {
 async function generate(
   source: string,
   numCards: number,
+  difficulty: "easy" | "medium" | "hard"
 ): Promise<FlashcardGeneration> {
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo-16k",
     messages: [
       {
         role: "system",
-        content: `You area a flashcard set generation AI. when given a source, create a flashcard set of only ${numCards} cards based on that source. If the source has insufficient data, use your own information and training data to create the flashcards.`,
+        content: `You area a flashcard set generation AI. when given a source, create a flashcard set of only ${numCards} cards of ${difficulty} difficulty based on that source. If the source has insufficient data, use your own information and training data to create the flashcards.`,
       },
       {
         role: "user",

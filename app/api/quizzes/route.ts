@@ -31,20 +31,21 @@ export async function POST(req: NextRequest) {
   if (isLimitExceeded)
     return NextResponse.json({ error: "Limit exceeded", status: 401 });
 
-  const { title, description, num, source } = (await req.json()) as {
+  const { title, description, num, source, difficulty } = (await req.json()) as {
     title?: string;
     description?: string;
     num?: number;
     source?: string;
+    difficulty?: "easy" | "medium" | "hard"
   };
 
-  if (!title || !description || !num || !source)
+  if (!title || !description || !num || !source || !difficulty)
     return NextResponse.json({
       error: "Invalid request, incorrect payload",
       status: 400,
     });
 
-  const aiQuestonGeneration = await generate(source, num);
+  const aiQuestonGeneration = await generate(source, num, difficulty);
   const generatedQuizQuestions = aiQuestonGeneration.questions.map(
     (question) => {
       return {
@@ -93,13 +94,14 @@ export async function POST(req: NextRequest) {
 async function generate(
   source: string,
   numQuestions: number,
+  difficulty: "easy" | "medium" | "hard"
 ): Promise<QuizGeneration> {
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo-16k",
     messages: [
       {
         role: "system",
-        content: `You area a quiz generation AI. when given a source, create a quiz of only ${numQuestions} questions based on that source. There are 5 possible answer choices. Make sure the correct answer isn't the same number for each question. If the source has insufficient data, use your own information and training data to create the quiz.`,
+        content: `You area a quiz generation AI. when given a source, create a quiz of only ${numQuestions} questions of ${difficulty} difficulty based on that source. There are 5 possible answer choices. Make sure the correct answer isn't the same number for each question. If the source has insufficient data, use your own information and training data to create the quiz.`,
       },
       {
         role: "user",

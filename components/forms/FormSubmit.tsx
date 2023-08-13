@@ -16,6 +16,7 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 const formSchema = z.object({
   title: z
@@ -30,6 +31,9 @@ const formSchema = z.object({
     .string()
     .min(5, { message: "Your description must be at least 5 characters." })
     .max(200, { message: "Your title must be less than 200 characters." }),
+  difficulty: z.enum(["easy", "medium", "hard"], {
+    required_error: "You need to select a difficulty."
+  })
 });
 
 export type FormSubmitVaues = z.infer<typeof formSchema>;
@@ -53,6 +57,7 @@ export function FormSubmit({
       title: "",
       description: "",
       num: 1,
+      difficulty: "easy"
     },
   });
 
@@ -83,6 +88,46 @@ export function FormSubmit({
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea placeholder="Enter description..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+                <FormField
+          control={form.control}
+          name="difficulty"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>Difficulty</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-1"
+                >
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="easy" />
+                    </FormControl>
+                    <FormLabel className="font-normal">
+                      Easy
+                    </FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="medium" />
+                    </FormControl>
+                    <FormLabel className="font-normal">
+                      Medium
+                    </FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="hard" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Hard</FormLabel>
+                  </FormItem>
+                </RadioGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
