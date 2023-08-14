@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { cards, faq, featuresPara, mission, plans } from "@/config/marketing";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import Link from "next/link";
@@ -26,15 +27,13 @@ export default function Home() {
       <main className="p-10 flex-1 mx-auto max-w-4xl md:max-w-6xl flex flex-col space-y-52 pt-24">
         <div className="flex flex-col space-y-4 items-center text-center">
           <div className="rounded-full border text-xs font-medium px-6 py-1.5">
-            v1.0.0 Live Now
+            {siteConfig.version} Live Now
           </div>
           <h1 className="font-extrabold text-4xl lg:text-5xl xl:text-6xl tracking-tight">
             Helping Students Study Better Using AI
           </h1>
           <p className="leading-normal text-muted-foreground sm:text-xl sm:leading-8 font-medium max-w-[42rem]">
-            We harnesses the power of artificial intelligence to help improve
-            students' critical thinking skills with AI, rather than replace
-            those skills.
+            {siteConfig.description}
           </p>
           <div className="flex items-center gap-3">
             <Link href="/dashboard">
