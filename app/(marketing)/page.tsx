@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { cards, faq, mission, plans } from "@/config/marketing";
+import { cards, faq, featuresPara, mission, plans } from "@/config/marketing";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import Link from "next/link";
@@ -53,8 +53,7 @@ export default function Home() {
               Features
             </h1>
             <p className="leading-normal text-muted-foreground sm:text-xl sm:leading-8 font-medium max-w-[42rem]">
-              Study AI includes many different features like file uploading and
-              link parsing to help students study efficiently.
+              {featuresPara}
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">

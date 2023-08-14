@@ -7,7 +7,7 @@ export function Header() {
     <nav className="h-20 z-50 sticky shrink-0 flex items-center justify-between px-6 md:px-12 lg:px-24 top-0 left-0 shadow-sm bg-background">
       <div className="flex items-center">
         <GraduationCap className="h-6 w-6 mr-2" />
-        <h1 className="font-semibold">studium ai</h1>
+        <h1 className="font-semibold">ai studium</h1>
       </div>
       <div className="flex items-center gap-2">
         <a href="https://discord.gg/rCGEZwWUPt">
