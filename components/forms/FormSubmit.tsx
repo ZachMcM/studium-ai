@@ -18,6 +18,8 @@ import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
+console.log(Number(process.env.NEXT_PUBLIC_MAX_NUM))
+
 const formSchema = z.object({
   title: z
     .string()
