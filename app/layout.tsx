@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 import { Provider } from "@/components/Provider";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";

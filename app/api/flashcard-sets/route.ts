@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       difficulty?: "easy" | "medium" | "hard";
     };
 
-  if (!source || !num || !title || !description || !difficulty)
+  if (!source || !num || num > 2 || !title || !description || !difficulty)
     return NextResponse.json({
       error: "Invalid request, incorrect paylod",
       status: 400,

@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       difficulty?: "easy" | "medium" | "hard";
     };
 
-  if (!title || !description || !num || !source || !difficulty)
+  if (!title || !description || !num || num > 20 || !source || !difficulty)
     return NextResponse.json({
       error: "Invalid request, incorrect payload",
       status: 400,
