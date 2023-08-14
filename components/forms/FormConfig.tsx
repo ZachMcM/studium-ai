@@ -120,8 +120,7 @@ export function FormConfig({
           <div className="space-y-1.5">
             <Input
               type="file"
-              // accept="text/plain, application/pdf, video/mp4, video/x-m4v, video/*, audio/*"
-              accept="text/plain, video/mp4, video/x-m4v, video/*, audio/*"
+              accept="text/plain, application/pdf, video/mp4, video/x-m4v, video/*, audio/*"
               onChange={(e) => setFileInput(e.target.files)}
             />
             <p className="text-[0.8rem] text-muted-foreground">
