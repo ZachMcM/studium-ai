@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
   if (
     !source ||
     !num ||
-    Number(process.env.MAX_NUM) ||
+    Number(process.env.MAX_NUM) > 20 ||
     !title ||
     !description ||
     !difficulty
