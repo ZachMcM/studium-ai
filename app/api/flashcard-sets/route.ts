@@ -36,13 +36,14 @@ export async function POST(req: NextRequest) {
   if (isLimitExceeded)
     return NextResponse.json({ error: "Limit exceeded", status: 401 });
 
-  const { source, num, title, description, difficulty } = (await req.json()) as {
-    source?: string;
-    num?: number;
-    title?: string;
-    description?: string;
-    difficulty?: "easy" | "medium" | "hard"
-  };
+  const { source, num, title, description, difficulty } =
+    (await req.json()) as {
+      source?: string;
+      num?: number;
+      title?: string;
+      description?: string;
+      difficulty?: "easy" | "medium" | "hard";
+    };
 
   if (!source || !num || !title || !description || !difficulty)
     return NextResponse.json({
@@ -50,8 +51,36 @@ export async function POST(req: NextRequest) {
       status: 400,
     });
 
-  const aiCardsGeneration = await generate(source, num, difficulty);
-  const generatedSet = aiCardsGeneration.flashcards.map((flashcard) => {
+  const response = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo-16k",
+    messages: [
+      {
+        role: "system",
+        content: `You area a flashcard set generation AI. when given a source, create a flashcard set of only ${num} cards of ${difficulty} difficulty based on that source. If the source has insufficient data, use your own information and training data to create the flashcards.`,
+      },
+      {
+        role: "user",
+        content: source,
+      },
+    ],
+    functions: [
+      {
+        name: "flashcard_set",
+        parameters: schema,
+      },
+    ],
+    function_call: {
+      name: "flashcard_set",
+    },
+    temperature: 1,
+  });
+
+  const data = (await response.json()) as ResponseTypes["createChatCompletion"];
+  const json = JSON.parse(
+    data.choices[0].message?.function_call?.arguments!,
+  ) as FlashcardGeneration;
+  console.log(json);
+  const generatedSet = json.flashcards.map((flashcard) => {
     return {
       userId: session.user.id,
       answer: flashcard.answer,
@@ -80,40 +109,4 @@ export async function POST(req: NextRequest) {
   });
 
   return NextResponse.json(newFlashcardSet);
-}
-
-async function generate(
-  source: string,
-  numCards: number,
-  difficulty: "easy" | "medium" | "hard"
-): Promise<FlashcardGeneration> {
-  const response = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo-16k",
-    messages: [
-      {
-        role: "system",
-        content: `You area a flashcard set generation AI. when given a source, create a flashcard set of only ${numCards} cards of ${difficulty} difficulty based on that source. If the source has insufficient data, use your own information and training data to create the flashcards.`,
-      },
-      {
-        role: "user",
-        content: source,
-      },
-    ],
-    functions: [
-      {
-        name: "flashcard_set",
-        parameters: schema,
-      },
-    ],
-    function_call: {
-      name: "flashcard_set",
-    },
-    temperature: 1,
-  });
-
-  const data = (await response.json()) as ResponseTypes["createChatCompletion"];
-  const json = JSON.parse(data.choices[0].message?.function_call?.arguments!);
-  console.log(data);
-  console.log(json.flashcards);
-  return json;
 }

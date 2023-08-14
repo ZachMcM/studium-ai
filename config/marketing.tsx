@@ -9,7 +9,7 @@ If you need to create a quiz or flashcards and all you have is a zoom recording 
 export const featuresPara = `
 Studium AI includes many different features like file uploading and
 link parsing to help students study efficiently.
-`
+`;
 
 export const cards = [
   {

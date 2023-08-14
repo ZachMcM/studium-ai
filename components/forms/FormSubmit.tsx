@@ -32,8 +32,8 @@ const formSchema = z.object({
     .min(5, { message: "Your description must be at least 5 characters." })
     .max(200, { message: "Your title must be less than 200 characters." }),
   difficulty: z.enum(["easy", "medium", "hard"], {
-    required_error: "You need to select a difficulty."
-  })
+    required_error: "You need to select a difficulty.",
+  }),
 });
 
 export type FormSubmitVaues = z.infer<typeof formSchema>;
@@ -57,7 +57,7 @@ export function FormSubmit({
       title: "",
       description: "",
       num: 1,
-      difficulty: "easy"
+      difficulty: "easy",
     },
   });
 
@@ -93,7 +93,7 @@ export function FormSubmit({
             </FormItem>
           )}
         />
-                <FormField
+        <FormField
           control={form.control}
           name="difficulty"
           render={({ field }) => (
@@ -109,17 +109,13 @@ export function FormSubmit({
                     <FormControl>
                       <RadioGroupItem value="easy" />
                     </FormControl>
-                    <FormLabel className="font-normal">
-                      Easy
-                    </FormLabel>
+                    <FormLabel className="font-normal">Easy</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
                       <RadioGroupItem value="medium" />
                     </FormControl>
-                    <FormLabel className="font-normal">
-                      Medium
-                    </FormLabel>
+                    <FormLabel className="font-normal">Medium</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>

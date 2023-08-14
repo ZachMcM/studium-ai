@@ -47,7 +47,7 @@ export default function NewFlashcardsPage() {
       title,
       num,
       description,
-      difficulty
+      difficulty,
     }: FormSubmitVaues): Promise<FlashcardSet> => {
       const res = await fetch("/api/flashcard-sets", {
         method: "POST",
@@ -56,7 +56,7 @@ export default function NewFlashcardsPage() {
           num,
           description,
           source,
-          difficulty
+          difficulty,
         }),
       });
       if (!res.ok) {
