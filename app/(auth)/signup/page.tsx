@@ -1,11 +1,5 @@
 import { AuthButton } from "@/components/AuthButton";
-import { Metadata } from "next";
 import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Sign Up | Studium AI",
-  description: "Create a Studium AI account",
-};
 
 export default function SignIn() {
   return (

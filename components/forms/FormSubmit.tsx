@@ -18,7 +18,7 @@ import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
-console.log(Number(process.env.NEXT_PUBLIC_MAX_NUM))
+console.log(Number(process.env.NEXT_PUBLIC_MAX_NUM));
 
 const formSchema = z.object({
   title: z
@@ -28,7 +28,9 @@ const formSchema = z.object({
   num: z.coerce
     .number()
     .min(1, { message: "There is a minimum of 1." })
-    .max(Number(process.env.NEXT_PUBLIC_MAX_NUM), { message: "There is a maximum of 25." }),
+    .max(Number(process.env.NEXT_PUBLIC_MAX_NUM), {
+      message: "There is a maximum of 25.",
+    }),
   description: z
     .string()
     .min(5, { message: "Your description must be at least 5 characters." })

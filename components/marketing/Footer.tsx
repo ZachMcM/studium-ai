@@ -7,7 +7,8 @@ export function Footer() {
   return (
     <footer className="h-14 border-t mt-48 flex items-center justify-between px-6 shadow-sm bg-background-card">
       <p className="text-xs text-muted-foreground font-medium flex items-center">
-        Copyright <Copyright className="h-3 w-3 ml-0.5 mr-1" /> {(new Date).getFullYear()} {siteConfig.name}.
+        Copyright <Copyright className="h-3 w-3 ml-0.5 mr-1" />{" "}
+        {new Date().getFullYear()} {siteConfig.name}.
       </p>
       <div className="flex items-center">
         <a href="https://discord.gg/rCGEZwWUPt">
