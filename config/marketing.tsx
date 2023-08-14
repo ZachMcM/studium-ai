@@ -2,12 +2,12 @@ import { Copy, File, FileText, Globe, MessagesSquare } from "lucide-react";
 import { SiOpenai } from "react-icons/si";
 
 export const mission = `
-At AI Studium our mission is to use AI to make studying easier and efficient rather than using AI to replace studying altogether. 
-If you need to create a quiz or flashcards and all you have is a zoom recording of a lecture, or a pdf file of notes, or a link to a website, AI Studium can help!
+At Studium AI our mission is to use AI to make studying easier and efficient rather than using AI to replace studying altogether. 
+If you need to create a quiz or flashcards and all you have is a zoom recording of a lecture, or a pdf file of notes, or a link to a website, Studium AI can help!
 `;
 
 export const featuresPara = `
-AI Studium includes many different features like file uploading and
+Studium AI includes many different features like file uploading and
 link parsing to help students study efficiently.
 `
 
