@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet";
 import Link from "next/link";
 import { HeaderLink } from "../HeaderLink";
 import { useState } from "react";
+import { siteConfig } from "@/config/site";
 
 export function Sidebar() {
   const [sidebar, setSidebar] = useState<boolean>(false);
@@ -18,7 +19,7 @@ export function Sidebar() {
         <SheetHeader>
           <Link href="/dashboard" className="flex items-center">
             <GraduationCap className="h-6 w-6 mr-2" />
-            <h1 className="font-semibold text-xl font-cal">studium ai</h1>
+            <h1 className="font-semibold text-xl font-cal">{siteConfig.name}</h1>
           </Link>
         </SheetHeader>
         <div className="flex flex-col mt-6 space-y-3 font-medium">
