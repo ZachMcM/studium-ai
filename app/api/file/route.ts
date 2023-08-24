@@ -1,4 +1,5 @@
 import { getAuthSession } from "@/lib/auth";
+import { reduceText } from "@/lib/reduce-text";
 import { NextRequest, NextResponse } from "next/server";
 import pdf from "pdf-parse";
 
@@ -23,14 +24,16 @@ export async function POST(req: NextRequest) {
 
   if (file.type == "text/plain") {
     const fileText = await file.text();
-    return NextResponse.json(fileText);
+    const reduced = reduceText(fileText)
+    return NextResponse.json(reduced);
   }
 
   if (file.type == "application/pdf") {
     const arrayBuffer = await file.arrayBuffer();
     const fileBuffer = Buffer.from(arrayBuffer);
     const fileData = await pdf(fileBuffer);
-    return NextResponse.json(fileData.text);
+    const reduced = reduceText(fileData.text)
+    return NextResponse.json(reduced);
   }
 
   if (file.type.includes("audio/") || file.type.includes("video/")) {
@@ -48,6 +51,7 @@ export async function POST(req: NextRequest) {
     });
     const transcription = await res.json();
     console.log(transcription);
-    return NextResponse.json(transcription.text);
+    const reduced = reduceText(transcription.text)
+    return NextResponse.json(reduced);
   }
 }

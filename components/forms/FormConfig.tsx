@@ -8,6 +8,7 @@ import { Textarea } from "../ui/textarea";
 import { useState } from "react";
 import { toast } from "../ui/use-toast";
 import { cn } from "@/lib/utils";
+import { reduceText } from "@/lib/reduce-text";
 
 export function FormConfig({
   onContinue,
@@ -90,7 +91,8 @@ export function FormConfig({
 
     if (tabValue == "subject" && input) {
       console.log("foo");
-      onContinue(input);
+      const reduced = reduceText(input)
+      onContinue(reduced);
       toast({
         description: (
           <p className="flex items-center">

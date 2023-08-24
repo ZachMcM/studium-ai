@@ -1,4 +1,5 @@
 import { getAuthSession } from "@/lib/auth";
+import { reduceText } from "@/lib/reduce-text";
 import * as cheerio from "cheerio";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,5 +28,6 @@ export async function GET(req: NextRequest) {
     siteText += " " + $(el).text();
   });
 
-  return NextResponse.json(siteText);
+  const reduced = reduceText(siteText)
+  return NextResponse.json(reduced);
 }

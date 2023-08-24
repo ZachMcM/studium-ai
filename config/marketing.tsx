@@ -76,7 +76,7 @@ export const faq = [
     answwer: "Studium is latin for study.",
   },
   {
-    question: "How can I get in touch",
+    question: "How can I get in touch?",
     answer: (
       <>
         We have a{" "}
@@ -91,6 +91,10 @@ export const faq = [
       </>
     ),
   },
+  {
+    question: "What is the max character length?",
+    answer: "The max character length is 50,000 characters. Any source longer than this will be shortened accordingly."
+  }
 ];
 
 export const plans = [
