@@ -20,8 +20,8 @@ export const metadata: Metadata = {
         height: 600,
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+    locale: "en_US",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     images: [`${siteConfig.url}/og.jpg`],
     creator: "@dzachmcm",
   },
-}
+};
 
 export default function RootLayout({
   children,

@@ -28,6 +28,6 @@ export async function GET(req: NextRequest) {
     siteText += " " + $(el).text();
   });
 
-  const reduced = reduceText(siteText)
+  const reduced = reduceText(siteText);
   return NextResponse.json(reduced);
 }

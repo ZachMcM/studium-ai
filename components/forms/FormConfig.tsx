@@ -91,7 +91,7 @@ export function FormConfig({
 
     if (tabValue == "subject" && input) {
       console.log("foo");
-      const reduced = reduceText(input)
+      const reduced = reduceText(input);
       onContinue(reduced);
       toast({
         description: (

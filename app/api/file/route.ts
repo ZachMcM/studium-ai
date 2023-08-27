@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
   if (file.type == "text/plain") {
     const fileText = await file.text();
-    const reduced = reduceText(fileText)
+    const reduced = reduceText(fileText);
     return NextResponse.json(reduced);
   }
 
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await file.arrayBuffer();
     const fileBuffer = Buffer.from(arrayBuffer);
     const fileData = await pdf(fileBuffer);
-    const reduced = reduceText(fileData.text)
+    const reduced = reduceText(fileData.text);
     return NextResponse.json(reduced);
   }
 
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     });
     const transcription = await res.json();
     console.log(transcription);
-    const reduced = reduceText(transcription.text)
+    const reduced = reduceText(transcription.text);
     return NextResponse.json(reduced);
   }
 }

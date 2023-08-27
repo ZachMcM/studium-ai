@@ -19,7 +19,9 @@ export function Sidebar() {
         <SheetHeader>
           <Link href="/dashboard" className="flex items-center">
             <GraduationCap className="h-6 w-6 mr-2" />
-            <h1 className="font-semibold text-xl font-cal">{siteConfig.name}</h1>
+            <h1 className="font-semibold text-xl font-cal">
+              {siteConfig.name}
+            </h1>
           </Link>
         </SheetHeader>
         <div className="flex flex-col mt-6 space-y-3 font-medium">

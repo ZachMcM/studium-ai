@@ -93,8 +93,9 @@ export const faq = [
   },
   {
     question: "What is the max character length?",
-    answer: "The max character length is 50,000 characters. Any source longer than this will be shortened accordingly."
-  }
+    answer:
+      "The max character length is 50,000 characters. Any source longer than this will be shortened accordingly.",
+  },
 ];
 
 export const plans = [
