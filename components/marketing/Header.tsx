@@ -2,6 +2,7 @@ import { GraduationCap } from "lucide-react";
 import { SigninButton } from "./SigninButton";
 import { Button } from "../ui/button";
 import { siteConfig } from "@/config/site";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 export function Header() {
   return (
@@ -17,6 +18,14 @@ export function Header() {
             className="hover:opacity-70 duration-500 hover:bg-inherit"
           >
             Discord
+          </Button>
+        </a>
+        <a href="https://github.com/ZachMcM/studium-ai">
+          <Button
+            variant="ghost"
+            className="hover:opacity-70 duration-500 hover:bg-inherit"
+          >
+            Github
           </Button>
         </a>
         <SigninButton />

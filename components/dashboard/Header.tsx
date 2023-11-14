@@ -7,6 +7,7 @@ import { FaDiscord } from "react-icons/fa6";
 import { HeaderLink } from "../HeaderLink";
 import { Sidebar } from "./Sidebar";
 import { siteConfig } from "@/config/site";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 export function Header() {
   return (
@@ -25,11 +26,17 @@ export function Header() {
         </div>
       </div>
 
-      <div className="flex items-center">
+      <div className="flex items-center gap-3">
         <ThemeButton />
-        <a href="https://discord.gg/rCGEZwWUPt" className="mr-3">
+        <a href="https://discord.gg/rCGEZwWUPt">
           <Button variant="ghost" size="icon">
             <FaDiscord className="h-5 w-5" />
+          </Button>
+        </a>
+        <a href="https://github.com/ZachMcM/studium-ai">
+          <Button
+            variant="ghost" size="icon">
+            <GitHubLogoIcon className="h-5 w-5"/>
           </Button>
         </a>
         <UserDropdown />

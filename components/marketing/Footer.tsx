@@ -20,6 +20,15 @@ export function Footer() {
             Discord
           </Button>
         </a>
+        <a href="https://github.com/ZachMcM/studium-ai">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hover:opacity-70 duration-500 hover:bg-inherit"
+          >
+            Github
+          </Button>
+        </a>
         <ThemeButton />
       </div>
     </footer>
