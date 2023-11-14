@@ -73,7 +73,7 @@ export const faq = [
   },
   {
     question: `What does "Studium" mean?`,
-    answwer: "Studium is latin for study.",
+    answwer: "Studium is the latin for study.",
   },
   {
     question: "How can I get in touch?",
