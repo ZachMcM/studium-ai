@@ -3,6 +3,7 @@ import { SigninButton } from "./SigninButton";
 import { Button } from "../ui/button";
 import { siteConfig } from "@/config/site";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { FaDiscord } from "react-icons/fa6";
 
 export function Header() {
   return (
@@ -13,19 +14,13 @@ export function Header() {
       </div>
       <div className="flex items-center gap-2">
         <a href="https://discord.gg/rCGEZwWUPt">
-          <Button
-            variant="ghost"
-            className="hover:opacity-70 duration-500 hover:bg-inherit"
-          >
-            Discord
+          <Button variant="outline" size="icon">
+            <FaDiscord className="h-5 w-5" />
           </Button>
         </a>
-        <a href="https://github.com/ZachMcM/studium-ai">
-          <Button
-            variant="ghost"
-            className="hover:opacity-70 duration-500 hover:bg-inherit"
-          >
-            Github
+        <a href="https://github.com/ZachMcM/studium-ai" className="mr-4">
+          <Button variant="outline" size="icon">
+            <GitHubLogoIcon className="h-5 w-5" />
           </Button>
         </a>
         <SigninButton />
