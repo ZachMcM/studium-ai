@@ -26,19 +26,20 @@ export function Header() {
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <ThemeButton />
-        <a href="https://discord.gg/rCGEZwWUPt">
-          <Button variant="ghost" size="icon">
-            <FaDiscord className="h-5 w-5" />
-          </Button>
-        </a>
-        <a href="https://github.com/ZachMcM/studium-ai">
-          <Button
-            variant="ghost" size="icon">
-            <GitHubLogoIcon className="h-5 w-5"/>
-          </Button>
-        </a>
+      <div className="flex items-center gap-5">
+        <div className="flex items-center gap-1.5">
+          <ThemeButton />
+          <a href="https://discord.gg/rCGEZwWUPt">
+            <Button variant="ghost" size="icon">
+              <FaDiscord className="h-5 w-5" />
+            </Button>
+          </a>
+          <a href="https://github.com/ZachMcM/studium-ai">
+            <Button variant="ghost" size="icon">
+              <GitHubLogoIcon className="h-5 w-5" />
+            </Button>
+          </a>
+        </div>
         <UserDropdown />
       </div>
     </header>
