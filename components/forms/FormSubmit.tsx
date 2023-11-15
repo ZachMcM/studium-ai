@@ -29,7 +29,7 @@ const formSchema = z.object({
     .number()
     .min(1, { message: "There is a minimum of 1." })
     .max(Number(process.env.NEXT_PUBLIC_MAX_NUM), {
-      message: "There is a maximum of 25.",
+      message: `There is a maximum of ${Number(process.env.NEXT_PUBLIC_MAX_NUM)}.`,
     }),
   description: z
     .string()
@@ -140,7 +140,7 @@ export function FormSubmit({
             <FormItem>
               <FormLabel>Number of {itemType}</FormLabel>
               <FormControl>
-                <Input type="number" {...field} />
+                <Input type="number" {...field} max={Number(process.env.NEXT_PUBLIC_MAX_NUM)} min={1} />
               </FormControl>
               <FormMessage />
             </FormItem>
