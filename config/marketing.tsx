@@ -69,7 +69,7 @@ export const faq = [
   },
   {
     question: "How does it work?",
-    answer: `By simply pasting a link, uploading a text, pdf, video, or audio file, or just defining a subject using the latest AI models we can generate you AI tutors, flashcard sets, and quizzes.`,
+    answer: `By simply pasting a link, uploading a text, pdf, video, or audio file, or just typing a subject using the latest AI models we can generate you AI tutors, flashcard sets, and quizzes.`,
   },
   {
     question: `What does "Studium" mean?`,
