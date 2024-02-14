@@ -237,7 +237,7 @@ export default function DashboardPage() {
                             />
                           </div>
                           <p className="font-bold">
-                            {Number(attempt.score) * 100}%
+                            {Math.round(Number(attempt.score) * 100 * 100) / 100}%
                           </p>
                         </div>
                       ))}

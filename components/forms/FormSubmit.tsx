@@ -140,7 +140,7 @@ export function FormSubmit({
             <FormItem>
               <FormLabel>Number of {itemType}</FormLabel>
               <FormControl>
-                <Input type="number" {...field} max={Number(process.env.NEXT_PUBLIC_MAX_NUM)} min={1} />
+                <Input type="number" {...field} max={Number(process.env.NEXT_PUBLIC_MAX_NUM)} min={1  } />
               </FormControl>
               <FormMessage />
             </FormItem>
