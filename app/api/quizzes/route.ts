@@ -50,11 +50,12 @@ export async function POST(req: NextRequest) {
   )
     return NextResponse.json({
       error: "Invalid request, incorrect payload",
+    }, {
       status: 400,
     });
 
   const response = await openai.createChatCompletion({
-    model: "gpt-4o",
+    model: "gpt-4o-mini",
     messages: [
       {
         role: "system",

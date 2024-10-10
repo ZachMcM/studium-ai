@@ -48,18 +48,19 @@ export async function POST(req: NextRequest) {
   if (
     !source ||
     !num ||
-    Number(process.env.MAX_NUM) > 20 ||
+    num > Number(process.env.MAX_NUM) ||
     !title ||
     !description ||
     !difficulty
-  )
-    return NextResponse.json({
+  ) {
+        return NextResponse.json({
       error: "Invalid request, incorrect paylod",
-      status: 400,
-    });
+    }, { status: 400 });
+  }
+
 
   const response = await openai.createChatCompletion({
-    model: "gpt-4o",
+    model: "gpt-4o-mini",
     messages: [
       {
         role: "system",
@@ -83,6 +84,7 @@ export async function POST(req: NextRequest) {
   });
 
   const data = (await response.json()) as ResponseTypes["createChatCompletion"];
+  console.log(data);
   const json = JSON.parse(
     data.choices[0].message?.function_call?.arguments!,
   ) as FlashcardGeneration;
@@ -107,6 +109,8 @@ export async function POST(req: NextRequest) {
       },
     },
   });
+
+  console.log(newFlashcardSet)
 
   await prisma.generation.create({
     data: {

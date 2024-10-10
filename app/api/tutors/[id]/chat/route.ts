@@ -46,7 +46,7 @@ export async function POST(
   });
 
   const response = await openai.createChatCompletion({
-    model: "gpt-4o",
+    model: "gpt-4o-mini",
     temperature: 1,
     messages: messages,
     stream: true,
