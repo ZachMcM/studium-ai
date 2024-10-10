@@ -5,6 +5,6 @@ We harnesses the power of artificial intelligence to help improve students' crit
 
 ## Features
 - AI tutor chatbots
-- PDF, video, or audio file uploading
+- PDF or txt file uploading
 - Link pasting
 - Quiz and flashcard generation

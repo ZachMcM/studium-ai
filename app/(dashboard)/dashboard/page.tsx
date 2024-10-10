@@ -247,7 +247,7 @@ export default function DashboardPage() {
               </div>
             </CardContent>
             <CardFooter className="absolute bottom-0">
-              <Link href="/flashcard=sets">
+              <Link href="/flashcard-sets">
                 <Button variant="ghost">
                   {" "}
                   View all <ArrowRight className="h-4 w-4 ml-2" />

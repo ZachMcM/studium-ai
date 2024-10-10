@@ -37,7 +37,7 @@ export const cards = [
     icon: <File className="h-8 w-8" />,
     title: "Upload Files",
     description:
-      "File handling. Give the AI a txt, pdf, video, or audio file to generate an item of choice.",
+      "File handling. Give the AI a txt or pdf to generate an item of choice.",
   },
   {
     icon: <Globe className="h-8 w-8" />,
@@ -69,7 +69,7 @@ export const faq = [
   },
   {
     question: "How does it work?",
-    answer: `By simply pasting a link, uploading a text, pdf, video, or audio file, or just typing a subject using the latest AI models we can generate you AI tutors, flashcard sets, and quizzes.`,
+    answer: `By simply pasting a link, uploading a txt or pdf, or just typing a subject using the latest AI models we can generate you AI tutors, flashcard sets, and quizzes.`,
   },
   {
     question: `What does "Studium" mean?`,
